@@ -42,16 +42,16 @@ const baseCSP = `
     font-src 'self';
     object-src 'none';
     base-uri 'self';
-    ${ENVIRONMENT !== 'development' ? 'upgrade-insecure-requests;' : ''}
+    ${process.env.NODE_ENV !== 'development' ? 'upgrade-insecure-requests;' : ''}
 `
 const nonEmbeddedCSP = `
   ${baseCSP}
-  ${ENVIRONMENT !== 'development' ? `form-action 'self' ${process.env.NEXT_PUBLIC_API_URL} polar:;` : ''}
+  ${process.env.NODE_ENV !== 'development' ? `form-action 'self' ${process.env.NEXT_PUBLIC_API_URL} polar:;` : ''}
   frame-ancestors 'none';
 `
 const embeddedCSP = `
   ${baseCSP}
-  ${ENVIRONMENT !== 'development' ? `form-action 'self' ${process.env.NEXT_PUBLIC_API_URL} polar:;` : ''}
+  ${process.env.NODE_ENV !== 'development' ? `form-action 'self' ${process.env.NEXT_PUBLIC_API_URL} polar:;` : ''}
   frame-ancestors *;
 `
 // Don't add form-action to the OAuth2 authorize page, as it blocks the OAuth2 redirection

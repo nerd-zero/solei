@@ -1,8 +1,8 @@
 # Polar - Development Makefile
-# Uses podman-compose for container management
+# Override COMPOSE to use a different container tool, e.g.: COMPOSE=podman-compose make infra-up
 
 SHELL := /bin/bash
-COMPOSE := podman-compose
+COMPOSE ?= docker compose
 COMPOSE_FILE := server/docker-compose.yml
 
 .PHONY: help setup run stop \
@@ -56,6 +56,9 @@ backoffice-build: ## Build backoffice CSS/JS static assets (Tailwind + DaisyUI +
 run: infra-up ## Start infra + API + worker + frontend (full dev stack)
 	@echo "Starting full dev stack..."
 	@$(MAKE) -j3 api worker frontend
+
+stop: ## Stop all infrastructure services
+	$(COMPOSE) -f $(COMPOSE_FILE) down
 
 # ─────────────────────────────────────────────
 # Infrastructure (Postgres, Redis, MinIO)
@@ -154,6 +157,9 @@ monitoring-down: ## Stop monitoring stack
 # ─────────────────────────────────────────────
 # Individual service logs
 # ─────────────────────────────────────────────
+
+logs-api: ## (API runs locally — check the terminal running 'make api' for logs)
+	@echo "The API runs as a local process via 'make api'. Check that terminal for logs."
 
 logs-db: ## Tail PostgreSQL logs
 	$(COMPOSE) -f $(COMPOSE_FILE) logs -f db
