@@ -13,6 +13,7 @@ from polar.eventstream import tasks as eventstream
 from polar.external_event import tasks as external_event
 from polar.integrations.chargeback_stop import tasks as chargeback_stop
 from polar.integrations.loops import tasks as loops
+from polar.integrations.smilepay import tasks as smilepay
 from polar.integrations.stripe import tasks as stripe
 from polar.meter import tasks as meter
 from polar.notifications import tasks as notifications
@@ -55,6 +56,7 @@ __all__ = [
     "personal_access_token",
     "processor_transaction",
     "slo_report",
+    "smilepay",
     "stripe",
     "subscription",
     "transaction",

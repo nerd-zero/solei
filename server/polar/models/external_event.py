@@ -22,6 +22,7 @@ from polar.kit.extensions.sqlalchemy.types import StrEnumType
 class ExternalEventSource(StrEnum):
     stripe = "stripe"
     chargeback_stop = "chargeback_stop"
+    smilepay = "smilepay"
 
 
 class ExternalEvent(RecordModel):
@@ -74,5 +75,16 @@ class ChargebackStopEvent(ExternalEvent):
 
     __mapper_args__ = {
         "polymorphic_identity": ExternalEventSource.chargeback_stop,
+        "polymorphic_load": "inline",
+    }
+
+
+class SmilePayEvent(ExternalEvent):
+    source: Mapped[Literal[ExternalEventSource.smilepay]] = mapped_column(  # pyright: ignore
+        use_existing_column=True, default=ExternalEventSource.smilepay
+    )
+
+    __mapper_args__ = {
+        "polymorphic_identity": ExternalEventSource.smilepay,
         "polymorphic_load": "inline",
     }

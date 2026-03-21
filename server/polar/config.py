@@ -235,6 +235,11 @@ class Settings(BaseSettings):
     STRIPE_CONNECT_WEBHOOK_SECRET: str = ""
     STRIPE_STATEMENT_DESCRIPTOR: str = "POLAR"
 
+    # SmilePay
+    SMILEPAY_API_KEY: str = ""
+    SMILEPAY_API_SECRET: str = ""
+    SMILEPAY_SANDBOX: bool = True
+
     # Numeral
     NUMERAL_API_KEY: str | None = None
 

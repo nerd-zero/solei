@@ -64,7 +64,7 @@ const XIcon = ({ className }: { className?: string }) => {
   )
 }
 
-interface BaseCheckoutFormProps {
+export interface BaseCheckoutFormProps {
   form: UseFormReturn<schemas['CheckoutUpdatePublic']>
   checkout: schemas['CheckoutPublic']
   confirm: (
@@ -82,7 +82,7 @@ interface BaseCheckoutFormProps {
   beforeSubmit?: React.ReactNode
 }
 
-const BaseCheckoutForm = ({
+export const BaseCheckoutForm = ({
   form,
   checkout,
   confirm,
@@ -734,7 +734,7 @@ const BaseCheckoutForm = ({
   )
 }
 
-interface CheckoutFormProps {
+export interface CheckoutFormProps {
   form: UseFormReturn<schemas['CheckoutUpdatePublic']>
   checkout: schemas['CheckoutPublic']
   update: (
@@ -885,6 +885,28 @@ const DummyCheckoutForm = (props: CheckoutFormProps) => {
   )
 }
 
+const SmilePayCheckoutForm = (props: CheckoutFormProps) => {
+  const { confirm, checkout } = props
+
+  const handleConfirm = async (data: schemas['CheckoutConfirmStripe']) => {
+    const confirmed = await confirm(data, null, null)
+
+    const metadata = confirmed.payment_processor_metadata as
+      | Record<string, string>
+      | undefined
+    const paymentUrl = metadata?.payment_url
+    if (paymentUrl) {
+      window.location.href = paymentUrl
+    }
+
+    return confirmed
+  }
+
+  return (
+    <BaseCheckoutForm {...props} checkout={checkout} confirm={handleConfirm} />
+  )
+}
+
 const CheckoutForm = (props: CheckoutFormProps) => {
   const {
     checkout: { payment_processor },
@@ -892,6 +914,9 @@ const CheckoutForm = (props: CheckoutFormProps) => {
 
   if (payment_processor === 'stripe') {
     return <StripeCheckoutForm {...props} />
+  }
+  if (payment_processor === 'smilepay') {
+    return <SmilePayCheckoutForm {...props} />
   }
   return <DummyCheckoutForm {...props} />
 }

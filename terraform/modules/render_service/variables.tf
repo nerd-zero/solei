@@ -28,7 +28,7 @@ variable "api_service_config" {
     allowed_hosts          = string # "[\"polar.sh\", \"backoffice.polar.sh\"]"
     cors_origins           = string # "[\"https://polar.sh\", \"https://github.com\", \"https://docs.polar.sh\"]"
     custom_domains         = list(object({ name = string }))
-    image_url              = optional(string, "ghcr.io/polarsource/polar")
+    image_url              = optional(string, "ghcr.io/nerd-zero/solei")
     image_digest           = string
     web_concurrency        = optional(string, "2")
     forwarded_allow_ips    = optional(string, "*")

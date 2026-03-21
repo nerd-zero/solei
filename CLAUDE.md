@@ -78,3 +78,17 @@ For Stripe, add to `server/.env`:
 - **S3/Minio**: File storage
 - **Redis**: Cache and job queue
 - **PostgreSQL**: Primary database
+- **SmilePay**: ZB Pay payment processing (ZWG/USD, sandbox + production)
+
+## Chief
+
+This project uses chief for developer coaching and workflow automation.
+
+**At the start of every chief session:** Read `CHIEF.md` for project context —
+stack, conventions, team setup, and coaching configuration.
+
+Available skills: /chief, /chief-init, /chief-push, /chief-cook, /chief-resolve,
+/chief-upgrade, /review, /ship, /qa, /qa-only, /investigate, /retro, /office-hours,
+/plan-eng-review, /plan-ceo-review, /plan-design-review, /design-review,
+/design-consultation, /document-release, /codex, /careful, /freeze, /guard,
+/unfreeze, /browse, /setup-browser-cookies.

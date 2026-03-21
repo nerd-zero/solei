@@ -72,7 +72,7 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: |
-            ghcr.io/polarsource/polar
+            ghcr.io/nerd-zero/solei
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -99,7 +99,7 @@ jobs:
         id: meta-playwright
         uses: docker/metadata-action@v6
         with:
-          images: ghcr.io/polarsource/polar-playwright
+          images: ghcr.io/nerd-zero/solei-playwright
           tags: |
             type=sha
             type=raw,value=latest,enable={{is_default_branch}}
