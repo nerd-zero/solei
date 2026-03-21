@@ -32,10 +32,16 @@ Today, Solei is maintained independently by **Nerd Zero**, laser-focused on the 
 
 ## Monorepo Structure
 
-- **[server](./server/README.md)** – Python · FastAPI · Dramatiq · SQLAlchemy (Postgres) · Redis
+- **server** – Python · FastAPI · Dramatiq · SQLAlchemy (Postgres) · Redis
 - **[clients](./clients/README.md)** – Turborepo
     - [web](./clients/apps/web) (Solei Dashboard) – Next.js (TypeScript)
     - [ui](./clients/packages/ui) – Shared React components
+
+## Issues & Contributing
+
+- **Found a bug?** [Open an issue](https://github.com/nerd-zero/solei/issues/new/choose)
+- **Have a feature request?** [Start a discussion](https://github.com/nerd-zero/solei/issues/new/choose)
+- **Questions?** Check the [docs](https://docs.solei.to) first.
 
 ## License & Legal
 

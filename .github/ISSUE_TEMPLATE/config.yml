@@ -1,1 +1,8 @@
 blank_issues_enabled: true
+contact_links:
+  - name: Solei Documentation
+    url: https://docs.solei.to
+    about: Check the docs first — your question may already be answered.
+  - name: Solei Website
+    url: https://solei.to
+    about: Learn more about Solei and what we're building.
