@@ -2186,7 +2186,6 @@ class CheckoutService:
 
         checkout.net_amount = checkout.amount - checkout.discount_amount
 
-        if not (checkout.is_payment_form_required and is_tax_applicable):
         if not (
             checkout.is_payment_form_required
             and is_tax_applicable

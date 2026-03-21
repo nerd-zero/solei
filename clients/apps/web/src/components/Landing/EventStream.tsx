@@ -35,10 +35,10 @@ function initBars() {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export const EventStream = () => {
-  const [events, setEvents] = useState(() =>
+  const [events, setEvents] = useState<ReturnType<typeof nextEvent>[]>(() =>
     Array.from({ length: 8 }, nextEvent),
   )
-  const [, setBars] = useState(initBars)
+  const [, setBars] = useState<number[]>(() => initBars())
   const totalRef = useRef(38_471)
   const [total, setTotal] = useState(38_471)
 
@@ -70,7 +70,7 @@ export const EventStream = () => {
             <span className="font-mono text-sm">Live Events</span>
           </div>
           <span className="dark:text-polar-500 font-mono text-xs text-gray-500 tabular-nums">
-            {total.toLocaleString()} ingested
+            {total.toLocaleString('en-US')} ingested
           </span>
         </div>
 
@@ -111,7 +111,7 @@ export const EventStream = () => {
               </div>
               {/* Value */}
               <span className="dark:text-polar-500 shrink-0 font-mono text-xs font-medium text-gray-600 tabular-nums">
-                {e.value.toLocaleString()}{' '}
+                {e.value.toLocaleString('en-US')}{' '}
                 <span className="dark:text-polar-500 text-gray-500">
                   {e.def.unit}
                 </span>

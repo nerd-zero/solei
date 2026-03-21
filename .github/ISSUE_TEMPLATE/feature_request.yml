@@ -1,5 +1,5 @@
 name: Feature request
-description: 'Suggest a feature for Polar'
+description: 'Suggest a feature for Solei'
 type: 'Discussion'
 body:
     - type: textarea
