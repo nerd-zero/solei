@@ -155,6 +155,17 @@ export const CheckoutFormProvider = ({
         }
       }
 
+      if (checkout.payment_processor !== 'stripe') {
+        setLoadingLabel(t('checkout.loading.processingPayment'))
+        try {
+          return await _confirm(data)
+        } catch (error) {
+          throw error
+        } finally {
+          setLoading(false)
+        }
+      }
+
       if (!stripe || !elements) {
         setLoading(false)
         throw new Error('Stripe elements not provided')

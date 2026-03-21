@@ -1,4 +1,5 @@
 import contextlib
+import secrets
 import typing
 import uuid
 from collections.abc import AsyncGenerator, AsyncIterator, Sequence
@@ -508,8 +509,11 @@ class CheckoutService:
         ):
             require_billing_address = True
 
+        initial_country = (
+            customer_billing_address.country if customer_billing_address else None
+        )
         checkout = Checkout(
-            payment_processor=PaymentProcessor.stripe,
+            payment_processor=self._processor_for_country(initial_country),
             client_secret=generate_token(prefix=CHECKOUT_CLIENT_SECRET_PREFIX),
             amount=amount,
             currency=currency,
@@ -943,8 +947,12 @@ class CheckoutService:
             )
 
         # Check if organization can accept payments
-        if not await organization_service.is_organization_ready_for_payment(
-            session, checkout.organization
+        # SmilePay checkouts bypass Stripe-specific account readiness checks
+        if (
+            checkout.payment_processor != PaymentProcessor.smilepay
+            and not await organization_service.is_organization_ready_for_payment(
+                session, checkout.organization
+            )
         ):
             if checkout.is_payment_required:
                 raise PaymentNotReady()
@@ -1013,7 +1021,8 @@ class CheckoutService:
                 )
 
         if (
-            checkout.is_payment_form_required
+            checkout.payment_processor == PaymentProcessor.stripe
+            and checkout.is_payment_form_required
             and checkout_confirm.confirmation_token_id is None
         ):
             errors.append(
@@ -1157,6 +1166,47 @@ class CheckoutService:
                                     intent.id, metadata=trial_intent_metadata
                                 )
                         raise TrialAlreadyRedeemed(checkout)
+        elif checkout.payment_processor == PaymentProcessor.smilepay:
+            if checkout.is_payment_setup_required:
+                raise NotImplementedError(
+                    "SmilePay does not support subscription setup"
+                )
+
+            async with self._create_or_update_customer(
+                session, auth_subject, checkout
+            ) as (customer, generate_customer_session):
+                from polar.integrations.smilepay.service import (
+                    smilepay_service,
+                )
+
+                checkout.customer = customer
+                webhook_token = secrets.token_urlsafe(32)
+                return_url = settings.generate_frontend_url(
+                    f"/checkout/{checkout.client_secret}/confirmation"
+                )
+                result_url = settings.generate_external_url(
+                    f"/v1/integrations/smilepay/result?token={webhook_token}"
+                )
+
+                response = await smilepay_service.initiate_transaction(
+                    order_reference=str(checkout.id),
+                    amount_cents=checkout.total_amount,
+                    currency=checkout.currency,
+                    return_url=return_url,
+                    result_url=result_url,
+                    item_name=checkout.product.name,
+                    item_description=checkout.product.description
+                    or checkout.product.name,
+                    first_name=checkout.customer_name,
+                    email=checkout.customer_email,
+                )
+
+                checkout.payment_processor_metadata = {
+                    **(checkout.payment_processor_metadata or {}),
+                    "payment_url": response["paymentUrl"],
+                    "transaction_reference": response["transactionReference"],
+                    "webhook_token": webhook_token,
+                }
         else:
             raise NotImplementedError()
 
@@ -1997,6 +2047,18 @@ class CheckoutService:
 
         if checkout_update.customer_billing_address:
             checkout.customer_billing_address = checkout_update.customer_billing_address
+            new_processor = self._processor_for_country(
+                checkout_update.customer_billing_address.country
+            )
+            if new_processor != checkout.payment_processor:
+                checkout.payment_processor = new_processor
+                # Seed the initial metadata for the new processor
+                if new_processor == PaymentProcessor.stripe:
+                    checkout.payment_processor_metadata = {
+                        "publishable_key": settings.STRIPE_PUBLISHABLE_KEY,
+                    }
+                else:
+                    checkout.payment_processor_metadata = {}
 
         if (
             checkout_update.customer_tax_id is None
@@ -2125,6 +2187,11 @@ class CheckoutService:
         checkout.net_amount = checkout.amount - checkout.discount_amount
 
         if not (checkout.is_payment_form_required and is_tax_applicable):
+        if not (
+            checkout.is_payment_form_required
+            and is_tax_applicable
+            and checkout.payment_processor == PaymentProcessor.stripe
+        ):
             checkout.tax_amount = 0
             checkout.tax_processor_id = None
             return checkout
@@ -2176,6 +2243,16 @@ class CheckoutService:
             return None
 
         return ip_geolocation.get_ip_country(ip_geolocation_client, str(ip_address))
+
+    def _processor_for_country(self, country: str | None) -> PaymentProcessor:
+        """Return the appropriate payment processor for a billing country.
+
+        Zimbabwe (ZW) customers are routed exclusively through SmilePay.
+        All other countries use Stripe.
+        """
+        if country == "ZW":
+            return PaymentProcessor.smilepay
+        return PaymentProcessor.stripe
 
     def _get_currencies(
         self,
@@ -2508,38 +2585,42 @@ class CheckoutService:
                 # Could be a malicious user trying to take over an existing customer's account by using their email
                 generate_customer_session = False
 
-        stripe_customer_id = customer.stripe_customer_id
-        if stripe_customer_id is None:
-            create_params: CustomerCreateParams = {"email": customer.email}
-            if checkout.customer_billing_name is not None:
-                create_params["name"] = checkout.customer_billing_name
-            elif checkout.customer_name is not None:
-                create_params["name"] = checkout.customer_name
-            if checkout.customer_billing_address is not None:
-                create_params["address"] = checkout.customer_billing_address.to_dict()  # type: ignore
-            if checkout.customer_tax_id is not None:
-                create_params["tax_id_data"] = [
-                    to_stripe_tax_id(checkout.customer_tax_id)
-                ]
-            stripe_customer = await stripe_service.create_customer(**create_params)
-            stripe_customer_id = stripe_customer.id
-        else:
-            update_params: CustomerModifyParams = {"email": customer.email}
-            if checkout.customer_billing_name is not None:
-                update_params["name"] = checkout.customer_billing_name
-            elif checkout.customer_name is not None:
-                update_params["name"] = checkout.customer_name
-            if checkout.customer_billing_address is not None:
-                update_params["address"] = checkout.customer_billing_address.to_dict()  # type: ignore
-            await stripe_service.update_customer(
-                stripe_customer_id,
-                tax_id=(
-                    to_stripe_tax_id(checkout.customer_tax_id)
-                    if checkout.customer_tax_id is not None
-                    else None
-                ),
-                **update_params,
-            )
+        # SmilePay checkouts do not require a Stripe customer record
+        if checkout.payment_processor != PaymentProcessor.smilepay:
+            stripe_customer_id = customer.stripe_customer_id
+            if stripe_customer_id is None:
+                create_params: CustomerCreateParams = {"email": customer.email}
+                if checkout.customer_billing_name is not None:
+                    create_params["name"] = checkout.customer_billing_name
+                elif checkout.customer_name is not None:
+                    create_params["name"] = checkout.customer_name
+                if checkout.customer_billing_address is not None:
+                    create_params["address"] = checkout.customer_billing_address.to_dict()  # type: ignore
+                if checkout.customer_tax_id is not None:
+                    create_params["tax_id_data"] = [
+                        to_stripe_tax_id(checkout.customer_tax_id)
+                    ]
+                stripe_customer = await stripe_service.create_customer(**create_params)
+                stripe_customer_id = stripe_customer.id
+            else:
+                update_params: CustomerModifyParams = {"email": customer.email}
+                if checkout.customer_billing_name is not None:
+                    update_params["name"] = checkout.customer_billing_name
+                elif checkout.customer_name is not None:
+                    update_params["name"] = checkout.customer_name
+                if checkout.customer_billing_address is not None:
+                    update_params["address"] = checkout.customer_billing_address.to_dict()  # type: ignore
+                await stripe_service.update_customer(
+                    stripe_customer_id,
+                    tax_id=(
+                        to_stripe_tax_id(checkout.customer_tax_id)
+                        if checkout.customer_tax_id is not None
+                        else None
+                    ),
+                    **update_params,
+                )
+
+            customer.stripe_customer_id = stripe_customer_id
 
         if checkout.customer_name is not None:
             customer.name = checkout.customer_name
@@ -2551,8 +2632,6 @@ class CheckoutService:
             customer.tax_id = checkout.customer_tax_id
         if checkout.locale is not None:
             customer.locale = checkout.locale
-
-        customer.stripe_customer_id = stripe_customer_id
         customer.user_metadata = {
             **customer.user_metadata,
             **checkout.customer_metadata,

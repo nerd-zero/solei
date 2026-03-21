@@ -9,7 +9,7 @@ if [ $# -lt 4 ]; then
   exit 1
 fi
 
-IMG="ghcr.io/polarsource/polar@${1}"
+IMG="ghcr.io/nerd-zero/solei@${1}"
 HAS_MIGRATIONS="${2}"
 API_SERVICE_ID="${3}"
 WORKER_SERVICE_IDS="${4}"
@@ -132,7 +132,7 @@ PLAYWRIGHT_WORKER_IDS="${6:-}"
 PLAYWRIGHT_SERVERS=()
 PLAYWRIGHT_IMG=""
 if [[ -n "$PLAYWRIGHT_DIGEST" && -n "$PLAYWRIGHT_WORKER_IDS" ]]; then
-  PLAYWRIGHT_IMG="ghcr.io/polarsource/polar-playwright@${PLAYWRIGHT_DIGEST}"
+  PLAYWRIGHT_IMG="ghcr.io/nerd-zero/solei-playwright@${PLAYWRIGHT_DIGEST}"
   IFS=',' read -ra PLAYWRIGHT_SERVERS <<< "$PLAYWRIGHT_WORKER_IDS"
 fi
 

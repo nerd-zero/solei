@@ -215,7 +215,7 @@ module "production" {
     "bulk-appeal-review" = {
       schedule      = "0 8 * * *" # 8:00 UTC = 9:00 CET
       start_command = "uv run python -m scripts.bulk_appeal_review --execute --limit 0"
-      image_url     = "ghcr.io/polarsource/polar-playwright"
+      image_url     = "ghcr.io/nerd-zero/solei-playwright"
       plan          = "standard"
     }
   }
