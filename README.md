@@ -26,7 +26,7 @@ Focus on what you build—**Solei** handles the infrastructure that gets you pai
 
 ## Acknowledgments & Lineage
 
-**Solei** began as a fork of the excellent [Polar](https://polar.sh) platform. We are deeply grateful to the **Polar Software Inc.** team and contributors for building such a powerful open-source foundation.
+**Solei** is a fork of the excellent [Polar](https://polar.sh) platform. We are deeply grateful to the **Polar Software Inc.** team and contributors for building such a powerful open-source foundation.
 
 Today, Solei is maintained independently by **Nerd Zero**, laser-focused on the African market while honoring the groundwork laid by the Polar community.
 
