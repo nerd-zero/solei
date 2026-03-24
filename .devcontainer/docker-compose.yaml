@@ -23,6 +23,14 @@ services:
   db:
     image: postgres:15-alpine
     restart: unless-stopped
+    # db is the network anchor — app, redis, and ingress all use network_mode: service:db,
+    # so all devcontainer ports must be published here (not on their own services).
+    ports:
+      - "3000:3000"   # Next.js (app)
+      - "8000:8000"   # FastAPI (app)
+      - "8080:8080"   # Caddy ingress
+      - "5432:5432"   # PostgreSQL (this service)
+      - "6379:6379"   # Redis (redis service shares this network)
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:

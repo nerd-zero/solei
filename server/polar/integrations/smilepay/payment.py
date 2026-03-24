@@ -4,12 +4,12 @@ import structlog
 
 from polar.checkout.repository import CheckoutRepository
 from polar.checkout.service import checkout as checkout_service
+from polar.enums import PaymentProcessor
 from polar.exceptions import PolarError
 from polar.kit.utils import generate_uuid
 from polar.logging import Logger
 from polar.models import Checkout, Payment
 from polar.models.payment import PaymentStatus
-from polar.enums import PaymentProcessor
 from polar.payment.repository import PaymentRepository
 from polar.postgres import AsyncSession
 

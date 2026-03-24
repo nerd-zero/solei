@@ -1,0 +1,202 @@
+name: Build & Publish Images
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "server/**"
+      - "clients/**"
+      - "!clients/apps/app/**"
+      - "VERSION"
+      - ".github/workflows/build.yml"
+      - ".github/scripts/bump-version.sh"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "server/**"
+      - "clients/**"
+      - "!clients/apps/app/**"
+  workflow_dispatch:
+
+jobs:
+  # Bump CalVer on main only — needs contents: write for the commit+push.
+  # Runs before prepare so the new version is available as an output.
+  bump-version:
+    name: "Bump Version 📦"
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Bump CalVer and commit
+        id: bump
+        run: |
+          chmod +x .github/scripts/bump-version.sh
+          VERSION=$(.github/scripts/bump-version.sh)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add VERSION
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: bump version to ${VERSION} [skip ci]"
+            git push
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+  prepare:
+    name: "Prepare 🔧"
+    needs: [bump-version]
+    if: always() && !cancelled()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      server-changed: ${{ steps.filter.outputs.server }}
+      web-changed: ${{ steps.filter.outputs.web }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            server:
+              - 'server/**'
+              - '.github/workflows/build.yml'
+              - '.github/scripts/bump-version.sh'
+            web:
+              - 'clients/**'
+              - '!clients/apps/app/**'
+              - '.github/workflows/build.yml'
+
+      - name: Compute version tag
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # PRs: tag as pr-{number}-{sha:7}, no version bump
+            PR_NUM="${{ github.event.pull_request.number }}"
+            SHA="${{ github.event.pull_request.head.sha }}"
+            echo "version=pr-${PR_NUM}-${SHA:0:7}" >> "$GITHUB_OUTPUT"
+          else
+            # Main: version was already bumped by the bump-version job
+            echo "version=${{ needs.bump-version.outputs.version }}" >> "$GITHUB_OUTPUT"
+          fi
+
+  build-server:
+    name: "Server: Build Image 🐳"
+    needs: prepare
+    if: needs.prepare.outputs.server-changed == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Skip login for fork PRs — they have read-only tokens and cannot push
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image tags
+        id: tags
+        run: |
+          VERSION="${{ needs.prepare.outputs.version }}"
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "tags=ghcr.io/nerd-zero/solei:${VERSION},ghcr.io/nerd-zero/solei:latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "tags=ghcr.io/nerd-zero/solei:${VERSION}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          # Fork PRs: build only (validates the image builds), skip push
+          push: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+          context: ./server
+          target: production
+          platforms: linux/amd64
+          tags: ${{ steps.tags.outputs.tags }}
+          build-args: |
+            RELEASE_VERSION=${{ needs.prepare.outputs.version }}
+          secrets: |
+            IPINFO_ACCESS_TOKEN=${{ secrets.IPINFO_ACCESS_TOKEN }}
+
+  build-web:
+    name: "Web: Build Image 🐳"
+    needs: prepare
+    if: needs.prepare.outputs.web-changed == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Skip login for fork PRs — they have read-only tokens and cannot push
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image tags
+        id: tags
+        run: |
+          VERSION="${{ needs.prepare.outputs.version }}"
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "tags=ghcr.io/nerd-zero/solei-web:${VERSION},ghcr.io/nerd-zero/solei-web:latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "tags=ghcr.io/nerd-zero/solei-web:${VERSION}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          # Fork PRs: build only (validates the image builds), skip push
+          push: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+          context: ./clients
+          file: ./clients/apps/web/Dockerfile
+          platforms: linux/amd64
+          tags: ${{ steps.tags.outputs.tags }}
+          build-args: |
+            RELEASE_VERSION=${{ needs.prepare.outputs.version }}
+          secrets: |
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+
+  deploy:
+    name: "Deploy 🚀"
+    needs: [bump-version, prepare, build-server, build-web]
+    if: |
+      always() &&
+      !failure() &&
+      !cancelled() &&
+      github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to self-hosted servers
+        run: |
+          echo "TODO: wire up deployment to self-hosted servers"
+          echo "Server image: ghcr.io/nerd-zero/solei:${{ needs.prepare.outputs.version }}"
+          echo "Web image:    ghcr.io/nerd-zero/solei-web:${{ needs.prepare.outputs.version }}"

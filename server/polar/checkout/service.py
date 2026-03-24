@@ -3,6 +3,7 @@ import secrets
 import typing
 import uuid
 from collections.abc import AsyncGenerator, AsyncIterator, Sequence
+from typing import cast
 
 import stripe as stripe_lib
 import structlog
@@ -115,8 +116,12 @@ from .sorting import CheckoutSortProperty
 if typing.TYPE_CHECKING:
     from stripe.params._customer_create_params import (
         CustomerCreateParams,
+        CustomerCreateParamsAddress,
     )
-    from stripe.params._customer_modify_params import CustomerModifyParams
+    from stripe.params._customer_modify_params import (
+        CustomerModifyParams,
+        CustomerModifyParamsAddress,
+    )
     from stripe.params._payment_intent_create_params import PaymentIntentCreateParams
     from stripe.params._setup_intent_create_params import SetupIntentCreateParams
 
@@ -1167,6 +1172,9 @@ class CheckoutService:
                                 )
                         raise TrialAlreadyRedeemed(checkout)
         elif checkout.payment_processor == PaymentProcessor.smilepay:
+            assert has_product_checkout(checkout)
+            product = checkout.product
+            assert product is not None
             if checkout.is_payment_setup_required:
                 raise NotImplementedError(
                     "SmilePay does not support subscription setup"
@@ -1194,9 +1202,8 @@ class CheckoutService:
                     currency=checkout.currency,
                     return_url=return_url,
                     result_url=result_url,
-                    item_name=checkout.product.name,
-                    item_description=checkout.product.description
-                    or checkout.product.name,
+                    item_name=product.name,
+                    item_description=(product.description or product.name),
                     first_name=checkout.customer_name,
                     email=checkout.customer_email,
                 )
@@ -2594,7 +2601,10 @@ class CheckoutService:
                 elif checkout.customer_name is not None:
                     create_params["name"] = checkout.customer_name
                 if checkout.customer_billing_address is not None:
-                    create_params["address"] = checkout.customer_billing_address.to_dict()  # type: ignore
+                    create_params["address"] = cast(
+                        "CustomerCreateParamsAddress",
+                        checkout.customer_billing_address.to_dict(),
+                    )
                 if checkout.customer_tax_id is not None:
                     create_params["tax_id_data"] = [
                         to_stripe_tax_id(checkout.customer_tax_id)
@@ -2608,7 +2618,10 @@ class CheckoutService:
                 elif checkout.customer_name is not None:
                     update_params["name"] = checkout.customer_name
                 if checkout.customer_billing_address is not None:
-                    update_params["address"] = checkout.customer_billing_address.to_dict()  # type: ignore
+                    update_params["address"] = cast(
+                        "CustomerModifyParamsAddress",
+                        checkout.customer_billing_address.to_dict(),
+                    )
                 await stripe_service.update_customer(
                     stripe_customer_id,
                     tax_id=(

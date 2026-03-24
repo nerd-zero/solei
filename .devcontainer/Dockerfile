@@ -10,5 +10,6 @@ ENV FORWARDED_ALLOW_IPS *
 #    && rm -rf /tmp/pip-tmp
 
 # Install additional OS packages.
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+RUN rm -f /etc/apt/sources.list.d/yarn.list \
+  && apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get -y install --no-install-recommends postgresql-client

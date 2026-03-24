@@ -159,8 +159,6 @@ export const CheckoutFormProvider = ({
         setLoadingLabel(t('checkout.loading.processingPayment'))
         try {
           return await _confirm(data)
-        } catch (error) {
-          throw error
         } finally {
           setLoading(false)
         }
