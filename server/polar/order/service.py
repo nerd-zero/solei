@@ -1114,7 +1114,7 @@ class OrderService:
             log.warning(
                 "Invalid payment processor", payment_processor=payment_processor
             )
-            raise OrderNotEligibleForRetry(payment_processor)
+            raise OrderNotEligibleForRetry(order)
 
         if confirmation_token_id is None and payment_method_id is None:
             raise PaymentRetryValidationError(
