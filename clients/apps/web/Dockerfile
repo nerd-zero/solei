@@ -1,7 +1,7 @@
 # Build context: ./clients (monorepo root)
 # docker build -f apps/web/Dockerfile .
 
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
@@ -17,9 +17,11 @@ ARG RELEASE_VERSION
 ENV NEXT_PUBLIC_RELEASE_VERSION=${RELEASE_VERSION}
 
 # SENTRY_AUTH_TOKEN is passed as a build secret so it never lands in a layer.
-# If not provided (e.g. fork PRs), source map upload is silently skipped.
+# If not provided (e.g. fork PRs), the var is left unset and Sentry skips upload.
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
-    SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN 2>/dev/null || true) \
+    if [ -f /run/secrets/SENTRY_AUTH_TOKEN ]; then \
+      export SENTRY_AUTH_TOKEN="$(cat /run/secrets/SENTRY_AUTH_TOKEN)"; \
+    fi; \
     pnpm --filter "web..." build
 
 # ---- Runner ----

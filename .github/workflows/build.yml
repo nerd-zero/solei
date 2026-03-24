@@ -19,11 +19,43 @@ on:
   workflow_dispatch:
 
 jobs:
-  prepare:
-    name: "Prepare 🔧"
+  # Bump CalVer on main only — needs contents: write for the commit+push.
+  # Runs before prepare so the new version is available as an output.
+  bump-version:
+    name: "Bump Version 📦"
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Bump CalVer and commit
+        id: bump
+        run: |
+          chmod +x .github/scripts/bump-version.sh
+          VERSION=$(.github/scripts/bump-version.sh)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add VERSION
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: bump version to ${VERSION} [skip ci]"
+            git push
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+  prepare:
+    name: "Prepare 🔧"
+    needs: [bump-version]
+    if: always() && !cancelled()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       version: ${{ steps.version.outputs.version }}
       server-changed: ${{ steps.filter.outputs.server }}
@@ -31,7 +63,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - uses: dorny/paths-filter@v4
@@ -56,17 +87,8 @@ jobs:
             SHA="${{ github.event.pull_request.head.sha }}"
             echo "version=pr-${PR_NUM}-${SHA:0:7}" >> "$GITHUB_OUTPUT"
           else
-            # Main: bump CalVer and commit back with [skip ci]
-            chmod +x .github/scripts/bump-version.sh
-            VERSION=$(.github/scripts/bump-version.sh)
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add VERSION
-            if ! git diff --staged --quiet; then
-              git commit -m "chore: bump version to ${VERSION} [skip ci]"
-              git push
-            fi
-            echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+            # Main: version was already bumped by the bump-version job
+            echo "version=${{ needs.bump-version.outputs.version }}" >> "$GITHUB_OUTPUT"
           fi
 
   build-server:
@@ -165,7 +187,7 @@ jobs:
 
   deploy:
     name: "Deploy 🚀"
-    needs: [prepare, build-server, build-web]
+    needs: [bump-version, prepare, build-server, build-web]
     if: |
       always() &&
       !failure() &&

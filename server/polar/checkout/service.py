@@ -2594,7 +2594,9 @@ class CheckoutService:
                 elif checkout.customer_name is not None:
                     create_params["name"] = checkout.customer_name
                 if checkout.customer_billing_address is not None:
-                    create_params["address"] = checkout.customer_billing_address.to_dict()  # type: ignore
+                    create_params["address"] = (
+                        checkout.customer_billing_address.to_dict()
+                    )  # type: ignore
                 if checkout.customer_tax_id is not None:
                     create_params["tax_id_data"] = [
                         to_stripe_tax_id(checkout.customer_tax_id)
@@ -2608,7 +2610,9 @@ class CheckoutService:
                 elif checkout.customer_name is not None:
                     update_params["name"] = checkout.customer_name
                 if checkout.customer_billing_address is not None:
-                    update_params["address"] = checkout.customer_billing_address.to_dict()  # type: ignore
+                    update_params["address"] = (
+                        checkout.customer_billing_address.to_dict()
+                    )  # type: ignore
                 await stripe_service.update_customer(
                     stripe_customer_id,
                     tax_id=(
