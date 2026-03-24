@@ -78,6 +78,7 @@ const docsCSP = `
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   allowedDevOrigins: ['127.0.0.1'],
   reactStrictMode: true,
   transpilePackages: ['shiki', '@polar-sh/checkout', '@polar-sh/orbit'],
