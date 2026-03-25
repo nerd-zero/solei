@@ -3,10 +3,10 @@ title: "Laravel"
 description: "Payments and Checkouts made dead simple with Laravel"
 ---
 
-Seamlessly integrate Polar.sh subscriptions and payments into your Laravel application. This package provides an elegant way to handle subscriptions, manage recurring payments, and interact with Polar's API. With built-in support for webhooks, subscription management, and a fluent API, you can focus on building your application while we handle the complexities of subscription billing.
+Seamlessly integrate Solei.sh subscriptions and payments into your Laravel application. This package provides an elegant way to handle subscriptions, manage recurring payments, and interact with Solei's API. With built-in support for webhooks, subscription management, and a fluent API, you can focus on building your application while we handle the complexities of subscription billing.
 
 <Note>
-This provider is not maintained or officially supported by Polar. Use at your own discretion. If you have questions about the provider, please contact the project maintainer.
+This provider is not maintained or officially supported by Solei. Use at your own discretion. If you have questions about the provider, please contact the project maintainer.
 </Note>
 
 ## Installation
@@ -51,23 +51,23 @@ This is the contents of the published config file:
 return [
     /*
     |--------------------------------------------------------------------------
-    | Polar Access Token
+    | Solei Access Token
     |--------------------------------------------------------------------------
     |
-    | The Polar access token is used to authenticate with the Polar API.
-    | You can find your access token in the Polar dashboard > Settings
+    | The Solei access token is used to authenticate with the Solei API.
+    | You can find your access token in the Solei dashboard > Settings
     | under the "Developers" section.
     |
     */
-    'access_token' => env('POLAR_ACCESS_TOKEN'),
+    'access_token' => env('SOLEI_ACCESS_TOKEN'),
 
     /*
     |--------------------------------------------------------------------------
-    | Polar Webhook Secret
+    | Solei Webhook Secret
     |--------------------------------------------------------------------------
     |
-    | The Polar webhook secret is used to verify that the webhook requests
-    | are coming from Polar. You can find your webhook secret in the Polar
+    | The Solei webhook secret is used to verify that the webhook requests
+    | are coming from Solei. You can find your webhook secret in the Solei
     | dashboard > Settings > Webhooks on each registered webhook.
     |
     | We (the developers) recommend using a single webhook for all your
@@ -79,11 +79,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Polar Url Path
+    | Solei Url Path
     |--------------------------------------------------------------------------
     |
-    | This is the base URI where routes from Polar will be served
-    | from. The URL built into Polar is used by default; however,
+    | This is the base URI where routes from Solei will be served
+    | from. The URL built into Solei is used by default; however,
     | you can modify this path as you see fit for your application.
     |
     */
@@ -96,7 +96,7 @@ return [
     |
     | This is the default redirect URL that will be used when a customer
     | is redirected back to your application after completing a purchase
-    | from a checkout session in your Polar account.
+    | from a checkout session in your Solei account.
     |
     */
     'redirect_url' => null,
@@ -119,21 +119,21 @@ return [
 
 ### Access Token
 
-Configure your access token. Create a new token in the Polar Dashboard > Settings > Developers and paste it in the `.env` file.
+Configure your access token. Create a new token in the Solei Dashboard > Settings > Developers and paste it in the `.env` file.
 
-- https://sandbox.polar.sh/dashboard/ORG_SLUG/settings (Sandbox)
-- https://polar.sh/dashboard/ORG_SLUG/settings (Production)
+- https://sandbox.solei.to/dashboard/ORG_SLUG/settings (Sandbox)
+- https://solei.to/dashboard/ORG_SLUG/settings (Production)
 
 ```bash Terminal
-POLAR_ACCESS_TOKEN="<your_access_token>"
+SOLEI_ACCESS_TOKEN="<your_access_token>"
 ```
 
 ### Webhook Secret
 
-Configure your webhook secret. Create a new webhook in the Polar Dashboard > Settings > Webhooks.
+Configure your webhook secret. Create a new webhook in the Solei Dashboard > Settings > Webhooks.
 
-- https://sandbox.polar.sh/dashboard/ORG_SLUG/settings/webhooks (Sandbox)
-- https://polar.sh/dashboard/ORG_SLUG/settings/webhooks (Production)
+- https://sandbox.solei.to/dashboard/ORG_SLUG/settings/webhooks (Sandbox)
+- https://solei.to/dashboard/ORG_SLUG/settings/webhooks (Production)
 
 Configure the webhook for the following events that this package supports:
 
@@ -159,7 +159,7 @@ Let’s make sure everything’s ready for your customers to checkout smoothly. 
 First, we’ll need to set up a model to handle billing—don’t worry, it’s super simple! In most cases, this will be your app’s User model. Just add the Billable trait to your model like this (you’ll import it from the package first, of course):
 
 ```php
-use Danestves\LaravelPolar\Billable;
+use Danestves\LaravelSolei\Billable;
 
 class User extends Authenticatable
 {
@@ -169,9 +169,9 @@ class User extends Authenticatable
 
 Now the user model will have access to the methods provided by the package. You can make any model billable by adding the trait to it, not just the User model.
 
-### Polar Script
+### Solei Script
 
-Polar includes a JavaScript script that you can use to initialize the [Polar Embedded Checkout](https://polar.sh/docs/features/checkout/embed). If you going to use this functionality, you can use the `@polarEmbedScript` directive to include the script in your views inside the `<head>` tag.
+Solei includes a JavaScript script that you can use to initialize the [Solei Embedded Checkout](https://solei.to/docs/features/checkout/embed). If you going to use this functionality, you can use the `@polarEmbedScript` directive to include the script in your views inside the `<head>` tag.
 
 ```blade
 <head>
@@ -183,7 +183,7 @@ Polar includes a JavaScript script that you can use to initialize the [Polar Emb
 
 ### Webhooks
 
-This package includes a webhook handler that will handle the webhooks from Polar.
+This package includes a webhook handler that will handle the webhooks from Solei.
 
 #### Webhooks & CSRF Protection
 
@@ -207,7 +207,7 @@ Or if you're using Laravel v11 and up, you should exclude `polar/*` in your appl
 
 ### Commands
 
-This package includes a list of commands that you can use to retrieve information about your Polar account.
+This package includes a list of commands that you can use to retrieve information about your Solei account.
 
 | Command                      | Description                                |
 | ---------------------------- | ------------------------------------------ |
@@ -339,7 +339,7 @@ Using any of these will result in an exception being thrown.
 
 #### Customer Portal
 
-Customers can update their personal information (e.g., name, email address) by accessing their [self-service customer portal](https://polar.sh/docs/features/customer-portal). To redirect customers to this portal, call the `redirectToCustomerPortal()` method on your billable model (e.g., the User model).
+Customers can update their personal information (e.g., name, email address) by accessing their [self-service customer portal](https://solei.to/docs/features/customer-portal). To redirect customers to this portal, call the `redirectToCustomerPortal()` method on your billable model (e.g., the User model).
 
 ```php
 use Illuminate\Http\Request;
@@ -623,7 +623,7 @@ if ($user->subscription()->onGracePeriod()) {
 }
 ```
 
-Polar does not offer immediate cancellation. To resume a subscription while it is still in its grace period, use the resume method.
+Solei does not offer immediate cancellation. To resume a subscription while it is still in its grace period, use the resume method.
 
 ```php
 $user->subscription()->resume();
@@ -633,20 +633,20 @@ When a cancelled subscription approaches the end of its grace period, it becomes
 
 ### Handling Webhooks
 
-Polar can send webhooks to your app, allowing you to react. By default, this package handles the majority of the work for you. If you have properly configured webhooks, it will listen for incoming events and update your database accordingly. We recommend activating all event kinds so you may easily upgrade in the future.
+Solei can send webhooks to your app, allowing you to react. By default, this package handles the majority of the work for you. If you have properly configured webhooks, it will listen for incoming events and update your database accordingly. We recommend activating all event kinds so you may easily upgrade in the future.
 
 #### Webhook Events
 
-- `Danestves\LaravelPolar\Events\BenefitGrantCreated`
-- `Danestves\LaravelPolar\Events\BenefitGrantUpdated`
-- `Danestves\LaravelPolar\Events\BenefitGrantRevoked`
-- `Danestves\LaravelPolar\Events\OrderCreated`
-- `Danestves\LaravelPolar\Events\OrderRefunded`
-- `Danestves\LaravelPolar\Events\SubscriptionActive`
-- `Danestves\LaravelPolar\Events\SubscriptionCanceled`
-- `Danestves\LaravelPolar\Events\SubscriptionCreated`
-- `Danestves\LaravelPolar\Events\SubscriptionRevoked`
-- `Danestves\LaravelPolar\Events\SubscriptionUpdated`
+- `Danestves\LaravelSolei\Events\BenefitGrantCreated`
+- `Danestves\LaravelSolei\Events\BenefitGrantUpdated`
+- `Danestves\LaravelSolei\Events\BenefitGrantRevoked`
+- `Danestves\LaravelSolei\Events\OrderCreated`
+- `Danestves\LaravelSolei\Events\OrderRefunded`
+- `Danestves\LaravelSolei\Events\SubscriptionActive`
+- `Danestves\LaravelSolei\Events\SubscriptionCanceled`
+- `Danestves\LaravelSolei\Events\SubscriptionCreated`
+- `Danestves\LaravelSolei\Events\SubscriptionRevoked`
+- `Danestves\LaravelSolei\Events\SubscriptionUpdated`
 
 Each of these events has a billable `$model` object and an event `$payload`. The subscription events also include the `$subscription` object. These can be accessed via the public properties.
 
@@ -657,12 +657,12 @@ If you wish to respond to these events, you must establish listeners for them. F
 
 namespace App\Listeners;
 
-use Danestves\LaravelPolar\Events\WebhookHandled;
+use Danestves\LaravelSolei\Events\WebhookHandled;
 
-class PolarEventListener
+class SoleiEventListener
 {
     /**
-     * Handle received Polar webhooks.
+     * Handle received Solei webhooks.
      */
     public function handle(WebhookHandled $event): void
     {
@@ -673,7 +673,7 @@ class PolarEventListener
 }
 ```
 
-The [Polar documentation](https://polar.sh/docs/integrate/webhooks/events) includes an example payload.
+The [Solei documentation](https://solei.to/docs/integrate/webhooks/events) includes an example payload.
 
 Laravel v11 and up will automatically discover the listener. If you're using Laravel v10 or lower, you should configure it in your app's `EventServiceProvider`:
 
@@ -682,15 +682,15 @@ Laravel v11 and up will automatically discover the listener. If you're using Lar
 
 namespace App\Providers;
 
-use App\Listeners\PolarEventListener;
+use App\Listeners\SoleiEventListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Danestves\LaravelPolar\Events\WebhookHandled;
+use Danestves\LaravelSolei\Events\WebhookHandled;
 
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
         WebhookHandled::class => [
-            PolarEventListener::class,
+            SoleiEventListener::class,
         ],
     ];
 }

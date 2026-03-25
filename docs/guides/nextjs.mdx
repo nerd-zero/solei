@@ -1,7 +1,7 @@
 ---
-title: "Integrate Polar with Next.js"
+title: "Integrate Solei with Next.js"
 sidebarTitle: "Next.js"
-description: "In this guide, we'll show you how to integrate Polar with Next.js."
+description: "In this guide, we'll show you how to integrate Solei with Next.js."
 ---
 
 Feel free to use our quick-start script to get started inside a new Next.js project:
@@ -11,13 +11,13 @@ Feel free to use our quick-start script to get started inside a new Next.js proj
 npx polar-init
 ```
 
-Consider following this guide while using the Polar Sandbox Environment. This will allow you to test your integration without affecting your production data.
+Consider following this guide while using the Solei Sandbox Environment. This will allow you to test your integration without affecting your production data.
 
-[A complete code-example of this guide can be found on GitHub](https://github.com/polarsource/polar-next).
+[A complete code-example of this guide can be found on GitHub](https://github.com/nerd-zero/solei-next).
 
-## Install the Polar JavaScript SDK
+## Install the Solei JavaScript SDK
 
-To get started, you need to install the Polar JavaScript SDK and the Polar Nextjs helper package. You can do this by running the following command:
+To get started, you need to install the Solei JavaScript SDK and the Solei Nextjs helper package. You can do this by running the following command:
 
 ```bash Terminal
 pnpm install @polar-sh/sdk @polar-sh/nextjs
@@ -25,29 +25,29 @@ pnpm install @polar-sh/sdk @polar-sh/nextjs
 
 ## Setting up environment variables
 
-### Polar Access Token
+### Solei Access Token
 
-To authenticate with Polar, you need to create an access token, and supply it to Next.js using a `POLAR_ACCESS_TOKEN` environment variable.
+To authenticate with Solei, you need to create an access token, and supply it to Next.js using a `SOLEI_ACCESS_TOKEN` environment variable.
 
 You can create an organization access token from your organization settings.
 
-## Configuring a Polar API Client
+## Configuring a Solei API Client
 
-To interact with the Polar API, you need to create a new instance of the `Polar` class. This class uses the provided access token to authenticate with the Polar API.
+To interact with the Solei API, you need to create a new instance of the `Solei` class. This class uses the provided access token to authenticate with the Solei API.
 
 ```typescript
 // src/polar.ts
 import { Polar } from "@polar-sh/sdk";
 
 export const api = new Polar({
-  accessToken: process.env.POLAR_ACCESS_TOKEN!,
+  accessToken: process.env.SOLEI_ACCESS_TOKEN!,
   server: "sandbox", // Use this option if you're using the sandbox environment - else use 'production' or omit the parameter
 });
 ```
 
 Remember to replace `sandbox` with `production` when you're ready to switch to the production environment.
 
-## Generating Polar Checkout Sessions
+## Generating Solei Checkout Sessions
 
 Next up, we need to create a checkout endpoint to handle the creation of checkout sessions.
 
@@ -58,15 +58,15 @@ Go ahead and create a new GET route in Next.js.
 import { Checkout } from "@polar-sh/nextjs";
 
 export const GET = Checkout({
-  accessToken: process.env.POLAR_ACCESS_TOKEN!,
+  accessToken: process.env.SOLEI_ACCESS_TOKEN!,
   successUrl: "https://your-app.com/confirmation?checkout_id={CHECKOUT_ID}",
   server: "sandbox", // Use this option if you're using the sandbox environment - else use 'production' or omit the parameter
 });
 ```
 
-## Handling Polar Webhooks
+## Handling Solei Webhooks
 
-Polar can send you events about various things happening in your organization. This is very useful for keeping your database in sync with Polar checkouts, orders, subscriptions, etc.
+Solei can send you events about various things happening in your organization. This is very useful for keeping your database in sync with Solei checkouts, orders, subscriptions, etc.
 
 Configuring a webhook is simple. Head over to your organization's settings page and click on the "Add Endpoint" button to create a new webhook.
 
@@ -82,14 +82,14 @@ ngrok http 3000
 
 ### Add Webhook Endpoint
 
-1. Point the Webhook to `your-app.com/api/webhook/polar`. This must be an absolute URL which Polar can reach. If you use ngrok, the URL will look something like this: `https://<your-ngrok-id>.ngrok-free.app/api/webhook/polar`.
+1. Point the Webhook to `your-app.com/api/webhook/polar`. This must be an absolute URL which Solei can reach. If you use ngrok, the URL will look something like this: `https://<your-ngrok-id>.ngrok-free.app/api/webhook/polar`.
 2. Select which events you want to be notified about. You can read more about the available events in the [Events section](/api-reference#webhooks).
-3. Generate a secret key to sign the requests. This will allow you to verify that the requests are truly coming from Polar.
+3. Generate a secret key to sign the requests. This will allow you to verify that the requests are truly coming from Solei.
 4. Add the secret key to your environment variables.
 
 ```bash Terminal
 # .env
-POLAR_ACCESS_TOKEN="polar_pat..."
+SOLEI_ACCESS_TOKEN="polar_pat..."
 POLAR_WEBHOOK_SECRET="..."
 ```
 
@@ -130,4 +130,4 @@ If you're building a real-time application, you might want to notify the client 
 
 ## Conclusion
 
-If you have issues or need support, feel free to join [our Discord](https://discord.gg/Pnhfz3UThd).
+If you have issues or need support, visit our [GitHub Discussions](https://github.com/nerd-zero/solei/discussions) or email [support@solei.to](mailto:support@solei.to).

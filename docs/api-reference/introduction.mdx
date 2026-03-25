@@ -6,10 +6,10 @@ description: "Base URLs, authentication, pagination, rate limits, and the differ
 
 <CardGroup cols={2}>
   <Card title="Production Base URL" icon="globe">
-    `https://api.polar.sh/v1`
+    `https://api.solei.to/v1`
   </Card>
   <Card title="Sandbox Base URL" icon="flask">
-    `https://sandbox-api.polar.sh/v1`
+    `https://sandbox-api.solei.to/v1`
   </Card>
   <Card title="Auth (Organization)" icon="key" href="/integrate/oat">
     Use an **Organization Access Token (OAT)** in the `Authorization: Bearer`
@@ -28,8 +28,8 @@ description: "Base URLs, authentication, pagination, rate limits, and the differ
 
 | Environment | Base URL                          | Purpose                         |
 | ----------- | --------------------------------- | ------------------------------- |
-| Production  | `https://api.polar.sh/v1`         | Real customers & live payments  |
-| Sandbox     | `https://sandbox-api.polar.sh/v1` | Safe testing & integration work |
+| Production  | `https://api.solei.to/v1`         | Real customers & live payments  |
+| Sandbox     | `https://sandbox-api.solei.to/v1` | Safe testing & integration work |
 
 <Info>
   The sandbox environment is fully isolated—data, users, tokens, and
@@ -46,7 +46,7 @@ Read more: [Sandbox Environment](/integrate/sandbox)
 Use an **OAT** to act on behalf of your organization (manage products, prices, checkouts, orders, subscriptions, benefits, etc.).
 
 ```http
-Authorization: Bearer polar_oat_xxxxxxxxxxxxxxxxx
+Authorization: Bearer solei_oat_xxxxxxxxxxxxxxxxx
 ```
 
 <Tip>
@@ -84,19 +84,19 @@ Do **not** use OATs in the browser. For customer-facing flows, [generate a **Cus
 
 <CodeGroup>
 ```bash curl (Production - Core API)
-curl https://api.polar.sh/v1/products/ \
+curl https://api.solei.to/v1/products/ \
   -H "Authorization: Bearer $POLAR_OAT" \
   -H "Accept: application/json"
 ```
 
 ```bash curl (Sandbox - Core API)
-curl https://sandbox-api.polar.sh/v1/products/ \
+curl https://sandbox-api.solei.to/v1/products/ \
   -H "Authorization: Bearer $POLAR_OAT_SANDBOX" \
   -H "Accept: application/json"
 ```
 
 ```bash curl (Customer Portal API)
-curl https://api.polar.sh/v1/customer-portal/orders/ \
+curl https://api.solei.to/v1/customer-portal/orders/ \
   -H "Authorization: Bearer $POLAR_CUSTOMER_TOKEN" \
   -H "Accept: application/json"
 ```
@@ -112,17 +112,17 @@ All official SDKs accept a `server` parameter for sandbox usage:
 import { Polar } from "@polar-sh/sdk";
 
 const polar = new Polar({
-accessToken: process.env.POLAR_ACCESS_TOKEN!,
+accessToken: process.env.SOLEI_ACCESS_TOKEN!,
 server: "sandbox", // omit or use 'production' for live
 });
 
 ````
 
 ```py Python
-from polar import Polar
+from polar_sdk import Polar
 
-client = Polar(
-    access_token=os.environ["POLAR_ACCESS_TOKEN"],
+client = Solei(
+    access_token=os.environ["SOLEI_ACCESS_TOKEN"],
     server="sandbox",
 )
 ````
@@ -130,14 +130,14 @@ client = Polar(
 ```go Go
 s := polargo.New(
   polargo.WithServer("sandbox"),
-  polargo.WithSecurity(os.Getenv("POLAR_ACCESS_TOKEN")),
+  polargo.WithSecurity(os.Getenv("SOLEI_ACCESS_TOKEN")),
 )
 ```
 
 ```php PHP
 $sdk = Polar\Polar::builder()
     ->setServer('sandbox')
-    ->setSecurity(getenv('POLAR_ACCESS_TOKEN'))
+    ->setSecurity(getenv('SOLEI_ACCESS_TOKEN'))
     ->build();
 ```
 
@@ -145,7 +145,7 @@ $sdk = Polar\Polar::builder()
 
 ## Pagination
 
-List endpoints in the Polar API support pagination to help you efficiently retrieve large datasets. Use the `page` and `limit` query parameters to control pagination.
+List endpoints in the Solei API support pagination to help you efficiently retrieve large datasets. Use the `page` and `limit` query parameters to control pagination.
 
 ### Query Parameters
 
@@ -174,7 +174,7 @@ Let's say you want to fetch products with a limit of 100 items per page:
 
 <CodeGroup>
 ```bash Request
-curl https://api.polar.sh/v1/products/?page=1&limit=100 \
+curl https://api.solei.to/v1/products/?page=1&limit=100 \
   -H "Authorization: Bearer $POLAR_OAT" \
   -H "Accept: application/json"
 ```
@@ -210,7 +210,7 @@ In this example:
 
 ## Rate Limits
 
-Polar API has rate limits to ensure fair usage and maintain performance. Limits differ between the **Sandbox** and **Production** environments.
+Solei API has rate limits to ensure fair usage and maintain performance. Limits differ between the **Sandbox** and **Production** environments.
 
 ### Production
 

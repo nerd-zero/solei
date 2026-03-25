@@ -5,11 +5,11 @@ description: "Payments and Checkouts made dead simple with Sveltekit"
 
 ## Examples
 
-- [With SvelteKit](https://github.com/polarsource/examples/tree/main/with-sveltekit)
+- [With SvelteKit](https://github.com/nerd-zero/solei-examples/tree/main/with-sveltekit)
 
 ## Installation
 
-Install the required Polar packages using the following command:
+Install the required Solei packages using the following command:
 
 <Tabs>
   <Tab title="npm">
@@ -42,10 +42,10 @@ Create a Checkout handler which takes care of redirections.
 import { Checkout } from "@polar-sh/sveltekit";
 
 export const GET = Checkout({
-  accessToken: process.env.POLAR_ACCESS_TOKEN,
+  accessToken: process.env.SOLEI_ACCESS_TOKEN,
   successUrl: process.env.SUCCESS_URL,
   returnUrl: "https://myapp.com", // An optional URL which renders a back-button in the Checkout
-  server: "sandbox", // Use sandbox if you're testing Polar - omit the parameter or pass 'production' otherwise
+  server: "sandbox", // Use sandbox if you're testing Solei - omit the parameter or pass 'production' otherwise
   theme: "dark", // Enforces the theme - System-preferred theme will be set if left omitted
 });
 ```
@@ -69,10 +69,10 @@ Create a customer portal where your customer can view orders and subscriptions.
 import { CustomerPortal } from "@polar-sh/sveltekit";
 
 export const GET = CustomerPortal({
-  server: process.env.POLAR_MODE, // Use sandbox if you're testing Polar - omit the parameter or pass 'production' otherwise
-  accessToken: process.env.POLAR_ACCESS_TOKEN,
+  server: process.env.POLAR_MODE, // Use sandbox if you're testing Solei - omit the parameter or pass 'production' otherwise
+  accessToken: process.env.SOLEI_ACCESS_TOKEN,
   returnUrl: "https://myapp.com", // An optional URL which renders a back-button in the Customer Portal
-  getCustomerId: (event) => "", // Function to resolve a Polar Customer ID
+  getCustomerId: (event) => "", // Function to resolve a Solei Customer ID
 });
 ```
 

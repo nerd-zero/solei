@@ -1,7 +1,7 @@
 ---
 title: "How to Grant Meter Credits Before Purchase"
 sidebarTitle: "Grant meter credits before purchase"
-description: "Learn how to grant meter credits to customers before they make any purchase using the Polar API."
+description: "Learn how to grant meter credits to customers before they make any purchase using the Solei API."
 ---
 
 ## Overview
@@ -17,7 +17,7 @@ This guide shows you how to grant credits to customers who don't have an active 
 ## How It Works
 
 To grant credits before a purchase, you need to:
-1. Create a customer in Polar (if they don't exist)
+1. Create a customer in Solei (if they don't exist)
 2. Create a meter with **Sum** aggregation to track usage
 3. Ingest an event with a **negative value** to grant credits
 
@@ -33,7 +33,7 @@ First, create a meter that will track your customers' usage.
 
 <Steps>
   <Step title="Navigate to Meters">
-    In the Polar dashboard sidebar, click on **Products** > **Meters**.
+    In the Solei dashboard sidebar, click on **Products** > **Meters**.
   </Step>
   <Step title="Create a new meter">
     Click **Create Meter** and configure:
@@ -54,13 +54,13 @@ Learn more about [creating meters](/features/usage-based-billing/meters).
 
 ## Step 2: Create a Customer
 
-If your customer doesn't already exist in Polar, you need to create them first.
+If your customer doesn't already exist in Solei, you need to create them first.
 
 ### Option A: Create via Dashboard
 
 <Steps>
   <Step title="Navigate to Customers">
-    In the Polar dashboard sidebar, click on **Customers**.
+    In the Solei dashboard sidebar, click on **Customers**.
   </Step>
   <Step title="Add new customer">
     Click **Add Customer** and fill in:
@@ -75,13 +75,13 @@ If your customer doesn't already exist in Polar, you need to create them first.
 
 ### Option B: Create via API
 
-Use the Polar SDK or API to create a customer programmatically:
+Use the Solei SDK or API to create a customer programmatically:
 
 ```typescript icon="square-js" title="create-customer.ts"
 import { Polar } from "@polar-sh/sdk";
 
 const polar = new Polar({
-  accessToken: process.env.POLAR_ACCESS_TOKEN,
+  accessToken: process.env.SOLEI_ACCESS_TOKEN,
 });
 
 // Create a new customer
@@ -93,12 +93,12 @@ await polar.customers.create({
 ```
 
 <Tip>
-  Use the `externalId` field to link Polar customers with your internal user system. This allows you to reference customers without storing Polar's internal ID.
+  Use the `externalId` field to link Solei customers with your internal user system. This allows you to reference customers without storing Solei's internal ID.
 </Tip>
 
 ### Using External ID
 
-If you set an `externalId` when creating the customer, you can use it in event ingestion instead of the Polar customer ID:
+If you set an `externalId` when creating the customer, you can use it in event ingestion instead of the Solei customer ID:
 
 ```typescript
 // Instead of using customerId, use externalCustomerId
@@ -117,13 +117,13 @@ Learn more about [customer management](/features/customer-management).
 
 Now that you have a customer and a meter, grant credits by ingesting an event with a negative value.
 
-### Using the Polar SDK
+### Using the Solei SDK
 
 ```typescript icon="square-js" title="grant-credits.ts"
 import { Polar } from "@polar-sh/sdk";
 
 const polar = new Polar({
-  accessToken: process.env.POLAR_ACCESS_TOKEN,
+  accessToken: process.env.SOLEI_ACCESS_TOKEN,
 });
 
 async function grantCredits(customerId: string, credits: number) {
@@ -154,7 +154,7 @@ If you're using `externalId` for customer management:
 import { Polar } from "@polar-sh/sdk";
 
 const polar = new Polar({
-  accessToken: process.env.POLAR_ACCESS_TOKEN,
+  accessToken: process.env.SOLEI_ACCESS_TOKEN,
 });
 
 async function grantCreditsToExternalUser(externalUserId: string, credits: number) {
@@ -187,7 +187,7 @@ Check that the credits were successfully granted to the customer.
 import { Polar } from "@polar-sh/sdk";
 
 const polar = new Polar({
-  accessToken: process.env.POLAR_ACCESS_TOKEN,
+  accessToken: process.env.SOLEI_ACCESS_TOKEN,
 });
 
 // Check customer's meter balance

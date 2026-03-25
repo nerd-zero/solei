@@ -4,7 +4,7 @@
   "appearance": {
     "default": "system"
   },
-  "name": "Polar",
+  "name": "Solei",
   "description": "Payments & Billing with 6 lines of code. Open Source & Global Merchant of Record.",
   "colors": {
     "primary": "#000",
@@ -600,23 +600,23 @@
   "logo": {
     "light": "./logo/light.png",
     "dark": "./logo/dark.png",
-    "href": "https://polar.sh"
+    "href": "https://solei.to"
   },
   "navbar": {
     "links": [
       {
         "label": "llms-full.txt",
-        "href": "https://polar.sh/docs/llms-full.txt"
+        "href": "https://solei.to/docs/llms-full.txt"
       },
       {
         "label": "Contact support",
-        "href": "https://polar.sh/docs/support"
+        "href": "https://solei.to/docs/support"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://polar.sh"
+      "href": "https://solei.to"
     }
   },
   "contextual": {
@@ -625,7 +625,7 @@
   "footer": {
     "socials": {
       "x": "https://x.com/polar_sh",
-      "github": "https://github.com/polarsource/polar",
+      "github": "https://github.com/nerd-zero/solei",
       "discord": "https://dub.sh/polar-discord"
     }
   },
