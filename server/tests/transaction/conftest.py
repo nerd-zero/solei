@@ -3,8 +3,8 @@ from datetime import datetime
 
 import pytest_asyncio
 
-from polar.enums import SubscriptionRecurringInterval
-from polar.models import (
+from solei.enums import SubscriptionRecurringInterval
+from solei.models import (
     Account,
     Customer,
     Dispute,
@@ -17,8 +17,8 @@ from polar.models import (
     Transaction,
     User,
 )
-from polar.models.pledge import PledgeType
-from polar.models.transaction import Processor, TransactionType
+from solei.models.pledge import PledgeType
+from solei.models.transaction import Processor, TransactionType
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_order,

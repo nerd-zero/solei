@@ -8,14 +8,14 @@ import structlog
 import typer
 from sqlalchemy import select
 
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Transaction
-from polar.models.transaction import TransactionType
-from polar.postgres import create_async_engine
-from polar.transaction.service.balance import (
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Transaction
+from solei.models.transaction import TransactionType
+from solei.postgres import create_async_engine
+from solei.transaction.service.balance import (
     balance_transaction as balance_transaction_service,
 )
-from polar.transaction.service.refund import (
+from solei.transaction.service.refund import (
     refund_transaction as refund_transaction_service,
 )
 

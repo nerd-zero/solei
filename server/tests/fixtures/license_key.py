@@ -1,17 +1,17 @@
 from collections.abc import Sequence
 
-from polar.benefit.strategies.license_keys.properties import (
+from solei.benefit.strategies.license_keys.properties import (
     BenefitGrantLicenseKeysProperties,
 )
-from polar.benefit.strategies.license_keys.schemas import (
+from solei.benefit.strategies.license_keys.schemas import (
     BenefitLicenseKeysCreateProperties,
 )
-from polar.benefit.strategies.license_keys.service import BenefitLicenseKeysService
-from polar.models import Benefit, Customer, LicenseKey, Organization, Product
-from polar.models.benefit import BenefitType
-from polar.models.subscription import SubscriptionStatus
-from polar.postgres import AsyncSession, sql
-from polar.redis import Redis
+from solei.benefit.strategies.license_keys.service import BenefitLicenseKeysService
+from solei.models import Benefit, Customer, LicenseKey, Organization, Product
+from solei.models.benefit import BenefitType
+from solei.models.subscription import SubscriptionStatus
+from solei.postgres import AsyncSession, sql
+from solei.redis import Redis
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_benefit,

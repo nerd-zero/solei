@@ -13,7 +13,7 @@ from alembic_utils.pg_trigger import PGTrigger
 from sqlalchemy import text as sql_text
 from sqlalchemy.dialects import postgresql
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "598f0b91204a"

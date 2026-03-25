@@ -44,11 +44,11 @@ export async function GET() {
 
 
 
-              Polar is made by all of our wonderful contributors.
+              Solei is made by all of our wonderful contributors.
 
                     https://github.com/polarsource/polar
 
-                Wanna work with us? https://polar.sh/company#open-roles
+                Wanna work with us? https://solei.to/company#open-roles
 
     `,
     {

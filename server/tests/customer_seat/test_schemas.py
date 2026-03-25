@@ -1,9 +1,9 @@
 from datetime import datetime
 from uuid import uuid4
 
-from polar.customer_seat.schemas import CustomerSeat as CustomerSeatSchema
-from polar.models.customer_seat import SeatStatus
-from polar.models.member import MemberRole
+from solei.customer_seat.schemas import CustomerSeat as CustomerSeatSchema
+from solei.models.customer_seat import SeatStatus
+from solei.models.member import MemberRole
 
 
 class TestCustomerSeatSchema:

@@ -7,7 +7,7 @@ import {
   type PropsWithChildren,
 } from 'react'
 
-const storage = new ExtensionStorage('group.com.polarsource.Polar')
+const storage = new ExtensionStorage('group.to.solei.Solei')
 
 const AuthContext = createContext<{
   setSession: (session: string | null) => void

@@ -17,9 +17,9 @@ import stripe as stripe_lib
 from alembic import op
 from sqlalchemy.dialects import postgresql
 
-# Polar Custom Imports
-from polar.config import settings
-from polar.integrations.stripe.utils import get_expandable_id
+# Solei Custom Imports
+from solei.config import settings
+from solei.integrations.stripe.utils import get_expandable_id
 
 # revision identifiers, used by Alembic.
 revision = "197161f42f14"

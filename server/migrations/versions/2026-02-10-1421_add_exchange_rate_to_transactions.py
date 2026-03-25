@@ -11,7 +11,7 @@ from alembic import op
 from alembic_utils.pg_grant_table import PGGrantTable
 from sqlalchemy import text as sql_text
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "eee9c7fb3595"

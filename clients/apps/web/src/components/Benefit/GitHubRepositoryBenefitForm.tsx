@@ -309,7 +309,7 @@ export const GitHubRepositoryBenefitForm = ({
         >
           Click here
         </Button>{' '}
-        to install it on Polar.
+        to install it on Solei.
       </FormDescription>
 
       {/* For error messages */}

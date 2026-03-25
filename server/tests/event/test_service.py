@@ -9,25 +9,25 @@ import pytest
 from pydantic import ValidationError
 from pytest_mock import MockerFixture
 
-from polar.auth.models import AuthSubject, is_user
-from polar.event.repository import EventRepository
-from polar.event.schemas import (
+from solei.auth.models import AuthSubject, is_user
+from solei.event.repository import EventRepository
+from solei.event.schemas import (
     EventCreateCustomer,
     EventCreateExternalCustomer,
     EventsIngest,
 )
-from polar.event.service import event as event_service
-from polar.event.sorting import EventNamesSortProperty
-from polar.event.system import SystemEvent
-from polar.event_type.repository import EventTypeRepository
-from polar.exceptions import PolarRequestValidationError
-from polar.integrations.tinybird.service import TinybirdEventTypeStats
-from polar.kit.pagination import PaginationParams
-from polar.kit.time_queries import TimeInterval
-from polar.kit.utils import utc_now
-from polar.meter.aggregation import AggregationFunction, PropertyAggregation
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.models import (
+from solei.event.service import event as event_service
+from solei.event.sorting import EventNamesSortProperty
+from solei.event.system import SystemEvent
+from solei.event_type.repository import EventTypeRepository
+from solei.exceptions import SoleiRequestValidationError
+from solei.integrations.tinybird.service import TinybirdEventTypeStats
+from solei.kit.pagination import PaginationParams
+from solei.kit.time_queries import TimeInterval
+from solei.kit.utils import utc_now
+from solei.meter.aggregation import AggregationFunction, PropertyAggregation
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.models import (
     Customer,
     CustomerMeter,
     EventType,
@@ -37,14 +37,14 @@ from polar.models import (
     User,
     UserOrganization,
 )
-from polar.models.checkout import CheckoutStatus
-from polar.models.discount import DiscountDuration, DiscountType
-from polar.models.event import EventSource
-from polar.models.order import OrderStatus
-from polar.models.subscription import CustomerCancellationReason
-from polar.order.service import order as order_service
-from polar.postgres import AsyncSession
-from polar.subscription.service import subscription as subscription_service
+from solei.models.checkout import CheckoutStatus
+from solei.models.discount import DiscountDuration, DiscountType
+from solei.models.event import EventSource
+from solei.models.order import OrderStatus
+from solei.models.subscription import CustomerCancellationReason
+from solei.order.service import order as order_service
+from solei.postgres import AsyncSession
+from solei.subscription.service import subscription as subscription_service
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
@@ -61,12 +61,12 @@ from tests.fixtures.random_objects import (
 
 @pytest.fixture
 def enqueue_job_mock(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch("polar.event.service.enqueue_job")
+    return mocker.patch("solei.event.service.enqueue_job")
 
 
 @pytest.fixture
 def enqueue_events_mock(mocker: MockerFixture) -> AsyncMock:
-    return mocker.patch("polar.event.service.enqueue_events")
+    return mocker.patch("solei.event.service.enqueue_events")
 
 
 @pytest.mark.asyncio
@@ -266,7 +266,7 @@ class TestGet:
         auth_subject: AuthSubject[User],
     ) -> None:
         mocker.patch(
-            "polar.integrations.tinybird.service.TinybirdEventsQuery.get_event_ids_and_count",
+            "solei.integrations.tinybird.service.TinybirdEventsQuery.get_event_ids_and_count",
             new_callable=AsyncMock,
             return_value=([], 0),
         )
@@ -307,7 +307,7 @@ class TestGet:
         event = await create_event(save_fixture, organization=organization)
 
         mocker.patch(
-            "polar.integrations.tinybird.service.TinybirdEventsQuery.get_event_ids_and_count",
+            "solei.integrations.tinybird.service.TinybirdEventsQuery.get_event_ids_and_count",
             new_callable=AsyncMock,
             return_value=([str(event.id)], 1),
         )
@@ -337,12 +337,12 @@ class TestGet:
         )
 
         mocker.patch(
-            "polar.integrations.tinybird.service.TinybirdEventsQuery.get_event_ids_and_count",
+            "solei.integrations.tinybird.service.TinybirdEventsQuery.get_event_ids_and_count",
             new_callable=AsyncMock,
             return_value=([str(parent.id)], 1),
         )
         mocker.patch(
-            "polar.integrations.tinybird.service.TinybirdEventsQuery.get_descendant_aggregates",
+            "solei.integrations.tinybird.service.TinybirdEventsQuery.get_descendant_aggregates",
             new_callable=AsyncMock,
             return_value=(2, {"_cost_amount": 150.0}),
         )
@@ -372,7 +372,7 @@ class TestListNames:
     ) -> None:
         now = utc_now()
         query_mock = mocker.patch(
-            "polar.event.tinybird_repository.TinybirdEventsQuery.get_event_type_stats",
+            "solei.event.tinybird_repository.TinybirdEventsQuery.get_event_type_stats",
             new_callable=AsyncMock,
             return_value=[
                 TinybirdEventTypeStats(
@@ -466,7 +466,7 @@ class TestIngest:
             ]
         )
 
-        with pytest.raises(PolarRequestValidationError) as e:
+        with pytest.raises(SoleiRequestValidationError) as e:
             await event_service.ingest(session, auth_subject, ingest)
 
         errors = e.value.errors()
@@ -493,7 +493,7 @@ class TestIngest:
             ]
         )
 
-        with pytest.raises(PolarRequestValidationError) as e:
+        with pytest.raises(SoleiRequestValidationError) as e:
             await event_service.ingest(session, auth_subject, ingest)
 
         errors = e.value.errors()
@@ -537,7 +537,7 @@ class TestIngest:
             ]
         )
 
-        with pytest.raises(PolarRequestValidationError) as e:
+        with pytest.raises(SoleiRequestValidationError) as e:
             await event_service.ingest(session, auth_subject, ingest)
 
         errors = e.value.errors()
@@ -806,7 +806,7 @@ class TestIngest:
             ]
         )
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await event_service.ingest(session, auth_subject, ingest)
 
     @pytest.mark.auth(AuthSubjectFixture(subject="organization"))

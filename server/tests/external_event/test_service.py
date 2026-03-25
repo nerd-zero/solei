@@ -3,16 +3,16 @@ from unittest.mock import AsyncMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.external_event.service import external_event as external_event_service
-from polar.models import ExternalEvent
-from polar.models.external_event import ExternalEventSource
-from polar.postgres import AsyncSession
+from solei.external_event.service import external_event as external_event_service
+from solei.models import ExternalEvent
+from solei.models.external_event import ExternalEventSource
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 
 
 @pytest.fixture
 def enqueue_job_mock(mocker: MockerFixture) -> AsyncMock:
-    return mocker.patch("polar.external_event.service.enqueue_job")
+    return mocker.patch("solei.external_event.service.enqueue_job")
 
 
 @pytest.mark.asyncio

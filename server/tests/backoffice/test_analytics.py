@@ -6,10 +6,10 @@ amounts directly from Payment, Refund, or Dispute records.
 
 import pytest
 
-from polar.backoffice.organizations.analytics import PaymentAnalyticsService
-from polar.models.dispute import DisputeStatus
-from polar.models.payment import PaymentStatus
-from polar.postgres import AsyncSession
+from solei.backoffice.organizations.analytics import PaymentAnalyticsService
+from solei.models.dispute import DisputeStatus
+from solei.models.payment import PaymentStatus
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_customer,

@@ -1,14 +1,14 @@
 import pytest
 
-from polar.auth.models import AuthSubject
-from polar.customer_portal.service.order import (
+from solei.auth.models import AuthSubject
+from solei.customer_portal.service.order import (
     CustomerOrderSortProperty,
 )
-from polar.customer_portal.service.order import customer_order as customer_order_service
-from polar.kit.db.postgres import AsyncSession
-from polar.kit.pagination import PaginationParams
-from polar.kit.sorting import Sorting
-from polar.models import Customer, Organization, Product
+from solei.customer_portal.service.order import customer_order as customer_order_service
+from solei.kit.db.postgres import AsyncSession
+from solei.kit.pagination import PaginationParams
+from solei.kit.sorting import Sorting
+from solei.models import Customer, Organization, Product
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (

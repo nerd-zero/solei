@@ -7,8 +7,8 @@ export const dynamicParams = false
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Polar',
-  url: 'https://polar.sh/',
+  name: 'Solei',
+  url: 'https://solei.to/',
 }
 
 export default function Layout({ children }: PropsWithChildren) {

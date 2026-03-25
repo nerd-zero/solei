@@ -1,11 +1,11 @@
 import pytest
 
-from polar.benefit.grant.service import benefit_grant as benefit_grant_service
-from polar.customer_meter.repository import CustomerMeterRepository
-from polar.models import Customer, Organization, Subscription
-from polar.models.benefit import BenefitType
-from polar.postgres import AsyncSession
-from polar.redis import Redis
+from solei.benefit.grant.service import benefit_grant as benefit_grant_service
+from solei.customer_meter.repository import CustomerMeterRepository
+from solei.models import Customer, Organization, Subscription
+from solei.models.benefit import BenefitType
+from solei.postgres import AsyncSession
+from solei.redis import Redis
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_benefit, create_meter
 

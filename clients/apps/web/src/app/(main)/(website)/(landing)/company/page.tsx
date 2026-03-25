@@ -87,12 +87,12 @@ export default function CompanyPage() {
             analytics, leading to deterministic and versioned billing as code.
           </p>
           <p>
-            We&apos;re building Polar to become the standard Events → Analytics
+            We&apos;re building Solei to become the standard Events → Analytics
             → Billing stack for the next generation of software.
           </p>
           <p>
             We&apos;re a small team with big ambitions, working with high
-            ownership and autonomy. Polar is open source and built in the open
+            ownership and autonomy. Solei is open source and built in the open
             with our community.
           </p>
         </div>

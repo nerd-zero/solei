@@ -19,10 +19,10 @@ export function AUPBlocker({ categories }: { categories: string[] }) {
         Not supported: {categories.join(', ')}
       </p>
       <p className="text-sm text-yellow-700 dark:text-yellow-300">
-        Polar is a Merchant of Record for digital products only. Physical goods,
+        Solei is a Merchant of Record for digital products only. Physical goods,
         human services, and marketplaces are not permitted under our{' '}
         <a
-          href="https://polar.sh/docs/merchant-of-record/acceptable-use"
+          href="https://solei.to/docs/merchant-of-record/acceptable-use"
           className="underline"
           target="_blank"
           rel="noreferrer"

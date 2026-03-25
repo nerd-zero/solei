@@ -17,20 +17,20 @@ from datetime import datetime
 import dramatiq
 import typer
 
-import polar.tasks  # noqa: F401 - Import tasks to register all dramatiq actors
-from polar.auth.models import AuthSubject
-from polar.customer.schemas.customer import CustomerCreate
-from polar.customer.service import customer as customer_service
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.meter.aggregation import AggregationFunction, PropertyAggregation
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.meter.schemas import MeterCreate
-from polar.meter.service import meter as meter_service
-from polar.organization.repository import OrganizationRepository
-from polar.postgres import AsyncSession, create_async_engine
-from polar.redis import create_redis
-from polar.user_organization.service import UserOrganizationService
-from polar.worker import JobQueueManager
+import solei.tasks  # noqa: F401 - Import tasks to register all dramatiq actors
+from solei.auth.models import AuthSubject
+from solei.customer.schemas.customer import CustomerCreate
+from solei.customer.service import customer as customer_service
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.meter.aggregation import AggregationFunction, PropertyAggregation
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.meter.schemas import MeterCreate
+from solei.meter.service import meter as meter_service
+from solei.organization.repository import OrganizationRepository
+from solei.postgres import AsyncSession, create_async_engine
+from solei.redis import create_redis
+from solei.user_organization.service import UserOrganizationService
+from solei.worker import JobQueueManager
 
 cli = typer.Typer()
 
@@ -74,7 +74,7 @@ async def create_loadtest_data(
         customer = await customer_service.create(
             session=session,
             customer_create=CustomerCreate(
-                email=f"{external_id}@polar.sh",
+                email=f"{external_id}@solei.to",
                 name=f"Load Test Customer {i + 1}",
                 external_id=external_id,
                 organization_id=organization.id,

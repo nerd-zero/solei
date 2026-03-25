@@ -4,19 +4,19 @@ from functools import wraps
 import typer
 from sqlalchemy import BigInteger, Case, Integer, func, select, update
 
-from polar.models import (
+from scripts.helper import (
+    configure_script_logging,
+    limit_bindparam,
+    run_batched_update,
+)
+from solei.models import (
     Checkout,
     Discount,
     Order,
     OrderItem,
     Subscription,
 )
-from polar.models.discount import DiscountFixed, DiscountPercentage, DiscountType
-from scripts.helper import (
-    configure_script_logging,
-    limit_bindparam,
-    run_batched_update,
-)
+from solei.models.discount import DiscountFixed, DiscountPercentage, DiscountType
 
 cli = typer.Typer()
 

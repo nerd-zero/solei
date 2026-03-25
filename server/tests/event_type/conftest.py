@@ -3,12 +3,12 @@ from dataclasses import dataclass, field
 
 import pytest_asyncio
 
-from polar.integrations.tinybird.client import TinybirdClient
-from polar.integrations.tinybird.schemas import TinybirdEvent
-from polar.integrations.tinybird.service import DATASOURCE_EVENTS, _event_to_tinybird
-from polar.kit.db.models import Model
-from polar.models import Event
-from polar.postgres import AsyncSession
+from solei.integrations.tinybird.client import TinybirdClient
+from solei.integrations.tinybird.schemas import TinybirdEvent
+from solei.integrations.tinybird.service import DATASOURCE_EVENTS, _event_to_tinybird
+from solei.kit.db.models import Model
+from solei.models import Event
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture, save_fixture_factory
 
 

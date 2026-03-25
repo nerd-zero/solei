@@ -110,7 +110,7 @@ export interface paths {
      * Disconnect Oauth Account
      * @description Disconnect an OAuth account (GitHub or Google) from the authenticated user.
      *
-     *     This allows users to unlink their OAuth provider while keeping their Polar account.
+     *     This allows users to unlink their OAuth provider while keeping their Solei account.
      *     They can still authenticate using other methods (email magic link or other OAuth providers).
      *
      *     Note: You cannot disconnect your last authentication method if your email is not verified.
@@ -6099,7 +6099,7 @@ export interface components {
       | 'organization_access_tokens:write'
     /**
      * BalanceCreditOrderEvent
-     * @description An event created by Polar when an order is paid via customer balance.
+     * @description An event created by Solei when an order is paid via customer balance.
      */
     BalanceCreditOrderEvent: {
       /**
@@ -6123,7 +6123,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -6161,7 +6161,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -6195,7 +6195,7 @@ export interface components {
     }
     /**
      * BalanceDisputeEvent
-     * @description An event created by Polar when an order is disputed.
+     * @description An event created by Solei when an order is disputed.
      */
     BalanceDisputeEvent: {
       /**
@@ -6219,7 +6219,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -6257,7 +6257,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -6303,7 +6303,7 @@ export interface components {
     }
     /**
      * BalanceDisputeReversalEvent
-     * @description An event created by Polar when a dispute is won and funds are reinstated.
+     * @description An event created by Solei when a dispute is won and funds are reinstated.
      */
     BalanceDisputeReversalEvent: {
       /**
@@ -6327,7 +6327,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -6365,7 +6365,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -6378,7 +6378,7 @@ export interface components {
     }
     /**
      * BalanceOrderEvent
-     * @description An event created by Polar when an order is paid.
+     * @description An event created by Solei when an order is paid.
      */
     BalanceOrderEvent: {
       /**
@@ -6402,7 +6402,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -6440,7 +6440,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -6484,7 +6484,7 @@ export interface components {
     }
     /**
      * BalanceRefundEvent
-     * @description An event created by Polar when an order is refunded.
+     * @description An event created by Solei when an order is refunded.
      */
     BalanceRefundEvent: {
       /**
@@ -6508,7 +6508,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -6546,7 +6546,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -6594,7 +6594,7 @@ export interface components {
     }
     /**
      * BalanceRefundReversalEvent
-     * @description An event created by Polar when a refund is reverted.
+     * @description An event created by Solei when a refund is reverted.
      */
     BalanceRefundReversalEvent: {
       /**
@@ -6618,7 +6618,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -6656,7 +6656,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -6881,7 +6881,7 @@ export interface components {
     }
     /**
      * BenefitCycledEvent
-     * @description An event created by Polar when a benefit is cycled.
+     * @description An event created by Solei when a benefit is cycled.
      */
     BenefitCycledEvent: {
       /**
@@ -6905,7 +6905,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -6943,7 +6943,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -8501,7 +8501,7 @@ export interface components {
       | components['schemas']['BenefitGrantFeatureFlagWebhook']
     /**
      * BenefitGrantedEvent
-     * @description An event created by Polar when a benefit is granted to a customer.
+     * @description An event created by Solei when a benefit is granted to a customer.
      */
     BenefitGrantedEvent: {
       /**
@@ -8525,7 +8525,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -8563,7 +8563,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -9067,7 +9067,7 @@ export interface components {
     }
     /**
      * BenefitRevokedEvent
-     * @description An event created by Polar when a benefit is revoked from a customer.
+     * @description An event created by Solei when a benefit is revoked from a customer.
      */
     BenefitRevokedEvent: {
       /**
@@ -9091,7 +9091,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -9129,7 +9129,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -9209,7 +9209,7 @@ export interface components {
       | 'feature_flag'
     /**
      * BenefitUpdatedEvent
-     * @description An event created by Polar when a benefit is updated.
+     * @description An event created by Solei when a benefit is updated.
      */
     BenefitUpdatedEvent: {
       /**
@@ -9233,7 +9233,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -9271,7 +9271,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -9664,7 +9664,7 @@ export interface components {
       metadata: components['schemas']['MetadataOutputType']
       /**
        * External Customer Id
-       * @description ID of the customer in your system. If a matching customer exists on Polar, the resulting order will be linked to this customer. Otherwise, a new customer will be created with this external ID set.
+       * @description ID of the customer in your system. If a matching customer exists on Solei, the resulting order will be linked to this customer. Otherwise, a new customer will be created with this external ID set.
        */
       external_customer_id: string | null
       /**
@@ -9786,7 +9786,7 @@ export interface components {
     CheckoutCreate: components['schemas']['CheckoutProductsCreate']
     /**
      * CheckoutCreatedEvent
-     * @description An event created by Polar when a checkout is created.
+     * @description An event created by Solei when a checkout is created.
      */
     CheckoutCreatedEvent: {
       /**
@@ -9810,7 +9810,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -9848,7 +9848,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -10639,7 +10639,7 @@ export interface components {
       is_business_customer: boolean
       /**
        * External Customer Id
-       * @description ID of the customer in your system. If a matching customer exists on Polar, the resulting order will be linked to this customer. Otherwise, a new customer will be created with this external ID set.
+       * @description ID of the customer in your system. If a matching customer exists on Solei, the resulting order will be linked to this customer. Otherwise, a new customer will be created with this external ID set.
        */
       external_customer_id?: string | null
       /** Customer Name */
@@ -10687,7 +10687,7 @@ export interface components {
       return_url?: string | null
       /**
        * Embed Origin
-       * @description If you plan to embed the checkout session, set this to the Origin of the embedding page. It'll allow the Polar iframe to communicate with the parent page.
+       * @description If you plan to embed the checkout session, set this to the Origin of the embedding page. It'll allow the Solei iframe to communicate with the parent page.
        */
       embed_origin?: string | null
       /** Locale */
@@ -10878,7 +10878,7 @@ export interface components {
       is_business_customer: boolean
       /**
        * External Customer Id
-       * @description ID of the customer in your system. If a matching customer exists on Polar, the resulting order will be linked to this customer. Otherwise, a new customer will be created with this external ID set.
+       * @description ID of the customer in your system. If a matching customer exists on Solei, the resulting order will be linked to this customer. Otherwise, a new customer will be created with this external ID set.
        */
       external_customer_id?: string | null
       /** Customer Name */
@@ -10926,7 +10926,7 @@ export interface components {
       return_url?: string | null
       /**
        * Embed Origin
-       * @description If you plan to embed the checkout session, set this to the Origin of the embedding page. It'll allow the Polar iframe to communicate with the parent page.
+       * @description If you plan to embed the checkout session, set this to the Origin of the embedding page. It'll allow the Solei iframe to communicate with the parent page.
        */
       embed_origin?: string | null
       /** Locale */
@@ -11032,7 +11032,7 @@ export interface components {
       is_business_customer: boolean
       /**
        * External Customer Id
-       * @description ID of the customer in your system. If a matching customer exists on Polar, the resulting order will be linked to this customer. Otherwise, a new customer will be created with this external ID set.
+       * @description ID of the customer in your system. If a matching customer exists on Solei, the resulting order will be linked to this customer. Otherwise, a new customer will be created with this external ID set.
        */
       external_customer_id?: string | null
       /** Customer Name */
@@ -11080,7 +11080,7 @@ export interface components {
       return_url?: string | null
       /**
        * Embed Origin
-       * @description If you plan to embed the checkout session, set this to the Origin of the embedding page. It'll allow the Polar iframe to communicate with the parent page.
+       * @description If you plan to embed the checkout session, set this to the Origin of the embedding page. It'll allow the Solei iframe to communicate with the parent page.
        */
       embed_origin?: string | null
       /** Locale */
@@ -11772,7 +11772,7 @@ export interface components {
       return_url?: string | null
       /**
        * Embed Origin
-       * @description If you plan to embed the checkout session, set this to the Origin of the embedding page. It'll allow the Polar iframe to communicate with the parent page.
+       * @description If you plan to embed the checkout session, set this to the Origin of the embedding page. It'll allow the Solei iframe to communicate with the parent page.
        */
       embed_origin?: string | null
     }
@@ -13672,7 +13672,7 @@ export interface components {
     }
     /**
      * CustomerCreatedEvent
-     * @description An event created by Polar when a customer is created.
+     * @description An event created by Solei when a customer is created.
      */
     CustomerCreatedEvent: {
       /**
@@ -13696,7 +13696,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -13734,7 +13734,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -13865,7 +13865,7 @@ export interface components {
     }
     /**
      * CustomerDeletedEvent
-     * @description An event created by Polar when a customer is deleted.
+     * @description An event created by Solei when a customer is deleted.
      */
     CustomerDeletedEvent: {
       /**
@@ -13889,7 +13889,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -13927,7 +13927,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -15909,7 +15909,7 @@ export interface components {
     }
     /**
      * CustomerUpdatedEvent
-     * @description An event created by Polar when a customer is updated.
+     * @description An event created by Solei when a customer is updated.
      */
     CustomerUpdatedEvent: {
       /**
@@ -15933,7 +15933,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -15971,7 +15971,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -16076,7 +16076,7 @@ export interface components {
       name: string
       /** Position */
       position: number
-      /** Is Polar Bot */
+      /** Is Solei Bot */
       is_polar_bot: boolean
       /**
        * Color
@@ -17389,11 +17389,11 @@ export interface components {
       external_id?: string | null
       /**
        * Parent Id
-       * @description The ID of the parent event. Can be either a Polar event ID (UUID) or an external event ID.
+       * @description The ID of the parent event. Can be either a Solei event ID (UUID) or an external event ID.
        */
       parent_id?: string | null
       /**
-       * @description Key-value object allowing you to store additional information about the event. Some keys like `_llm` are structured data that are handled specially by Polar.
+       * @description Key-value object allowing you to store additional information about the event. Some keys like `_llm` are structured data that are handled specially by Solei.
        *
        *     The key must be a string with a maximum length of **40 characters**.
        *     The value must be either:
@@ -17409,7 +17409,7 @@ export interface components {
       /**
        * Customer Id
        * Format: uuid4
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string
       /**
@@ -17443,11 +17443,11 @@ export interface components {
       external_id?: string | null
       /**
        * Parent Id
-       * @description The ID of the parent event. Can be either a Polar event ID (UUID) or an external event ID.
+       * @description The ID of the parent event. Can be either a Solei event ID (UUID) or an external event ID.
        */
       parent_id?: string | null
       /**
-       * @description Key-value object allowing you to store additional information about the event. Some keys like `_llm` are structured data that are handled specially by Polar.
+       * @description Key-value object allowing you to store additional information about the event. Some keys like `_llm` are structured data that are handled specially by Solei.
        *
        *     The key must be a string with a maximum length of **40 characters**.
        *     The value must be either:
@@ -17492,7 +17492,7 @@ export interface components {
        * @description The name of the event.
        */
       name: string
-      /** @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API. */
+      /** @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API. */
       source: components['schemas']['EventSource']
       /**
        * Occurrences
@@ -19386,7 +19386,7 @@ export interface components {
     }
     /**
      * MeterCreditEvent
-     * @description An event created by Polar when credits are added to a customer meter.
+     * @description An event created by Solei when credits are added to a customer meter.
      */
     MeterCreditEvent: {
       /**
@@ -19410,7 +19410,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -19448,7 +19448,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -19496,7 +19496,7 @@ export interface components {
     }
     /**
      * MeterResetEvent
-     * @description An event created by Polar when a customer meter is reset.
+     * @description An event created by Solei when a customer meter is reset.
      */
     MeterResetEvent: {
       /**
@@ -19520,7 +19520,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -19558,7 +19558,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -20618,7 +20618,7 @@ export interface components {
     }
     /**
      * OrderPaidEvent
-     * @description An event created by Polar when an order is paid.
+     * @description An event created by Solei when an order is paid.
      */
     OrderPaidEvent: {
       /**
@@ -20642,7 +20642,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -20680,7 +20680,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -20789,7 +20789,7 @@ export interface components {
     }
     /**
      * OrderRefundedEvent
-     * @description An event created by Polar when an order is refunded.
+     * @description An event created by Solei when an order is refunded.
      */
     OrderRefundedEvent: {
       /**
@@ -20813,7 +20813,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -20851,7 +20851,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -21608,7 +21608,7 @@ export interface components {
        * @description Link to social profiles.
        */
       socials?: components['schemas']['OrganizationSocialLink'][] | null
-      /** @description Additional, private, business details Polar needs about active organizations for compliance (KYC). */
+      /** @description Additional, private, business details Solei needs about active organizations for compliance (KYC). */
       details?: components['schemas']['OrganizationDetails'] | null
       /** @description Two-letter country code (ISO 3166-1 alpha-2). */
       country?:
@@ -21966,7 +21966,7 @@ export interface components {
       /**
        * Intended Use
        * @deprecated
-       * @description How the organization will integrate and use Polar.
+       * @description How the organization will integrate and use Solei.
        */
       intended_use?: string | null
       /**
@@ -22265,7 +22265,7 @@ export interface components {
        * @description Links to social profiles.
        */
       socials?: components['schemas']['OrganizationSocialLink'][] | null
-      /** @description Additional, private, business details Polar needs about active organizations for compliance (KYC). */
+      /** @description Additional, private, business details Solei needs about active organizations for compliance (KYC). */
       details?: components['schemas']['OrganizationDetails'] | null
       /** @description Two-letter country code (ISO 3166-1 alpha-2). */
       country?:
@@ -22944,7 +22944,7 @@ export interface components {
     }
     /**
      * PlatformFeeType
-     * @description Type of fees applied by Polar, and billed to the users.
+     * @description Type of fees applied by Solei, and billed to the users.
      * @enum {string}
      */
     PlatformFeeType:
@@ -24961,7 +24961,7 @@ export interface components {
     }
     /**
      * SubscriptionBillingPeriodUpdatedEvent
-     * @description An event created by Polar when a subscription billing period is updated.
+     * @description An event created by Solei when a subscription billing period is updated.
      */
     SubscriptionBillingPeriodUpdatedEvent: {
       /**
@@ -24985,7 +24985,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -25023,7 +25023,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -25072,7 +25072,7 @@ export interface components {
        *
        *     **IMPORTANT:**
        *     Do not use this to store internal notes! It's intended to be input
-       *     from the customer and is therefore also available in their Polar
+       *     from the customer and is therefore also available in their Solei
        *     purchases library.
        *
        *     Only set this in case your own service is requesting the reason from the
@@ -25090,7 +25090,7 @@ export interface components {
     }
     /**
      * SubscriptionCanceledEvent
-     * @description An event created by Polar when a subscription is canceled.
+     * @description An event created by Solei when a subscription is canceled.
      */
     SubscriptionCanceledEvent: {
       /**
@@ -25114,7 +25114,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -25152,7 +25152,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -25292,13 +25292,13 @@ export interface components {
       product_id: string
       /**
        * External Customer Id
-       * @description The ID of the customer in your system to create the subscription for. It must already exist in Polar.
+       * @description The ID of the customer in your system to create the subscription for. It must already exist in Solei.
        */
       external_customer_id: string
     }
     /**
      * SubscriptionCreatedEvent
-     * @description An event created by Polar when a subscription is created.
+     * @description An event created by Solei when a subscription is created.
      */
     SubscriptionCreatedEvent: {
       /**
@@ -25322,7 +25322,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -25360,7 +25360,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -25463,7 +25463,7 @@ export interface components {
     }
     /**
      * SubscriptionCycledEvent
-     * @description An event created by Polar when a subscription is cycled.
+     * @description An event created by Solei when a subscription is cycled.
      */
     SubscriptionCycledEvent: {
       /**
@@ -25487,7 +25487,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -25525,7 +25525,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -25614,7 +25614,7 @@ export interface components {
     }
     /**
      * SubscriptionProductUpdatedEvent
-     * @description An event created by Polar when a subscription changes the product.
+     * @description An event created by Solei when a subscription changes the product.
      */
     SubscriptionProductUpdatedEvent: {
       /**
@@ -25638,7 +25638,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -25676,7 +25676,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -25735,7 +25735,7 @@ export interface components {
        *
        *     **IMPORTANT:**
        *     Do not use this to store internal notes! It's intended to be input
-       *     from the customer and is therefore also available in their Polar
+       *     from the customer and is therefore also available in their Solei
        *     purchases library.
        *
        *     Only set this in case your own service is requesting the reason from the
@@ -25752,7 +25752,7 @@ export interface components {
     }
     /**
      * SubscriptionRevokedEvent
-     * @description An event created by Polar when a subscription is revoked from a customer.
+     * @description An event created by Solei when a subscription is revoked from a customer.
      */
     SubscriptionRevokedEvent: {
       /**
@@ -25776,7 +25776,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -25814,7 +25814,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -25842,7 +25842,7 @@ export interface components {
     }
     /**
      * SubscriptionSeatsUpdatedEvent
-     * @description An event created by Polar when a the seats on a subscription is changed.
+     * @description An event created by Solei when a the seats on a subscription is changed.
      */
     SubscriptionSeatsUpdatedEvent: {
       /**
@@ -25866,7 +25866,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -25904,7 +25904,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -25963,7 +25963,7 @@ export interface components {
       | 'unpaid'
     /**
      * SubscriptionUncanceledEvent
-     * @description An event created by Polar when a subscription cancellation is reversed.
+     * @description An event created by Solei when a subscription cancellation is reversed.
      */
     SubscriptionUncanceledEvent: {
       /**
@@ -25987,7 +25987,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -26025,7 +26025,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -26128,7 +26128,7 @@ export interface components {
     }
     /**
      * SubscriptionUpdatedEvent
-     * @description An event created by Polar when a subscription is updated.
+     * @description An event created by Solei when a subscription is updated.
      */
     SubscriptionUpdatedEvent: {
       /**
@@ -26152,7 +26152,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -26190,7 +26190,7 @@ export interface components {
       label: string
       /**
        * Source
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API.
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API.
        * @constant
        */
       source: 'system'
@@ -26800,7 +26800,7 @@ export interface components {
       organization_id: string
       /**
        * Customer Id
-       * @description ID of the customer in your Polar organization associated with the event.
+       * @description ID of the customer in your Solei organization associated with the event.
        */
       customer_id: string | null
       /** @description The customer associated with the event. */
@@ -26842,7 +26842,7 @@ export interface components {
        */
       name: string
       /**
-       * @description The source of the event. `system` events are created by Polar. `user` events are the one you create through our ingestion API. (enum property replaced by openapi-typescript)
+       * @description The source of the event. `system` events are created by Solei. `user` events are the one you create through our ingestion API. (enum property replaced by openapi-typescript)
        * @enum {string}
        */
       source: 'user'

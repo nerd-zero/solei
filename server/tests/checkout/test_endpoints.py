@@ -8,15 +8,15 @@ import pytest_asyncio
 from httpx import AsyncClient
 from pytest_mock import MockerFixture
 
-from polar.auth.models import AuthSubject
-from polar.auth.scope import Scope
-from polar.checkout.repository import CheckoutRepository
-from polar.checkout.schemas import CheckoutProductCreate
-from polar.checkout.service import checkout as checkout_service
-from polar.enums import SubscriptionRecurringInterval, TaxProcessor
-from polar.integrations.stripe.service import StripeService
-from polar.kit.utils import utc_now
-from polar.models import (
+from solei.auth.models import AuthSubject
+from solei.auth.scope import Scope
+from solei.checkout.repository import CheckoutRepository
+from solei.checkout.schemas import CheckoutProductCreate
+from solei.checkout.service import checkout as checkout_service
+from solei.enums import SubscriptionRecurringInterval, TaxProcessor
+from solei.integrations.stripe.service import StripeService
+from solei.kit.utils import utc_now
+from solei.models import (
     Checkout,
     Customer,
     Discount,
@@ -27,11 +27,11 @@ from polar.models import (
     UserOrganization,
     WebhookEndpoint,
 )
-from polar.models.checkout import CheckoutStatus
-from polar.models.discount import DiscountDuration, DiscountType
-from polar.postgres import AsyncSession
-from polar.tax.calculation import TaxCalculationService
-from polar.tax.calculation.base import TaxabilityReason
+from solei.models.checkout import CheckoutStatus
+from solei.models.discount import DiscountDuration, DiscountType
+from solei.postgres import AsyncSession
+from solei.tax.calculation import TaxCalculationService
+from solei.tax.calculation.base import TaxabilityReason
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
@@ -56,14 +56,14 @@ def api_prefix(request: pytest.FixtureRequest) -> str:
 @pytest.fixture(autouse=True)
 def stripe_service_mock(mocker: MockerFixture) -> MagicMock:
     mock = MagicMock(spec=StripeService)
-    mocker.patch("polar.checkout.service.stripe_service", new=mock)
+    mocker.patch("solei.checkout.service.stripe_service", new=mock)
     return mock
 
 
 @pytest.fixture(autouse=True)
 def calculate_tax_mock(mocker: MockerFixture) -> AsyncMock:
     mock = mocker.patch(
-        "polar.checkout.service.tax_calculation_service", spec=TaxCalculationService
+        "solei.checkout.service.tax_calculation_service", spec=TaxCalculationService
     )
     mock.calculate.return_value = (
         {

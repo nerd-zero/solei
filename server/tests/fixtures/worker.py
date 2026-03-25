@@ -8,13 +8,13 @@ import pytest_asyncio
 from dramatiq.middleware.current_message import CurrentMessage
 from pytest_mock import MockerFixture
 
-from polar.config import settings
-from polar.kit.db.postgres import AsyncSession
-from polar.redis import Redis
-from polar.worker import JobQueueManager, RedisMiddleware
-from polar.worker._enqueue import _job_queue_manager
-from polar.worker._httpx import HTTPXMiddleware
-from polar.worker._sqlalchemy import SQLAlchemyMiddleware
+from solei.config import settings
+from solei.kit.db.postgres import AsyncSession
+from solei.redis import Redis
+from solei.worker import JobQueueManager, RedisMiddleware
+from solei.worker._enqueue import _job_queue_manager
+from solei.worker._httpx import HTTPXMiddleware
+from solei.worker._sqlalchemy import SQLAlchemyMiddleware
 
 
 @pytest.fixture(autouse=True)

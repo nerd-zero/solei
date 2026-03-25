@@ -3,18 +3,18 @@ from typing import Any, Literal
 
 import pytest
 
-from polar.auth.models import AuthSubject, User
-from polar.checkout.schemas import CheckoutUpdatePublic
-from polar.checkout.service import checkout as checkout_service
-from polar.discount.schemas import (
+from solei.auth.models import AuthSubject, User
+from solei.checkout.schemas import CheckoutUpdatePublic
+from solei.checkout.service import checkout as checkout_service
+from solei.discount.schemas import (
     DiscountFixedOnceForeverDurationCreate,
     DiscountUpdate,
 )
-from polar.discount.service import discount as discount_service
-from polar.exceptions import PolarRequestValidationError
-from polar.kit.currency import PresentmentCurrency
-from polar.kit.utils import utc_now
-from polar.models import (
+from solei.discount.service import discount as discount_service
+from solei.exceptions import SoleiRequestValidationError
+from solei.kit.currency import PresentmentCurrency
+from solei.kit.utils import utc_now
+from solei.models import (
     Checkout,
     Discount,
     DiscountRedemption,
@@ -22,13 +22,13 @@ from polar.models import (
     Product,
     UserOrganization,
 )
-from polar.models.discount import (
+from solei.models.discount import (
     DiscountDuration,
     DiscountFixed,
     DiscountPercentage,
     DiscountType,
 )
-from polar.postgres import AsyncSession
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_checkout, create_discount
 
@@ -90,7 +90,7 @@ class TestUpdate:
             organization=organization,
         )
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await discount_service.update(
                 session,
                 discount,
@@ -112,7 +112,7 @@ class TestUpdate:
             organization=organization,
         )
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await discount_service.update(
                 session,
                 discount,
@@ -159,7 +159,7 @@ class TestUpdate:
         )
         await session.refresh(discount, ["organization", "redemptions_count"])
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await discount_service.update(
                 session,
                 discount,
@@ -360,7 +360,7 @@ class TestUpdate:
             code="OTHER",
         )
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await discount_service.update(
                 session,
                 discount_to_update,

@@ -4,13 +4,13 @@ from unittest.mock import MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.email.schemas import OrganizationReviewedEmail
-from polar.held_balance.service import HeldBalanceService
-from polar.held_balance.service import held_balance as held_balance_service
-from polar.kit.db.postgres import AsyncSession
-from polar.models import Account, Organization, User
-from polar.models.organization import OrganizationStatus
-from polar.organization.tasks import (
+from solei.email.schemas import OrganizationReviewedEmail
+from solei.held_balance.service import HeldBalanceService
+from solei.held_balance.service import held_balance as held_balance_service
+from solei.kit.db.postgres import AsyncSession
+from solei.models import Account, Organization, User
+from solei.models.organization import OrganizationStatus
+from solei.organization.tasks import (
     OrganizationDoesNotExist,
     organization_created,
     organization_reviewed,
@@ -22,7 +22,7 @@ from tests.fixtures.database import SaveFixture
 @pytest.fixture(autouse=True)
 def enqueue_email_template_mock(mocker: MockerFixture) -> MagicMock:
     return mocker.patch(
-        "polar.organization.tasks.enqueue_email_template", autospec=True
+        "solei.organization.tasks.enqueue_email_template", autospec=True
     )
 
 
@@ -69,7 +69,7 @@ class TestOrganizationUnderReview:
         session.expunge_all()
 
         create_organization_review_thread_mock = mocker.patch(
-            "polar.organization.tasks.plain_service.create_organization_review_thread"
+            "solei.organization.tasks.plain_service.create_organization_review_thread"
         )
 
         await organization_under_review(organization.id)
@@ -94,7 +94,7 @@ class TestOrganizationUnderReview:
         session.expunge_all()
 
         create_organization_review_thread_mock = mocker.patch(
-            "polar.organization.tasks.plain_service.create_organization_review_thread"
+            "solei.organization.tasks.plain_service.create_organization_review_thread"
         )
 
         await organization_under_review(organization.id)
@@ -130,7 +130,7 @@ class TestOrganizationReviewed:
             spec=HeldBalanceService.release_account,
         )
         get_admin_user_mock = mocker.patch(
-            "polar.organization.tasks.OrganizationRepository.get_admin_user",
+            "solei.organization.tasks.OrganizationRepository.get_admin_user",
             return_value=user,
         )
 
@@ -165,7 +165,7 @@ class TestOrganizationReviewed:
             spec=HeldBalanceService.release_account,
         )
         get_admin_user_mock = mocker.patch(
-            "polar.organization.tasks.OrganizationRepository.get_admin_user",
+            "solei.organization.tasks.OrganizationRepository.get_admin_user",
             return_value=user,
         )
 

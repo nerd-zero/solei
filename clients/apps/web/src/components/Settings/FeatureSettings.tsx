@@ -106,7 +106,7 @@ export default function FeatureSettings({
               <>
                 Show{' '}
                 <a
-                  href="https://polar.sh/docs/features/checkout/localization"
+                  href="https://solei.to/docs/features/checkout/localization"
                   target="_blank"
                   className="underline"
                   rel="noreferrer noopener"
@@ -172,7 +172,7 @@ export default function FeatureSettings({
           <p className="text-sm">
             Please review the{' '}
             <a
-              href="https://polar.sh/docs/guides/seat-based-pricing"
+              href="https://solei.to/docs/guides/seat-based-pricing"
               target="_blank"
               className="underline"
               rel="noreferrer noopener"

@@ -3,9 +3,9 @@ import os
 
 import pytest
 
-from polar.email.react import render_email_template
-from polar.models.order import OrderBillingReasonInternal
-from polar.notifications.notification import (
+from solei.email.react import render_email_template
+from solei.models.order import OrderBillingReasonInternal
+from solei.notifications.notification import (
     MaintainerAccountCreditsGrantedNotificationPayload,
     MaintainerCreateAccountNotificationPayload,
     MaintainerNewPaidSubscriptionNotificationPayload,
@@ -20,7 +20,7 @@ async def check_diff(notification: NotificationPayloadBase) -> None:
     expected = f"{subject}\n<hr>\n{body}"
 
     # Run with `POLAR_TEST_RECORD=1 pytest` to produce new golden files :-)
-    record = os.environ.get("POLAR_TEST_RECORD", False) == "1"
+    record = os.environ.get("SOLEI_TEST_RECORD", False) == "1"
 
     name = inspect.stack()[1].function
 
@@ -53,7 +53,7 @@ async def test_MaintainerNewPaidSubscriptionNotification() -> None:
 @pytest.mark.asyncio
 async def test_MaintainerNewProductSaleNotification() -> None:
     n = MaintainerNewProductSaleNotificationPayload(
-        customer_email="birk@polar.sh",
+        customer_email="birk@solei.to",
         customer_name="Birk",
         billing_address_country="US",
         billing_address_city="San Francisco",

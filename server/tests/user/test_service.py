@@ -1,18 +1,18 @@
 import pytest
 from sqlalchemy import select
 
-from polar.kit.utils import utc_now
-from polar.models import (
+from solei.kit.utils import utc_now
+from solei.models import (
     NotificationRecipient,
     OAuthAccount,
     Organization,
     User,
     UserOrganization,
 )
-from polar.models.user import OAuthPlatform
-from polar.postgres import AsyncSession
-from polar.user.schemas import UserDeletionBlockedReason
-from polar.user.service import user as user_service
+from solei.models.user import OAuthPlatform
+from solei.postgres import AsyncSession
+from solei.user.schemas import UserDeletionBlockedReason
+from solei.user.service import user as user_service
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_notification_recipient,
@@ -101,7 +101,7 @@ class TestRequestDeletion:
         assert result.blocked_reasons == []
         assert user.deleted_at is not None
         assert user.email != original_email
-        assert user.email.endswith("@anonymized.polar.sh")
+        assert user.email.endswith("@anonymized.solei.to")
 
     async def test_blocked_with_active_organization(
         self,
@@ -137,7 +137,7 @@ class TestRequestDeletion:
 
         assert result.deleted is True
         assert user.email != original_email
-        assert user.email.endswith("@anonymized.polar.sh")
+        assert user.email.endswith("@anonymized.solei.to")
         assert user.avatar_url is None
         assert user.meta == {}
         assert user.deleted_at is not None

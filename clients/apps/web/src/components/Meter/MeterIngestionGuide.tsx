@@ -45,9 +45,9 @@ export const MeterIngestionGuide = () => {
           <Well className="dark:bg-polar-900 flex-1 shrink overflow-auto bg-white p-6 text-sm">
             <SyntaxHighlighterClient
               lang="typescript"
-              code={`import { Polar } from "@polar-sh/sdk";
+              code={`import { Solei } from "@polar-sh/sdk";
 
-const polar = new Polar({
+const polar = new Solei({
   accessToken: process.env["POLAR_ACCESS_TOKEN"] ?? "",
 });
 

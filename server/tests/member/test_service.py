@@ -5,12 +5,12 @@ import pytest
 from pytest_mock import MockerFixture
 from sqlalchemy.exc import IntegrityError
 
-from polar.auth.models import AuthSubject
-from polar.kit.pagination import PaginationParams
-from polar.member.service import member_service
-from polar.models import Customer, Member, Organization, User, UserOrganization
-from polar.models.member import MemberRole
-from polar.postgres import AsyncSession
+from solei.auth.models import AuthSubject
+from solei.kit.pagination import PaginationParams
+from solei.member.service import member_service
+from solei.models import Customer, Member, Organization, User, UserOrganization
+from solei.models.member import MemberRole
+from solei.postgres import AsyncSession
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer
@@ -312,8 +312,8 @@ class TestCreate:
         user_organization: UserOrganization,
     ) -> None:
         """Test that individual customers can only have 1 member (the owner)."""
-        from polar.exceptions import NotPermitted
-        from polar.models.customer import CustomerType
+        from solei.exceptions import NotPermitted
+        from solei.models.customer import CustomerType
 
         organization.feature_settings = {"member_model_enabled": True}
         await save_fixture(organization)
@@ -362,7 +362,7 @@ class TestCreate:
         user_organization: UserOrganization,
     ) -> None:
         """Test that team customers can have multiple members."""
-        from polar.models.customer import CustomerType
+        from solei.models.customer import CustomerType
 
         organization.feature_settings = {"member_model_enabled": True}
         await save_fixture(organization)
@@ -507,7 +507,7 @@ class TestUpdate:
         organization: Organization,
     ) -> None:
         """Test that cannot change role when member is the only owner."""
-        from polar.exceptions import PolarRequestValidationError
+        from solei.exceptions import SoleiRequestValidationError
 
         customer = await create_customer(
             save_fixture,
@@ -524,7 +524,7 @@ class TestUpdate:
         )
         await save_fixture(owner)
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await member_service.update(session, owner, role=MemberRole.member)
 
         assert "must have exactly one owner" in str(exc_info.value).lower()
@@ -537,7 +537,7 @@ class TestUpdate:
         organization: Organization,
     ) -> None:
         """Test that cannot promote member to owner when an owner already exists."""
-        from polar.exceptions import PolarRequestValidationError
+        from solei.exceptions import SoleiRequestValidationError
 
         customer = await create_customer(
             save_fixture,
@@ -563,7 +563,7 @@ class TestUpdate:
         )
         await save_fixture(member)
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await member_service.update(session, member, role=MemberRole.owner)
 
         assert "only the owner can transfer ownership" in str(exc_info.value).lower()
@@ -609,7 +609,7 @@ class TestDelete:
         organization: Organization,
     ) -> None:
         """Test that deleting a member enqueues a job to revoke their seats."""
-        enqueue_job_mock: MagicMock = mocker.patch("polar.member.service.enqueue_job")
+        enqueue_job_mock: MagicMock = mocker.patch("solei.member.service.enqueue_job")
 
         customer = await create_customer(
             save_fixture,
@@ -655,7 +655,7 @@ class TestDelete:
         organization: Organization,
     ) -> None:
         """Test that the only owner cannot be deleted."""
-        from polar.exceptions import PolarRequestValidationError
+        from solei.exceptions import SoleiRequestValidationError
 
         customer = await create_customer(
             save_fixture,
@@ -672,7 +672,7 @@ class TestDelete:
         )
         await save_fixture(owner)
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await member_service.delete(session, owner)
 
         assert "only owner" in str(exc_info.value).lower()
@@ -687,7 +687,7 @@ class TestDeleteByCustomer:
         session: AsyncSession,
         organization: Organization,
     ) -> None:
-        enqueue_job_mock: MagicMock = mocker.patch("polar.member.service.enqueue_job")
+        enqueue_job_mock: MagicMock = mocker.patch("solei.member.service.enqueue_job")
 
         customer = await create_customer(
             save_fixture,
@@ -733,7 +733,7 @@ class TestDeleteByCustomer:
         organization: Organization,
     ) -> None:
         enqueue_member_mock: MagicMock = mocker.patch(
-            "polar.benefit.grant.service.BenefitGrantService"
+            "solei.benefit.grant.service.BenefitGrantService"
             ".enqueue_member_grant_deletions"
         )
 
@@ -886,7 +886,7 @@ class TestGetOrCreateByEmail:
         await save_fixture(existing)
 
         # Mock repository.create to raise IntegrityError, simulating a race
-        from polar.member.repository import MemberRepository
+        from solei.member.repository import MemberRepository
 
         original_create = MemberRepository.create
 

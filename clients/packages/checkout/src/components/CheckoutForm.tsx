@@ -722,7 +722,7 @@ export const BaseCheckoutForm = ({
         </div>
       </div>
       <a
-        href="https://polar.sh?utm_source=checkout"
+        href="https://solei.to?utm_source=checkout"
         className="dark:text-polar-600 flex w-full flex-row items-center justify-center gap-x-3 text-sm text-gray-400"
         target="_blank"
         rel="noreferrer"

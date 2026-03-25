@@ -7,30 +7,30 @@ import { themeConfig } from './shiki.config.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const PREVIEW_BUILD = process.env.POLAR_PREVIEW_BUILD === '1'
+const PREVIEW_BUILD = process.env.SOLEI_PREVIEW_BUILD === '1'
 
 // Vercel preview: compute basePath and API URL from PR number + Tailscale hostname
 let previewBasePath = ''
 if (
   process.env.VERCEL_GIT_PULL_REQUEST_ID &&
-  process.env.POLAR_PREVIEW_BACKEND_HOST
+  process.env.SOLEI_PREVIEW_BACKEND_HOST
 ) {
   const prNum = parseInt(process.env.VERCEL_GIT_PULL_REQUEST_ID)
   previewBasePath = `/pr-${prNum}`
-  const baseUrl = `https://${process.env.POLAR_PREVIEW_BACKEND_HOST}${previewBasePath}`
+  const baseUrl = `https://${process.env.SOLEI_PREVIEW_BACKEND_HOST}${previewBasePath}`
   process.env.NEXT_PUBLIC_API_URL = baseUrl
   process.env.NEXT_PUBLIC_FRONTEND_BASE_URL = baseUrl
 }
 
-const POLAR_AUTH_COOKIE_KEY =
-  process.env.POLAR_AUTH_COOKIE_KEY || 'polar_session'
+const SOLEI_AUTH_COOKIE_KEY =
+  process.env.SOLEI_AUTH_COOKIE_KEY || 'solei_session'
 const ENVIRONMENT =
   process.env.VERCEL_ENV || process.env.NEXT_PUBLIC_VERCEL_ENV || 'development'
 const CODESPACES = process.env.CODESPACES === 'true'
 
 const defaultFrontendHostname = process.env.NEXT_PUBLIC_FRONTEND_BASE_URL
   ? new URL(process.env.NEXT_PUBLIC_FRONTEND_BASE_URL).hostname
-  : 'polar.sh'
+  : 'solei.to'
 
 const S3_PUBLIC_IMAGES_BUCKET_ORIGIN = process.env
   .S3_PUBLIC_IMAGES_BUCKET_HOSTNAME
@@ -42,7 +42,7 @@ const baseCSP = `
     frame-src 'self' https://*.js.stripe.com https://js.stripe.com https://hooks.stripe.com https://customer-wl21dabnj6qtvcai.cloudflarestream.com videodelivery.net *.cloudflarestream.com;
     script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.js.stripe.com https://js.stripe.com https://maps.googleapis.com https://www.googletagmanager.com https://chat.cdn-plain.com https://embed.cloudflarestream.com;
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    img-src 'self' blob: data: https://www.gravatar.com https://img.logo.dev https://lh3.googleusercontent.com https://avatars.githubusercontent.com ${S3_PUBLIC_IMAGES_BUCKET_ORIGIN} https://uploads.polar.sh https://prod-uk-services-workspac-workspacefilespublicbuck-vs4gjqpqjkh6.s3.amazonaws.com https://prod-uk-services-attachm-attachmentsbucket28b3ccf-uwfssb4vt2us.s3.eu-west-2.amazonaws.com https://i0.wp.com;
+    img-src 'self' blob: data: https://www.gravatar.com https://img.logo.dev https://lh3.googleusercontent.com https://avatars.githubusercontent.com ${S3_PUBLIC_IMAGES_BUCKET_ORIGIN} https://uploads.solei.to https://prod-uk-services-workspac-workspacefilespublicbuck-vs4gjqpqjkh6.s3.amazonaws.com https://prod-uk-services-attachm-attachmentsbucket28b3ccf-uwfssb4vt2us.s3.eu-west-2.amazonaws.com https://i0.wp.com;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
@@ -50,12 +50,12 @@ const baseCSP = `
 `
 const nonEmbeddedCSP = `
   ${baseCSP}
-  ${process.env.NODE_ENV !== 'development' ? `form-action 'self' ${process.env.NEXT_PUBLIC_API_URL} polar:;` : ''}
+  ${process.env.NODE_ENV !== 'development' ? `form-action 'self' ${process.env.NEXT_PUBLIC_API_URL} solei:;` : ''}
   frame-ancestors 'none';
 `
 const embeddedCSP = `
   ${baseCSP}
-  ${process.env.NODE_ENV !== 'development' ? `form-action 'self' ${process.env.NEXT_PUBLIC_API_URL} polar:;` : ''}
+  ${process.env.NODE_ENV !== 'development' ? `form-action 'self' ${process.env.NEXT_PUBLIC_API_URL} solei:;` : ''}
   frame-ancestors *;
 `
 // Don't add form-action to the OAuth2 authorize page, as it blocks the OAuth2 redirection
@@ -65,7 +65,7 @@ const oauth2CSP = `
   frame-ancestors 'none';
 `
 
-// We rewrite Mintlify docs to polar.sh/docs, so we need a specific CSP for them
+// We rewrite Mintlify docs to solei.to/docs, so we need a specific CSP for them
 // Ref: https://www.mintlify.com/docs/guides/csp-configuration#content-security-policy-csp-configuration
 const docsCSP = `
   default-src 'self';
@@ -92,7 +92,7 @@ const nextConfig = {
   ...(previewBasePath && {
     basePath: previewBasePath,
     env: {
-      POLAR_API_URL: `https://${process.env.POLAR_PREVIEW_BACKEND_HOST}:8443${previewBasePath}`,
+      SOLEI_API_URL: `https://${process.env.SOLEI_PREVIEW_BACKEND_HOST}:8443${previewBasePath}`,
     },
   }),
 
@@ -163,7 +163,7 @@ const nextConfig = {
   },
 
   async rewrites() {
-    const apiUrl = process.env.POLAR_API_URL || process.env.NEXT_PUBLIC_API_URL
+    const apiUrl = process.env.SOLEI_API_URL || process.env.NEXT_PUBLIC_API_URL
     return [
       ...(PREVIEW_BUILD && apiUrl
         ? [
@@ -198,53 +198,53 @@ const nextConfig = {
 
   async redirects() {
     return [
-      // dashboard.polar.sh redirections
+      // dashboard.solei.to redirections
       {
         source: '/',
         destination: '/login',
         has: [
           {
             type: 'host',
-            value: 'dashboard.polar.sh',
+            value: 'dashboard.solei.to',
           },
         ],
         permanent: false,
       },
       {
         source: '/:path*',
-        destination: 'https://polar.sh/:path*',
+        destination: 'https://solei.to/:path*',
         has: [
           {
             type: 'host',
-            value: 'dashboard.polar.sh',
+            value: 'dashboard.solei.to',
           },
         ],
         permanent: false,
       },
       {
         source: '/careers',
-        destination: 'https://polar.sh/company',
+        destination: 'https://solei.to/company',
         permanent: false,
       },
       {
         source: '/llms.txt',
-        destination: 'https://polar.sh/docs/llms.txt',
+        destination: 'https://solei.to/docs/llms.txt',
         permanent: true,
         has: [
           {
             type: 'host',
-            value: 'polar.sh',
+            value: 'solei.to',
           },
         ],
       },
       {
         source: '/llms-full.txt',
-        destination: 'https://polar.sh/docs/llms-full.txt',
+        destination: 'https://solei.to/docs/llms-full.txt',
         permanent: true,
         has: [
           {
             type: 'host',
-            value: 'polar.sh',
+            value: 'solei.to',
           },
         ],
       },
@@ -256,7 +256,7 @@ const nextConfig = {
         has: [
           {
             type: 'cookie',
-            key: POLAR_AUTH_COOKIE_KEY,
+            key: SOLEI_AUTH_COOKIE_KEY,
           },
           {
             type: 'host',
@@ -374,36 +374,16 @@ const nextConfig = {
         permanent: false,
       },
 
-      // Old blog redirects
-      {
-        source: '/polarsource/posts',
-        destination: '/blog',
-        permanent: false,
-      },
-      {
-        source: '/polarsource/posts/:path(.*)',
-        destination: '/blog/:path*',
-        permanent: false,
-      },
-
       // Fallback blog redirect
       {
         source: '/:path*',
-        destination: 'https://polar.sh/polarsource',
+        destination: 'https://solei.to/blog',
         has: [
           {
             type: 'host',
-            value: 'blog.polar.sh',
+            value: 'blog.solei.to',
           },
         ],
-        permanent: false,
-      },
-
-      // CLI Install Script
-      {
-        source: '/install.sh',
-        destination:
-          'https://raw.githubusercontent.com/polarsource/cli/main/install.sh',
         permanent: false,
       },
 
@@ -549,7 +529,7 @@ const createConfig = async () => {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
 
-    org: 'polar-sh',
+    org: 'nerd-zero',
     project: 'dashboard',
 
     // Pass the auth token

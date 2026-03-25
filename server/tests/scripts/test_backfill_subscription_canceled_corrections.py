@@ -3,12 +3,12 @@ from datetime import UTC, datetime
 import pytest
 from sqlalchemy import select
 
-from polar.event.system import SystemEvent
-from polar.kit.db.postgres import AsyncSession
-from polar.models import Event, Organization, Product
-from polar.models.event import EventSource
-from polar.models.subscription import CustomerCancellationReason, SubscriptionStatus
 from scripts.backfill_subscription_canceled_corrections import run_backfill
+from solei.event.system import SystemEvent
+from solei.kit.db.postgres import AsyncSession
+from solei.models import Event, Organization, Product
+from solei.models.event import EventSource
+from solei.models.subscription import CustomerCancellationReason, SubscriptionStatus
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_customer,

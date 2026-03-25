@@ -1,8 +1,8 @@
 import pytest
 from httpx import AsyncClient
 
-from polar.kit.utils import utc_now
-from polar.models import Organization, User, UserOrganization
+from solei.kit.utils import utc_now
+from solei.models import Organization, User, UserOrganization
 from tests.fixtures.database import SaveFixture
 
 

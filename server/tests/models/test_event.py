@@ -1,11 +1,11 @@
 import pytest
 from sqlalchemy.orm import joinedload
 
-from polar.event.repository import EventRepository
-from polar.kit.utils import utc_now
-from polar.models import Customer, Event, EventType, Organization
-from polar.models.event import EventSource
-from polar.postgres import AsyncSession
+from solei.event.repository import EventRepository
+from solei.kit.utils import utc_now
+from solei.models import Customer, Event, EventType, Organization
+from solei.models.event import EventSource
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer, create_event
 

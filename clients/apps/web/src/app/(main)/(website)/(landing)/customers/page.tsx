@@ -7,15 +7,15 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Customers',
-  description: 'Successful teams & companies that believe in Polar',
+  description: 'Successful teams & companies that believe in Solei',
   keywords:
     'customer success, customer stories, customers, polar, merchant of record, payments, billing',
   openGraph: {
-    siteName: 'Polar',
+    siteName: 'Solei',
     type: 'website',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
       },
@@ -25,10 +25,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Polar',
+        alt: 'Solei',
       },
     ],
   },
@@ -39,7 +39,7 @@ export default function Customers() {
     <div className="mx-auto flex h-full min-h-screen w-full max-w-6xl flex-col gap-y-8 md:gap-y-16">
       <Hero
         title="Customer Stories"
-        description="Polar powers thousands of successful startups"
+        description="Solei powers thousands of successful startups"
       />
       <div className="flex flex-col gap-y-8">
         <div className="flex flex-col items-center justify-center gap-y-16">

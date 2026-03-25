@@ -90,7 +90,7 @@ const mobileNavigationItems: NavigationItem[] = [
   },
   {
     title: 'Documentation',
-    href: 'https://polar.sh/docs',
+    href: 'https://solei.to/docs',
     target: '_blank',
   },
   {
@@ -107,7 +107,7 @@ const mobileNavigationItems: NavigationItem[] = [
     target: '_blank',
   },
   {
-    title: 'Polar on X',
+    title: 'Solei on X',
     href: 'https://x.com/polar_sh',
     target: '_blank',
   },
@@ -255,7 +255,7 @@ const LandingPageDesktopNavigation = () => {
           href: '/docs/features/products',
           label: 'Documentation Portal',
           target: '_blank',
-          subtitle: 'Get started with Polar',
+          subtitle: 'Get started with Solei',
         },
         {
           href: '/docs/features/products',

@@ -4,19 +4,19 @@ import pytest
 import pytest_asyncio
 from pydantic import HttpUrl
 
-from polar.auth.models import AuthSubject
-from polar.checkout_link.schemas import (
+from solei.auth.models import AuthSubject
+from solei.checkout_link.schemas import (
     CheckoutLinkCreateProducts,
     CheckoutLinkUpdate,
 )
-from polar.checkout_link.service import checkout_link as checkout_link_service
-from polar.enums import PaymentProcessor
-from polar.exceptions import PolarRequestValidationError
-from polar.kit.pagination import PaginationParams
-from polar.models import Discount, Organization, Product, User, UserOrganization
-from polar.models.checkout_link import CheckoutLink
-from polar.models.product_price import ProductPriceFixed
-from polar.postgres import AsyncSession
+from solei.checkout_link.service import checkout_link as checkout_link_service
+from solei.enums import PaymentProcessor
+from solei.exceptions import SoleiRequestValidationError
+from solei.kit.pagination import PaginationParams
+from solei.models import Discount, Organization, Product, User, UserOrganization
+from solei.models.checkout_link import CheckoutLink
+from solei.models.product_price import ProductPriceFixed
+from solei.postgres import AsyncSession
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
@@ -62,7 +62,7 @@ class TestCreate:
     async def test_not_existing_product(
         self, session: AsyncSession, auth_subject: AuthSubject[User]
     ) -> None:
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await checkout_link_service.create(
                 session,
                 CheckoutLinkCreateProducts(
@@ -82,7 +82,7 @@ class TestCreate:
         auth_subject: AuthSubject[User | Organization],
         product_one_time: Product,
     ) -> None:
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await checkout_link_service.create(
                 session,
                 CheckoutLinkCreateProducts(
@@ -107,7 +107,7 @@ class TestCreate:
         product_one_time.is_archived = True
         await save_fixture(product_one_time)
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await checkout_link_service.create(
                 session,
                 CheckoutLinkCreateProducts(
@@ -136,7 +136,7 @@ class TestCreate:
         )
         await save_fixture(user_organization)
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await checkout_link_service.create(
                 session,
                 CheckoutLinkCreateProducts(
@@ -297,7 +297,7 @@ class TestUpdate:
         )
         await save_fixture(user_organization)
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await checkout_link_service.update(
                 session,
                 checkout_link,

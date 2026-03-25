@@ -1,13 +1,13 @@
 import pytest_asyncio
 
-from polar.models import (
+from solei.models import (
     Organization,
     User,
     WebhookDelivery,
     WebhookEndpoint,
     WebhookEvent,
 )
-from polar.models.webhook_endpoint import WebhookEventType, WebhookFormat
+from solei.models.webhook_endpoint import WebhookEventType, WebhookFormat
 from tests.fixtures.database import SaveFixture
 
 

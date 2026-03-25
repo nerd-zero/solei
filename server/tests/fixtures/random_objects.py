@@ -11,19 +11,19 @@ from typing import Any, Literal, Unpack
 import pytest_asyncio
 from typing_extensions import TypeIs
 
-from polar.enums import (
+from solei.enums import (
     AccountType,
     PaymentProcessor,
     SubscriptionRecurringInterval,
     TaxProcessor,
 )
-from polar.kit.address import Address
-from polar.kit.currency import PresentmentCurrency
-from polar.kit.trial import TrialInterval
-from polar.kit.utils import utc_now
-from polar.meter.aggregation import Aggregation, CountAggregation
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.models import (
+from solei.kit.address import Address
+from solei.kit.currency import PresentmentCurrency
+from solei.kit.trial import TrialInterval
+from solei.kit.utils import utc_now
+from solei.meter.aggregation import Aggregation, CountAggregation
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.models import (
     Account,
     Benefit,
     BillingEntry,
@@ -73,18 +73,18 @@ from polar.models import (
     WalletTransaction,
     WebhookEndpoint,
 )
-from polar.models.benefit import BenefitType
-from polar.models.benefit_grant import (
+from solei.models.benefit import BenefitType
+from solei.models.benefit_grant import (
     BenefitGrant,
     BenefitGrantScope,
 )
-from polar.models.billing_entry import BillingEntryDirection, BillingEntryType
-from polar.models.checkout import (
+from solei.models.billing_entry import BillingEntryDirection, BillingEntryType
+from solei.models.checkout import (
     CheckoutAnalyticsMetadata,
     CheckoutStatus,
     get_expires_at,
 )
-from polar.models.custom_field import (
+from solei.models.custom_field import (
     CustomFieldCheckbox,
     CustomFieldCheckboxProperties,
     CustomFieldNumber,
@@ -96,32 +96,32 @@ from polar.models.custom_field import (
     CustomFieldTextProperties,
     CustomFieldType,
 )
-from polar.models.customer_seat import SeatStatus
-from polar.models.discount import (
+from solei.models.customer_seat import SeatStatus
+from solei.models.discount import (
     DiscountDuration,
     DiscountFixed,
     DiscountPercentage,
     DiscountType,
 )
-from polar.models.dispute import DisputeAlertProcessor, DisputeStatus
-from polar.models.event import EventSource
-from polar.models.member import MemberRole
-from polar.models.notification_recipient import NotificationRecipient
-from polar.models.order import OrderBillingReasonInternal, OrderStatus
-from polar.models.payment import PaymentStatus
-from polar.models.payout import PayoutStatus
-from polar.models.payout_attempt import PayoutAttemptStatus
-from polar.models.pledge import Pledge, PledgeState, PledgeType
-from polar.models.product_price import ProductPriceAmountType, ProductPriceType
-from polar.models.subscription import SubscriptionStatus
-from polar.models.transaction import Processor, TransactionType
-from polar.models.user import OAuthAccount, OAuthPlatform
-from polar.models.wallet import WalletType
-from polar.models.webhook_endpoint import WebhookEventType, WebhookFormat
-from polar.notification_recipient.schemas import NotificationRecipientPlatform
-from polar.product.price_set import PriceSet
-from polar.tax.calculation import TaxabilityReason, TaxRate
-from polar.tax.tax_id import TaxID
+from solei.models.dispute import DisputeAlertProcessor, DisputeStatus
+from solei.models.event import EventSource
+from solei.models.member import MemberRole
+from solei.models.notification_recipient import NotificationRecipient
+from solei.models.order import OrderBillingReasonInternal, OrderStatus
+from solei.models.payment import PaymentStatus
+from solei.models.payout import PayoutStatus
+from solei.models.payout_attempt import PayoutAttemptStatus
+from solei.models.pledge import Pledge, PledgeState, PledgeType
+from solei.models.product_price import ProductPriceAmountType, ProductPriceType
+from solei.models.subscription import SubscriptionStatus
+from solei.models.transaction import Processor, TransactionType
+from solei.models.user import OAuthAccount, OAuthPlatform
+from solei.models.wallet import WalletType
+from solei.models.webhook_endpoint import WebhookEventType, WebhookFormat
+from solei.notification_recipient.schemas import NotificationRecipientPlatform
+from solei.product.price_set import PriceSet
+from solei.tax.calculation import TaxabilityReason, TaxRate
+from solei.tax.tax_id import TaxID
 from tests.fixtures.database import SaveFixture
 
 
@@ -2050,7 +2050,7 @@ async def create_payout(
         account_currency=account_currency,
         account_amount=account_amount,
         transactions=[transaction] if transaction else [],
-        invoice_number=invoice_number or rstr("POLAR-"),
+        invoice_number=invoice_number or rstr("SOLEI-"),
         attempts=[
             PayoutAttempt(
                 processor_id=rstr("PAYOUT_ATTEMPT_PROCESSOR_ID"),

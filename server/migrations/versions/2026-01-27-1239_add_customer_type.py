@@ -9,9 +9,9 @@ Create Date: 2026-01-27 12:39:49.518183
 import sqlalchemy as sa
 from alembic import op
 
-from polar.models.customer import CustomerType
+from solei.models.customer import CustomerType
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "b89845322d11"

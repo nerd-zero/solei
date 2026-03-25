@@ -4,15 +4,15 @@ from typing import Any
 import pytest
 from httpx import AsyncClient
 
-from polar.models import (
+from solei.models import (
     Benefit,
     Organization,
     Product,
     ProductPriceFixed,
     UserOrganization,
 )
-from polar.models.custom_field import CustomFieldType
-from polar.postgres import AsyncSession
+from solei.models.custom_field import CustomFieldType
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_custom_field,

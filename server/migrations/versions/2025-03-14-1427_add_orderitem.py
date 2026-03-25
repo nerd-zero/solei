@@ -19,7 +19,7 @@ import sqlalchemy.exc
 import stripe as stripe_lib
 from alembic import op
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "78b2c37d5aa0"

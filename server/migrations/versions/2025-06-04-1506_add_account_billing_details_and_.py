@@ -9,9 +9,9 @@ Create Date: 2025-06-04 15:06:32.396008
 import sqlalchemy as sa
 from alembic import op
 
-from polar.kit.address import AddressType
+from solei.kit.address import AddressType
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "c61bb7759df7"

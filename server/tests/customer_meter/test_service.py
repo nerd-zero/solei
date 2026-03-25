@@ -5,24 +5,24 @@ from decimal import Decimal
 import pytest
 import pytest_asyncio
 
-from polar.customer_meter.service import customer_meter as customer_meter_service
-from polar.event.repository import EventRepository
-from polar.event.system import SystemEvent
-from polar.kit.utils import generate_uuid, utc_now
-from polar.meter.aggregation import (
+from solei.customer_meter.service import customer_meter as customer_meter_service
+from solei.event.repository import EventRepository
+from solei.event.system import SystemEvent
+from solei.kit.utils import generate_uuid, utc_now
+from solei.meter.aggregation import (
     AggregationFunction,
     PropertyAggregation,
 )
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.models import (
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.models import (
     Customer,
     CustomerMeter,
     Event,
     Meter,
     Organization,
 )
-from polar.models.event import EventSource
-from polar.postgres import AsyncSession
+from solei.models.event import EventSource
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     METER_TEST_EVENT,
@@ -647,7 +647,7 @@ class TestUpdateCustomerMeter:
         customer_with_external_id: Customer,
         organization: Organization,
     ) -> None:
-        from polar.meter.aggregation import UniqueAggregation
+        from solei.meter.aggregation import UniqueAggregation
 
         meter = await create_meter(
             save_fixture,
@@ -1095,7 +1095,7 @@ class TestUpdateCustomer:
         await customer_meter_service.update_customer(session, customer)
 
         # Check that no customer meter was created
-        from polar.customer_meter.repository import CustomerMeterRepository
+        from solei.customer_meter.repository import CustomerMeterRepository
 
         repository = CustomerMeterRepository.from_session(session)
         customer_meter = await repository.get_by_customer_and_meter(
@@ -1119,7 +1119,7 @@ class TestUpdateCustomer:
         await customer_meter_service.update_customer(session, customer)
 
         # Check that customer meter was created
-        from polar.customer_meter.repository import CustomerMeterRepository
+        from solei.customer_meter.repository import CustomerMeterRepository
 
         repository = CustomerMeterRepository.from_session(session)
         customer_meter = await repository.get_by_customer_and_meter(

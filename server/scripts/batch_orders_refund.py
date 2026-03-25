@@ -10,18 +10,18 @@ from pydantic import UUID4
 from rich.progress import Progress
 from sqlalchemy import func, select
 
-from polar import tasks  # noqa: F401
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Customer, Order
-from polar.models.refund import RefundReason
-from polar.order.repository import OrderRepository
-from polar.organization.repository import OrganizationRepository
-from polar.postgres import create_async_engine
-from polar.redis import create_redis
-from polar.refund.schemas import RefundCreate
-from polar.refund.service import RefundDisputedPayment, RefundedAlready
-from polar.refund.service import refund as refund_service
-from polar.worker import JobQueueManager
+from solei import tasks  # noqa: F401
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Customer, Order
+from solei.models.refund import RefundReason
+from solei.order.repository import OrderRepository
+from solei.organization.repository import OrganizationRepository
+from solei.postgres import create_async_engine
+from solei.redis import create_redis
+from solei.refund.schemas import RefundCreate
+from solei.refund.service import RefundDisputedPayment, RefundedAlready
+from solei.refund.service import refund as refund_service
+from solei.worker import JobQueueManager
 
 cli = typer.Typer()
 

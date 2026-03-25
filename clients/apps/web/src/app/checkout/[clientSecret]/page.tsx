@@ -28,7 +28,7 @@ export async function generateMetadata(props: {
   )
 
   if (!checkout?.product) {
-    return { title: 'Checkout | Polar' }
+    return { title: 'Checkout | Solei' }
   }
 
   return {

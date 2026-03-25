@@ -11,8 +11,8 @@ from alembic import op
 from alembic_utils.pg_function import PGFunction
 from sqlalchemy.schema import CreateSequence
 
-# Polar Custom Imports
-from polar.models import Customer
+# Solei Custom Imports
+from solei.models import Customer
 
 # revision identifiers, used by Alembic.
 revision = "aee75623c4bb"

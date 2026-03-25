@@ -6,25 +6,25 @@ import stripe as stripe_lib
 from httpx import AsyncClient, Response
 from pytest_mock import MockerFixture
 
-from polar.integrations.stripe.service import StripeService
-from polar.models import (
+from solei.integrations.stripe.service import StripeService
+from solei.models import (
     Customer,
     Order,
     Organization,
     Product,
     Transaction,
 )
-from polar.models.dispute import DisputeAlertProcessor
-from polar.models.order import OrderStatus
-from polar.models.refund import RefundReason, RefundStatus
-from polar.models.webhook_endpoint import WebhookEventType
-from polar.order.repository import OrderRepository
-from polar.order.service import order as order_service
-from polar.postgres import AsyncSession
-from polar.refund.schemas import RefundCreate
-from polar.refund.service import MissingRelatedDispute, RefundedAlready
-from polar.refund.service import refund as refund_service
-from polar.wallet.service import wallet as wallet_service
+from solei.models.dispute import DisputeAlertProcessor
+from solei.models.order import OrderStatus
+from solei.models.refund import RefundReason, RefundStatus
+from solei.models.webhook_endpoint import WebhookEventType
+from solei.order.repository import OrderRepository
+from solei.order.service import order as order_service
+from solei.postgres import AsyncSession
+from solei.refund.schemas import RefundCreate
+from solei.refund.service import MissingRelatedDispute, RefundedAlready
+from solei.refund.service import refund as refund_service
+from solei.wallet.service import wallet as wallet_service
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_dispute,
@@ -40,14 +40,14 @@ from tests.fixtures.stripe import build_stripe_refund
 @pytest.fixture(autouse=True)
 def stripe_service_mock(mocker: MockerFixture) -> MagicMock:
     mock = MagicMock(spec=StripeService)
-    mocker.patch("polar.refund.service.stripe_service", new=mock)
+    mocker.patch("solei.refund.service.stripe_service", new=mock)
     return mock
 
 
 @pytest.fixture(autouse=True)
 def refund_transaction_service_mock(mocker: MockerFixture) -> MagicMock:
     mock = mocker.patch(
-        "polar.refund.service.refund_transaction_service", autospec=True
+        "solei.refund.service.refund_transaction_service", autospec=True
     )
     return mock
 
@@ -893,7 +893,7 @@ class TestOrganizationRefundsBlocked:
     ) -> None:
         """Test that refunds are blocked when organization.refunds_blocked is True."""
         # Set organization refunds_blocked flag
-        from polar.organization.repository import OrganizationRepository
+        from solei.organization.repository import OrganizationRepository
 
         org_repository = OrganizationRepository.from_session(session)
         organization = await org_repository.update(
@@ -915,7 +915,7 @@ class TestOrganizationRefundsBlocked:
             reason=RefundReason.customer_request,
         )
 
-        from polar.refund.service import RefundsBlocked
+        from solei.refund.service import RefundsBlocked
 
         # Should raise RefundsBlocked exception
         with pytest.raises(RefundsBlocked) as exc_info:
@@ -942,7 +942,7 @@ class TestOrganizationRefundsBlocked:
         )
 
         # Update order to paid status
-        from polar.order.repository import OrderRepository
+        from solei.order.repository import OrderRepository
 
         order_repository = OrderRepository.from_session(session)
         order = await order_repository.update(

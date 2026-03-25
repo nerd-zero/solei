@@ -3,12 +3,12 @@ from datetime import timedelta
 import pytest
 from pydantic import HttpUrl
 
-from polar.kit.utils import utc_now
-from polar.member_session.service import member_session
-from polar.models import Member, Organization
-from polar.models.member import MemberRole
-from polar.models.member_session import MEMBER_SESSION_TOKEN_PREFIX, MemberSession
-from polar.postgres import AsyncSession
+from solei.kit.utils import utc_now
+from solei.member_session.service import member_session
+from solei.models import Member, Organization
+from solei.models.member import MemberRole
+from solei.models.member_session import MEMBER_SESSION_TOKEN_PREFIX, MemberSession
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer
 

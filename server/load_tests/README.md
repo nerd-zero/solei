@@ -142,7 +142,7 @@ All configuration is managed via environment variables. See `load_tests/config.p
 #### Required (for non-local testing)
 
 ```bash
-LOAD_TEST_HOST=https://staging.polar.sh
+LOAD_TEST_HOST=https://staging.solei.to
 LOAD_TEST_API_TOKEN=polar_pat_...          # Personal access token
 LOAD_TEST_PRODUCT_ID=uuid-here             # Product for checkout tests
 ```

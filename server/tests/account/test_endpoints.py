@@ -5,10 +5,10 @@ import stripe as stripe_lib
 from httpx import AsyncClient
 from pytest_mock import MockerFixture
 
-from polar.models.account import Account
-from polar.models.organization import Organization
-from polar.models.user import User
-from polar.models.user_organization import UserOrganization
+from solei.models.account import Account
+from solei.models.organization import Organization
+from solei.models.user import User
+from solei.models.user_organization import UserOrganization
 
 
 @pytest.mark.asyncio

@@ -1,9 +1,9 @@
 import pytest
 from httpx import AsyncClient
 
-from polar.models import Organization, UserOrganization
-from polar.models.user import User
-from polar.notification_recipient.schemas import NotificationRecipientPlatform
+from solei.models import Organization, UserOrganization
+from solei.models.user import User
+from solei.notification_recipient.schemas import NotificationRecipientPlatform
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_notification_recipient

@@ -4,8 +4,8 @@ import pytest
 import pytest_asyncio
 from httpx import AsyncClient
 
-from polar.auth.scope import Scope
-from polar.models import Customer, Order, Product, UserOrganization
+from solei.auth.scope import Scope
+from solei.models import Customer, Order, Product, UserOrganization
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_order

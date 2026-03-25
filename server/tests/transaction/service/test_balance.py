@@ -5,13 +5,13 @@ import pytest
 from pytest_mock import MockerFixture
 from sqlalchemy.orm import joinedload
 
-from polar.enums import AccountType
-from polar.integrations.stripe.service import StripeService
-from polar.models import Account, Transaction, User
-from polar.models.transaction import TransactionType
-from polar.postgres import AsyncSession
-from polar.transaction.service.balance import PaymentTransactionForChargeDoesNotExist
-from polar.transaction.service.balance import (
+from solei.enums import AccountType
+from solei.integrations.stripe.service import StripeService
+from solei.models import Account, Transaction, User
+from solei.models.transaction import TransactionType
+from solei.postgres import AsyncSession
+from solei.transaction.service.balance import PaymentTransactionForChargeDoesNotExist
+from solei.transaction.service.balance import (
     balance_transaction as balance_transaction_service,
 )
 from tests.fixtures.database import SaveFixture
@@ -21,7 +21,7 @@ from tests.fixtures.random_objects import create_payment_transaction
 @pytest.fixture(autouse=True)
 def stripe_service_mock(mocker: MockerFixture) -> MagicMock:
     mock = MagicMock(spec=StripeService)
-    mocker.patch("polar.transaction.service.balance.stripe_service", new=mock)
+    mocker.patch("solei.transaction.service.balance.stripe_service", new=mock)
     return mock
 
 
@@ -208,7 +208,7 @@ async def create_balance_transactions(
     amount: int = 1000,
 ) -> tuple[Transaction, Transaction]:
     outgoing_transaction = Transaction(
-        account=None,  # Polar account
+        account=None,  # Solei account
         type=TransactionType.balance,
         currency=currency,
         amount=-amount,  # Subtract the amount

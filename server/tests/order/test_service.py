@@ -11,32 +11,32 @@ from pydantic import BaseModel
 from pytest_mock import MockerFixture
 from sqlalchemy.orm import joinedload
 
-from polar.auth.models import AuthSubject
-from polar.checkout.eventstream import CheckoutEvent
-from polar.email.schemas import OrderConfirmationEmail
-from polar.enums import (
+from solei.auth.models import AuthSubject
+from solei.checkout.eventstream import CheckoutEvent
+from solei.email.schemas import OrderConfirmationEmail
+from solei.enums import (
     InvoiceNumbering,
     PaymentProcessor,
     SubscriptionRecurringInterval,
     TaxProcessor,
 )
-from polar.event.repository import EventRepository
-from polar.event.system import SystemEvent
-from polar.exceptions import PolarRequestValidationError
-from polar.held_balance.service import held_balance as held_balance_service
-from polar.integrations.stripe.service import StripeService
-from polar.kit.address import (
+from solei.event.repository import EventRepository
+from solei.event.system import SystemEvent
+from solei.exceptions import SoleiRequestValidationError
+from solei.held_balance.service import held_balance as held_balance_service
+from solei.integrations.stripe.service import StripeService
+from solei.kit.address import (
     Address,
     AddressDict,
     AddressInput,
     CountryAlpha2,
     CountryAlpha2Input,
 )
-from polar.kit.db.postgres import AsyncSession
-from polar.kit.math import polar_round
-from polar.kit.pagination import PaginationParams
-from polar.kit.utils import utc_now
-from polar.models import (
+from solei.kit.db.postgres import AsyncSession
+from solei.kit.math import polar_round
+from solei.kit.pagination import PaginationParams
+from solei.kit.utils import utc_now
+from solei.models import (
     Account,
     BillingEntry,
     Customer,
@@ -49,18 +49,18 @@ from polar.models import (
     User,
     UserOrganization,
 )
-from polar.models.billing_entry import BillingEntryDirection, BillingEntryType
-from polar.models.checkout import CheckoutStatus
-from polar.models.discount import DiscountDuration, DiscountType
-from polar.models.order import OrderBillingReasonInternal, OrderStatus
-from polar.models.organization import Organization, OrganizationStatus
-from polar.models.payment import PaymentStatus
-from polar.models.product import ProductBillingType
-from polar.models.subscription import SubscriptionStatus
-from polar.models.transaction import PlatformFeeType, TransactionType
-from polar.models.wallet import WalletType
-from polar.order.schemas import OrderUpdate
-from polar.order.service import (
+from solei.models.billing_entry import BillingEntryDirection, BillingEntryType
+from solei.models.checkout import CheckoutStatus
+from solei.models.discount import DiscountDuration, DiscountType
+from solei.models.order import OrderBillingReasonInternal, OrderStatus
+from solei.models.organization import Organization, OrganizationStatus
+from solei.models.payment import PaymentStatus
+from solei.models.product import ProductBillingType
+from solei.models.subscription import SubscriptionStatus
+from solei.models.transaction import PlatformFeeType, TransactionType
+from solei.models.wallet import WalletType
+from solei.order.schemas import OrderUpdate
+from solei.order.service import (
     MissingCheckoutCustomer,
     NoPendingBillingEntries,
     NotRecurringProduct,
@@ -71,23 +71,23 @@ from polar.order.service import (
     RecurringProduct,
     SubscriptionNotTrialing,
 )
-from polar.order.service import order as order_service
-from polar.product.guard import is_fixed_price, is_static_price
-from polar.product.price_set import PriceSet
-from polar.subscription.service import SubscriptionService
-from polar.tax.calculation import (
+from solei.order.service import order as order_service
+from solei.product.guard import is_fixed_price, is_static_price
+from solei.product.price_set import PriceSet
+from solei.subscription.service import SubscriptionService
+from solei.tax.calculation import (
     CalculationExpiredError,
     TaxabilityReason,
     TaxCalculation,
     TaxCalculationService,
 )
-from polar.tax.tax_id import TaxID
-from polar.transaction.service.balance import PaymentTransactionForChargeDoesNotExist
-from polar.transaction.service.payment import (
+from solei.tax.tax_id import TaxID
+from solei.transaction.service.balance import PaymentTransactionForChargeDoesNotExist
+from solei.transaction.service.payment import (
     payment_transaction as payment_transaction_service,
 )
-from polar.transaction.service.platform_fee import PlatformFeeTransactionService
-from polar.wallet.service import wallet as wallet_service
+from solei.transaction.service.platform_fee import PlatformFeeTransactionService
+from solei.wallet.service import wallet as wallet_service
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
@@ -135,7 +135,7 @@ def build_stripe_payment_intent(
 @pytest.fixture(autouse=True)
 def stripe_service_mock(mocker: MockerFixture, customer: Customer) -> MagicMock:
     mock = MagicMock(spec=StripeService)
-    mocker.patch("polar.order.service.stripe_service", new=mock)
+    mocker.patch("solei.order.service.stripe_service", new=mock)
 
     mock.get_customer.return_value = SimpleNamespace(
         id=customer.stripe_customer_id,
@@ -149,17 +149,17 @@ def stripe_service_mock(mocker: MockerFixture, customer: Customer) -> MagicMock:
 
 @pytest.fixture
 def enqueue_job_mock(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch("polar.order.service.enqueue_job")
+    return mocker.patch("solei.order.service.enqueue_job")
 
 
 @pytest.fixture
 def enqueue_email_mock(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch("polar.order.service.enqueue_email_template", autospec=True)
+    return mocker.patch("solei.order.service.enqueue_email_template", autospec=True)
 
 
 @pytest.fixture
 def publish_checkout_event_mock(mocker: MockerFixture) -> AsyncMock:
-    return mocker.patch("polar.order.service.publish_checkout_event")
+    return mocker.patch("solei.order.service.publish_checkout_event")
 
 
 @pytest.fixture
@@ -172,7 +172,7 @@ def event_creation_time() -> tuple[datetime, int]:
 @pytest.fixture(autouse=True)
 def tax_service_mock(mocker: MockerFixture) -> MagicMock:
     mock = mocker.patch(
-        "polar.order.service.tax_calculation_service", spec=TaxCalculationService
+        "solei.order.service.tax_calculation_service", spec=TaxCalculationService
     )
     mock.record.return_value = ("TAX_TRANSACTION_ID", TaxProcessor.numeral)
     return mock
@@ -475,7 +475,7 @@ class TestUpdate:
             billing_address=Address.model_validate(set_address),
         )
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await order_service.update(
                 session,
                 order,
@@ -1562,7 +1562,7 @@ class TestCreateSubscriptionOrder:
         reset to start fresh for the new period.
         """
         subscription_service_mock = mocker.patch(
-            "polar.order.service.subscription_service", spec=SubscriptionService
+            "solei.order.service.subscription_service", spec=SubscriptionService
         )
 
         subscription = await create_active_subscription(
@@ -1612,7 +1612,7 @@ class TestCreateSubscriptionOrder:
         were resetting meters mid-cycle without re-applying benefit credits.
         """
         subscription_service_mock = mocker.patch(
-            "polar.order.service.subscription_service", spec=SubscriptionService
+            "solei.order.service.subscription_service", spec=SubscriptionService
         )
 
         subscription = await create_active_subscription(
@@ -2051,7 +2051,7 @@ class TestCreateOrderBalance:
         )
 
         create_balance_from_charge_mock = mocker.patch(
-            "polar.order.service.balance_transaction_service.create_balance_from_charge"
+            "solei.order.service.balance_transaction_service.create_balance_from_charge"
         )
         create_balance_from_charge_mock.return_value = (
             Transaction(type=TransactionType.balance, amount=-order.net_amount),
@@ -2063,7 +2063,7 @@ class TestCreateOrderBalance:
         )
 
         platform_fee_transaction_service_mock = mocker.patch(
-            "polar.order.service.platform_fee_transaction_service",
+            "solei.order.service.platform_fee_transaction_service",
             spec=PlatformFeeTransactionService,
         )
         platform_fee_transaction_service_mock.create_fees_reversal_balances.return_value = [
@@ -2358,7 +2358,7 @@ class TestHandlePaymentFailure:
         await save_fixture(order)
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
         mock_mark_past_due.return_value = subscription
 
@@ -2400,12 +2400,12 @@ class TestHandlePaymentFailure:
         await save_fixture(order)
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
         mock_mark_past_due.return_value = subscription
 
         mock_enqueue_benefits_grants = mocker.patch(
-            "polar.subscription.service.subscription.enqueue_benefits_grants"
+            "solei.subscription.service.subscription.enqueue_benefits_grants"
         )
 
         await order_service.handle_payment_failure(session, order)
@@ -2439,7 +2439,7 @@ class TestHandlePaymentFailure:
         await save_fixture(order)
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
 
         # When
@@ -2470,7 +2470,7 @@ class TestHandlePaymentFailure:
         await save_fixture(order)
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
 
         # When
@@ -2516,7 +2516,7 @@ class TestHandlePaymentFailure:
         )
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
 
         # When
@@ -2571,7 +2571,7 @@ class TestHandlePaymentFailure:
         )
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
 
         # When
@@ -2621,9 +2621,9 @@ class TestHandlePaymentFailure:
             )
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
-        mock_revoke = mocker.patch("polar.subscription.service.subscription.revoke")
+        mock_revoke = mocker.patch("solei.subscription.service.subscription.revoke")
 
         # When
         result_order = await order_service.handle_payment_failure(session, order)
@@ -2670,9 +2670,9 @@ class TestHandlePaymentFailure:
             )
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
-        mock_revoke = mocker.patch("polar.subscription.service.subscription.revoke")
+        mock_revoke = mocker.patch("solei.subscription.service.subscription.revoke")
 
         # When
         result_order = await order_service.handle_payment_failure(session, order)
@@ -2723,7 +2723,7 @@ class TestHandlePaymentFailure:
         )
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
 
         # When
@@ -2769,7 +2769,7 @@ class TestHandlePaymentFailure:
         order.next_payment_attempt_at = utc_now() - timedelta(days=1)  # Past due
         await save_fixture(order)
 
-        mock_revoke = mocker.patch("polar.subscription.service.subscription.revoke")
+        mock_revoke = mocker.patch("solei.subscription.service.subscription.revoke")
 
         # When
         result_order = await order_service.handle_payment_failure(session, order)
@@ -2805,7 +2805,7 @@ class TestHandlePaymentFailure:
         order.next_payment_attempt_at = utc_now() - timedelta(days=1)  # Past due
         await save_fixture(order)
 
-        mock_revoke = mocker.patch("polar.subscription.service.subscription.revoke")
+        mock_revoke = mocker.patch("solei.subscription.service.subscription.revoke")
 
         # When
         result_order = await order_service.handle_payment_failure(session, order)
@@ -2859,12 +2859,12 @@ class TestHandlePaymentFailure:
             return sub
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due",
+            "solei.subscription.service.subscription.mark_past_due",
             side_effect=mark_past_due_side_effect,
         )
 
         mock_enqueue_benefits_grants = mocker.patch(
-            "polar.subscription.service.subscription.enqueue_benefits_grants"
+            "solei.subscription.service.subscription.enqueue_benefits_grants"
         )
 
         # When
@@ -2913,7 +2913,7 @@ class TestHandlePaymentFailure:
         )
 
         mock_mark_past_due = mocker.patch(
-            "polar.subscription.service.subscription.mark_past_due"
+            "solei.subscription.service.subscription.mark_past_due"
         )
         mock_mark_past_due.return_value = subscription
 
@@ -2965,7 +2965,7 @@ class TestHandlePaymentFailure:
             order=order,
         )
 
-        mock_revoke = mocker.patch("polar.subscription.service.subscription.revoke")
+        mock_revoke = mocker.patch("solei.subscription.service.subscription.revoke")
 
         # When
         result_order = await order_service.handle_payment_failure(session, order)
@@ -2989,7 +2989,7 @@ class TestProcessDunningOrder:
     ) -> None:
         """Test that process_dunning_order logs warning for orders without subscription"""
         # Given
-        log_mock = mocker.patch("polar.order.service.log")
+        log_mock = mocker.patch("solei.order.service.log")
         order = await create_order(
             save_fixture,
             product=product,
@@ -3051,7 +3051,7 @@ class TestProcessDunningOrder:
     ) -> None:
         """Test that process_dunning_order logs warning for subscriptions without payment method"""
         # Given
-        log_mock = mocker.patch("polar.order.service.log")
+        log_mock = mocker.patch("solei.order.service.log")
         order = await create_order(
             save_fixture,
             product=product,
@@ -3085,7 +3085,7 @@ class TestProcessDunningOrder:
     ) -> None:
         """Test that process_dunning_order logs warning for subscriptions with a soft deleted payment method"""
         # Given
-        log_mock = mocker.patch("polar.order.service.log")
+        log_mock = mocker.patch("solei.order.service.log")
         order = await create_order(
             save_fixture,
             product=product,
@@ -3689,7 +3689,7 @@ class TestTriggerPayment:
 
         descriptor = call_kwargs["statement_descriptor_suffix"]
         assert descriptor.endswith(" TRIAL OVER")
-        from polar.config import settings
+        from solei.config import settings
 
         assert len(descriptor) <= settings.stripe_descriptor_suffix_max_length
         assert descriptor.startswith(organization.slug[:4])
@@ -4027,7 +4027,7 @@ class TestProcessRetryPayment:
         )
         await save_fixture(order)
 
-        from polar.order.service import OrderNotEligibleForRetry
+        from solei.order.service import OrderNotEligibleForRetry
 
         with pytest.raises(OrderNotEligibleForRetry):
             await order_service.process_retry_payment(

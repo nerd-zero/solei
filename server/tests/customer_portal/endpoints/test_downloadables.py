@@ -7,13 +7,13 @@ import pytest
 from freezegun import freeze_time
 from httpx import AsyncClient
 
-from polar.benefit.strategies.downloadables.schemas import (
+from solei.benefit.strategies.downloadables.schemas import (
     BenefitDownloadablesCreateProperties,
 )
-from polar.customer_portal.schemas.downloadables import DownloadableRead
-from polar.models import Customer, File, Organization, Product
-from polar.postgres import AsyncSession, sql
-from polar.redis import Redis
+from solei.customer_portal.schemas.downloadables import DownloadableRead
+from solei.models import Customer, File, Organization, Product
+from solei.postgres import AsyncSession, sql
+from solei.redis import Redis
 from tests.fixtures.auth import CUSTOMER_AUTH_SUBJECT
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.downloadable import TestDownloadable
@@ -66,7 +66,7 @@ class TestDownloadablesEndpoints:
         # Revoke the benefit
         await TestDownloadable.run_revoke_task(session, redis, benefit, customer)
 
-        # Polar download endpoint will now 404
+        # Solei download endpoint will now 404
         response = await client.get(
             "/v1/customer-portal/downloadables/i-am-a-hacker", follow_redirects=False
         )
@@ -107,7 +107,7 @@ class TestDownloadablesEndpoints:
         downloadable = DownloadableRead(**downloadable_list[0])
         polar_download_url = downloadable.file.download.url
 
-        # Polar download endpoint gives presigned S3 redirect
+        # Solei download endpoint gives presigned S3 redirect
         response = await client.get(polar_download_url, follow_redirects=False)
         assert response.status_code == 302
         s3_download_url = response.headers.get("location", None)
@@ -153,7 +153,7 @@ class TestDownloadablesEndpoints:
         downloadable = downloadable_list[0]
         polar_download_url = downloadable["file"]["download"]["url"]
 
-        # Polar download endpoint gives presigned S3 redirect
+        # Solei download endpoint gives presigned S3 redirect
         response = await client.get(polar_download_url, follow_redirects=False)
         assert response.status_code == 302
         s3_download_url = response.headers.get("location", None)
@@ -252,7 +252,7 @@ class TestDownloadablesEndpoints:
         downloadable = downloadable_list[0]
         polar_download_url = downloadable["file"]["download"]["url"]
 
-        # Polar download endpoint gives presigned S3 redirect
+        # Solei download endpoint gives presigned S3 redirect
         response = await client.get(polar_download_url, follow_redirects=False)
         assert response.status_code == 302
         s3_download_url = response.headers.get("location", None)

@@ -2,16 +2,16 @@ from functools import partial
 
 import pytest
 
-from polar.models import Account, Organization, Payout, Transaction, User
-from polar.models.transaction import Processor, TransactionType
-from polar.postgres import AsyncSession
-from polar.transaction.service.payout import (
+from solei.models import Account, Organization, Payout, Transaction, User
+from solei.models.transaction import Processor, TransactionType
+from solei.postgres import AsyncSession
+from solei.transaction.service.payout import (
     payout_transaction as payout_transaction_service,
 )
-from polar.transaction.service.platform_fee import (
+from solei.transaction.service.platform_fee import (
     platform_fee_transaction as platform_fee_transaction_service,
 )
-from polar.transaction.service.transaction import transaction as transaction_service
+from solei.transaction.service.transaction import transaction as transaction_service
 from tests.fixtures import random_objects as ro
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_account

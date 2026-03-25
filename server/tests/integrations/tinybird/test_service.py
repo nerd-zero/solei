@@ -7,15 +7,15 @@ import httpx
 import pytest
 import respx
 
-from polar.integrations.tinybird.client import TinybirdClient, TinybirdRequestError
-from polar.integrations.tinybird.service import (
+from solei.integrations.tinybird.client import TinybirdClient, TinybirdRequestError
+from solei.integrations.tinybird.service import (
     DATASOURCE_EVENTS,
     TinybirdEventsQuery,
     TinybirdEventTypesQuery,
     _event_to_tinybird,
 )
-from polar.models import Event
-from polar.models.event import EventSource
+from solei.models import Event
+from solei.models.event import EventSource
 from tests.fixtures.tinybird import tinybird_available
 
 pytestmark = pytest.mark.xdist_group(name="tinybird")

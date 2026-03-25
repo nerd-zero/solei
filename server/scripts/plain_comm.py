@@ -19,11 +19,11 @@ import typer
 from rich.console import Console
 from rich.progress import Progress
 
-from polar.config import settings
-from polar.kit.db.postgres import AsyncSession, create_async_sessionmaker
-from polar.organization.repository import OrganizationRepository
-from polar.postgres import create_async_engine
-from polar.user.repository import UserRepository
+from solei.config import settings
+from solei.kit.db.postgres import AsyncSession, create_async_sessionmaker
+from solei.organization.repository import OrganizationRepository
+from solei.postgres import create_async_engine
+from solei.user.repository import UserRepository
 
 cli = typer.Typer()
 console = Console()

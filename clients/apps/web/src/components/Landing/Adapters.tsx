@@ -23,15 +23,15 @@ const adapters = [
 export const GET = Checkout({
   accessToken: 'xxx'
 });`,
-    link: 'https://polar.sh/docs/integrate/sdk/adapters/nextjs',
+    link: 'https://solei.to/docs/integrate/sdk/adapters/nextjs',
   },
   {
     name: 'BetterAuth',
     code: `import { betterAuth } from "better-auth";
 import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth";
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@polar-sh/sdk";
 
-const client = new Polar({ accessToken: 'xxx' });
+const client = new Solei({ accessToken: 'xxx' });
 
 const auth = betterAuth({
     // ... Better Auth config
@@ -48,13 +48,13 @@ const auth = betterAuth({
         })
     ]
 });`,
-    link: 'https://polar.sh/docs/integrate/sdk/adapters/better-auth',
+    link: 'https://solei.to/docs/integrate/sdk/adapters/better-auth',
   },
   {
     name: 'TypeScript',
-    code: `import { Polar } from "@polar-sh/sdk";
+    code: `import { Solei } from "@polar-sh/sdk";
 
-const polar = new Polar({
+const polar = new Solei({
   accessToken: 'xxx',
 });
 
@@ -63,7 +63,7 @@ const checkout = await polar.checkouts.create({
 });
 
 redirect(checkout.url)`,
-    link: 'https://polar.sh/docs/api-reference/checkouts/create-session',
+    link: 'https://solei.to/docs/api-reference/checkouts/create-session',
   },
 ]
 
@@ -110,7 +110,7 @@ export const Adapters = () => {
                 </TabsTrigger>
               ))}
               <Link
-                href="https://polar.sh/docs/integrate/sdk/adapters/nextjs"
+                href="https://solei.to/docs/integrate/sdk/adapters/nextjs"
                 target="_blank"
               >
                 <Button

@@ -7,15 +7,15 @@ import { twMerge } from 'tailwind-merge'
 
 export const metadata: Metadata = {
   title: 'Downloads',
-  description: 'Use Polar in a variety of different environments',
+  description: 'Use Solei in a variety of different environments',
   keywords:
     'downloads, ios, android, raycast, framer, binaries, saas, digital products, platform, developer, open source, funding, open source, economy',
   openGraph: {
-    siteName: 'Polar',
+    siteName: 'Solei',
     type: 'website',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
       },
@@ -25,10 +25,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Polar',
+        alt: 'Solei',
       },
     ],
   },
@@ -36,30 +36,30 @@ export const metadata: Metadata = {
 
 const downloads = [
   {
-    title: 'Polar for iOS',
+    title: 'Solei for iOS',
     description: 'Your business in the palm of your hand. Built for iPhone.',
     href: 'https://apps.apple.com/se/app/polar-monetize-your-software/id6746640471',
     target: '_blank',
     icon: <Apple size={20} />,
   },
   {
-    title: 'Polar for Android',
+    title: 'Solei for Android',
     description:
-      'The perfect companion app for your business on Polar. Built for Android.',
+      'The perfect companion app for your business on Solei. Built for Android.',
     icon: <Google size={20} />,
   },
 ]
 
 const plugins = [
   {
-    title: 'Polar for Raycast',
+    title: 'Solei for Raycast',
     href: 'https://www.raycast.com/emilwidlund/polar',
     description:
       'Access to your latest orders & customers right at your fingertips.',
     icon: <Raycast size={20} />,
   },
   {
-    title: 'Polar for Framer',
+    title: 'Solei for Framer',
     href: 'https://www.framer.com/marketplace/plugins/polar',
     description:
       'Empower your Framer projects with flexible Checkout components.',
@@ -102,9 +102,9 @@ export default function Downloads() {
             height={160}
             alt="App Icon"
           />
-          <h3 className="text-4xl md:text-7xl">Polar in your pocket</h3>
+          <h3 className="text-4xl md:text-7xl">Solei in your pocket</h3>
           <p className="dark:text-polar-500 text-2xl text-balance text-gray-500">
-            Take Polar with you. Now available on a variety of platforms.
+            Take Solei with you. Now available on a variety of platforms.
           </p>
         </Box>
       </Box>
@@ -167,7 +167,7 @@ export default function Downloads() {
           <Box display="flex" flexDirection="column" rowGap="s">
             <h3 className="text-2xl">Plugins</h3>
             <p className="dark:text-polar-500 text-lg text-gray-500">
-              Polar integrated in your favourite apps
+              Solei integrated in your favourite apps
             </p>
           </Box>
           {plugins.map((link) => (

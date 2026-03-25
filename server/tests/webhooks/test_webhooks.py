@@ -8,26 +8,26 @@ from dramatiq import Retry
 from pytest_mock import MockerFixture
 from standardwebhooks.webhooks import Webhook as StandardWebhook
 
-from polar.config import settings
-from polar.kit.db.postgres import AsyncSession
-from polar.models.organization import Organization
-from polar.models.subscription import Subscription
-from polar.models.webhook_delivery import WebhookDelivery
-from polar.models.webhook_endpoint import (
+from solei.config import settings
+from solei.kit.db.postgres import AsyncSession
+from solei.models.organization import Organization
+from solei.models.subscription import Subscription
+from solei.models.webhook_delivery import WebhookDelivery
+from solei.models.webhook_endpoint import (
     WebhookEndpoint,
     WebhookEventType,
     WebhookFormat,
 )
-from polar.models.webhook_event import WebhookEvent
-from polar.webhook.repository import WebhookDeliveryRepository
-from polar.webhook.service import webhook as webhook_service
-from polar.webhook.tasks import _webhook_event_send, webhook_event_send
+from solei.models.webhook_event import WebhookEvent
+from solei.webhook.repository import WebhookDeliveryRepository
+from solei.webhook.service import webhook as webhook_service
+from solei.webhook.tasks import _webhook_event_send, webhook_event_send
 from tests.fixtures.database import SaveFixture
 
 
 @pytest.fixture
 def enqueue_job_mock(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch("polar.webhook.service.enqueue_job")
+    return mocker.patch("solei.webhook.service.enqueue_job")
 
 
 @pytest.mark.asyncio

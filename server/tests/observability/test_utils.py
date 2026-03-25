@@ -1,10 +1,10 @@
 from unittest.mock import MagicMock
 
-from polar.observability.http_metrics import (
+from solei.observability.http_metrics import (
     METRICS_EXCLUDED_APPS,
     exclude_app_from_metrics,
 )
-from polar.observability.utils import get_path_template
+from solei.observability.utils import get_path_template
 
 
 class TestGetPathTemplate:

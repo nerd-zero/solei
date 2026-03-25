@@ -6,13 +6,13 @@ from typing import Any
 import pytest
 from pydantic import ValidationError
 
-from polar.organization_review.report import (
+from solei.organization_review.report import (
     LATEST_VERSION,
     AgentReportV2,
     build_agent_report,
     parse_agent_report,
 )
-from polar.organization_review.schemas import (
+from solei.organization_review.schemas import (
     RISK_LEVEL_SCORES,
     AccountData,
     AgentReviewResult,

@@ -4,21 +4,21 @@ import pytest
 from pytest_mock import MockerFixture
 from sqlalchemy.exc import IntegrityError
 
-from polar.auth.models import AuthSubject, is_user
-from polar.customer.repository import CustomerRepository
-from polar.customer.schemas.customer import CustomerCreate, CustomerUpdate
-from polar.customer.service import customer as customer_service
-from polar.exceptions import PolarRequestValidationError
-from polar.kit.address import Address, AddressInput, CountryAlpha2, CountryAlpha2Input
-from polar.kit.pagination import PaginationParams
-from polar.member.repository import MemberRepository
-from polar.models import Customer, Organization, User, UserOrganization
-from polar.models.customer import CustomerType
-from polar.models.member import Member, MemberRole
-from polar.models.webhook_endpoint import CustomerWebhookEventType, WebhookEventType
-from polar.postgres import AsyncSession
-from polar.redis import Redis
-from polar.tax.tax_id import TaxIDFormat
+from solei.auth.models import AuthSubject, is_user
+from solei.customer.repository import CustomerRepository
+from solei.customer.schemas.customer import CustomerCreate, CustomerUpdate
+from solei.customer.service import customer as customer_service
+from solei.exceptions import SoleiRequestValidationError
+from solei.kit.address import Address, AddressInput, CountryAlpha2, CountryAlpha2Input
+from solei.kit.pagination import PaginationParams
+from solei.member.repository import MemberRepository
+from solei.models import Customer, Organization, User, UserOrganization
+from solei.models.customer import CustomerType
+from solei.models.member import Member, MemberRole
+from solei.models.webhook_endpoint import CustomerWebhookEventType, WebhookEventType
+from solei.postgres import AsyncSession
+from solei.redis import Redis
+from solei.tax.tax_id import TaxIDFormat
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer, create_member
@@ -89,7 +89,7 @@ class TestCreate:
         auth_subject: AuthSubject[User],
         organization: Organization,
     ) -> None:
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.create(
                 session,
                 CustomerCreate(
@@ -116,7 +116,7 @@ class TestCreate:
         if is_user(auth_subject):
             payload["organization_id"] = str(organization.id)
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.create(
                 session, CustomerCreate.model_validate(payload), auth_subject
             )
@@ -139,7 +139,7 @@ class TestCreate:
         if is_user(auth_subject):
             payload["organization_id"] = str(organization.id)
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.create(
                 session, CustomerCreate.model_validate(payload), auth_subject
             )
@@ -254,11 +254,11 @@ class TestCreate:
         await save_fixture(organization)
 
         payload: dict[str, Any] = {
-            "email": "customer@polar.sh",
+            "email": "customer@solei.to",
             "name": "Customer Name",
             "external_id": "customer_ext_123",
             "owner": {
-                "email": "owner@polar.sh",
+                "email": "owner@solei.to",
                 "name": "Owner Name",
                 "external_id": "owner_ext_456",
             },
@@ -271,7 +271,7 @@ class TestCreate:
         )
         await session.flush()
 
-        assert customer.email == "customer@polar.sh"
+        assert customer.email == "customer@solei.to"
         assert customer.name == "Customer Name"
         assert customer.external_id == "customer_ext_123"
 
@@ -279,7 +279,7 @@ class TestCreate:
         member = await member_repository.get_owner_by_customer_id(session, customer.id)
         assert member is not None
         assert member.customer_id == customer.id
-        assert member.email == "owner@polar.sh"
+        assert member.email == "owner@solei.to"
         assert member.name == "Owner Name"
         assert member.external_id == "owner_ext_456"
         assert member.role == MemberRole.owner
@@ -313,7 +313,7 @@ class TestCreate:
         if is_user(auth_subject):
             payload["organization_id"] = str(organization.id)
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await customer_service.create(
                 session, CustomerCreate.model_validate(payload), auth_subject
             )
@@ -354,7 +354,7 @@ class TestCreate:
         if is_user(auth_subject):
             payload["organization_id"] = str(organization.id)
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await customer_service.create(
                 session, CustomerCreate.model_validate(payload), auth_subject
             )
@@ -378,7 +378,7 @@ class TestCreate:
         if is_user(auth_subject):
             payload["organization_id"] = str(organization.id)
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await customer_service.create(
                 session, CustomerCreate.model_validate(payload), auth_subject
             )
@@ -403,7 +403,7 @@ class TestCreate:
         if is_user(auth_subject):
             payload["organization_id"] = str(organization.id)
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await customer_service.create(
                 session, CustomerCreate.model_validate(payload), auth_subject
             )
@@ -443,7 +443,7 @@ class TestUpdate:
     async def test_existing_external_id(
         self, session: AsyncSession, customer: Customer, customer_external_id: Customer
     ) -> None:
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.update(
                 session,
                 customer,
@@ -464,7 +464,7 @@ class TestUpdate:
         session: AsyncSession,
         customer_external_id: Customer,
     ) -> None:
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.update(
                 session,
                 customer_external_id,
@@ -483,7 +483,7 @@ class TestUpdate:
             organization=organization,
             billing_address=Address(country=CountryAlpha2("FR")),
         )
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.update(
                 session, customer, CustomerUpdate(billing_address=None)
             )
@@ -493,7 +493,7 @@ class TestUpdate:
     async def test_existing_email(
         self, session: AsyncSession, customer: Customer, customer_second: Customer
     ) -> None:
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.update(
                 session,
                 customer,
@@ -627,7 +627,7 @@ class TestUpdate:
         customer.type = CustomerType.team
         await save_fixture(customer)
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await customer_service.update(
                 session,
                 customer,
@@ -668,7 +668,7 @@ class TestUpdate:
         customer: Customer,
     ) -> None:
         """Updating a customer with tax_id but no billing_address should fail."""
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await customer_service.update(
                 session,
                 customer,
@@ -689,7 +689,7 @@ class TestUpdate:
             email="invalid-taxid-update@example.com",
             billing_address=Address(country=CountryAlpha2("FR")),
         )
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await customer_service.update(
                 session,
                 customer,
@@ -736,7 +736,7 @@ class TestUpdate:
             tax_id=("FR61954506077", TaxIDFormat.eu_vat),
         )
         # Changing country to US should fail because FR VAT is not valid in US
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await customer_service.update(
                 session,
                 customer,
@@ -907,7 +907,7 @@ class TestDelete:
         )
         deleted = await customer_service.delete(session, customer, anonymize=True)
         assert deleted.deleted_at is not None
-        assert deleted.email.endswith("@anonymized.polar.sh")
+        assert deleted.email.endswith("@anonymized.solei.to")
         assert deleted.name is not None
         assert deleted.name != "Delete Anon User"
         assert len(deleted.name) == 64  # SHA-256 hex
@@ -1096,7 +1096,7 @@ class TestAnonymize:
         anonymized = await customer_service.anonymize(session, customer)
 
         # Email should be hashed
-        assert anonymized.email.endswith("@anonymized.polar.sh")
+        assert anonymized.email.endswith("@anonymized.solei.to")
         assert anonymized.email != "individual@example.com"
         assert anonymized.email_verified is False
 
@@ -1131,7 +1131,7 @@ class TestAnonymize:
         anonymized = await customer_service.anonymize(session, customer)
 
         # Email should be hashed
-        assert anonymized.email.endswith("@anonymized.polar.sh")
+        assert anonymized.email.endswith("@anonymized.solei.to")
         assert anonymized.email_verified is False
 
         # Name should be PRESERVED for businesses
@@ -1278,7 +1278,7 @@ class TestAnonymize:
         # Should still be able to anonymize
         anonymized = await customer_service.anonymize(session, customer)
 
-        assert anonymized.email.endswith("@anonymized.polar.sh")
+        assert anonymized.email.endswith("@anonymized.solei.to")
         assert anonymized.deleted_at is not None
 
 
@@ -1300,7 +1300,7 @@ class TestWebhook:
         redis: Redis,
         customer: Customer,
     ) -> None:
-        send_mock = mocker.patch("polar.webhook.service.webhook.send")
+        send_mock = mocker.patch("solei.webhook.service.webhook.send")
 
         await customer_service.webhook(session, redis, event_type, customer)
 
@@ -1313,7 +1313,7 @@ class TestWebhook:
         redis: Redis,
         customer: Customer,
     ) -> None:
-        send_mock = mocker.patch("polar.webhook.service.webhook.send")
+        send_mock = mocker.patch("solei.webhook.service.webhook.send")
 
         await customer_service.webhook(
             session, redis, WebhookEventType.customer_state_changed, customer

@@ -15,7 +15,7 @@ export const companyTestimonials = [
     text: (
       <>
         <p>
-          Polar&apos;s Python SDK and Webhook infrastructure made our billing
+          Solei&apos;s Python SDK and Webhook infrastructure made our billing
           integration straightforward.
         </p>
         <p>It gave us production-ready billing in hours, not weeks.</p>
@@ -31,7 +31,7 @@ export const companyTestimonials = [
     avatar: '/assets/landing/testamonials/eric.jpg',
     text: (
       <>
-        <p>Polar was a turning point for Repo Prompt.</p>
+        <p>Solei was a turning point for Repo Prompt.</p>
         <p>
           I went from dreading payments to having everything live in a weekend.
         </p>
@@ -49,7 +49,7 @@ const userTestimonials = [
     avatar: '/assets/landing/testamonials/rauch.jpg',
     text: (
       <p>
-        The speed at which Polar is executing on the financial infrastructure
+        The speed at which Solei is executing on the financial infrastructure
         primitives the new world needs is very impressive.
       </p>
     ),
@@ -64,7 +64,7 @@ const userTestimonials = [
       <>
         <p>Open source + great DX + responsive support always wins.</p>
         <p>
-          If you&apos;re selling stuff online and haven&apos;t tried Polar yet —
+          If you&apos;re selling stuff online and haven&apos;t tried Solei yet —
           100% recommend doing so!
         </p>
       </>
@@ -78,7 +78,7 @@ const userTestimonials = [
     avatar: '/assets/landing/testamonials/mitchell.jpg',
     text: (
       <>
-        <p>I&apos;ve joined Polar as an advisor!</p>
+        <p>I&apos;ve joined Solei as an advisor!</p>
         <p>
           I think it benefits everyone for devs to have more options to get paid
           to work on their passions, to support upstreams, and for users to have
@@ -96,7 +96,7 @@ const userTestimonials = [
     avatar: '/assets/landing/testamonials/lee.jpg',
     text: (
       <>
-        <p>I switched to Polar a few weeks back. Best decision ever.</p>
+        <p>I switched to Solei a few weeks back. Best decision ever.</p>
       </>
     ),
   },
@@ -106,7 +106,7 @@ const userTestimonials = [
     company: 'Midday',
     verified: true,
     avatar: '/assets/landing/testamonials/pontus.jpg',
-    text: <p>You can tell Polar is building DX first.</p>,
+    text: <p>You can tell Solei is building DX first.</p>,
   },
   {
     link: 'https://x.com/tonykelly/status/2016615925701570990',
@@ -117,7 +117,7 @@ const userTestimonials = [
     text: (
       <>
         <p>
-          Highly recommend using Polar for billing. Easiest and quickest payment
+          Highly recommend using Solei for billing. Easiest and quickest payment
           integration I’ve done in… ever actually!
         </p>
         <p>

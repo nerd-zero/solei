@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from polar.worker._asyncio import _EventLoopWatchdog
+from solei.worker._asyncio import _EventLoopWatchdog
 
 
 @pytest.fixture
@@ -99,7 +99,7 @@ class TestEventLoopWatchdog:
             heartbeat_timeout=0.3,
         )
 
-        with patch("polar.worker._asyncio.log") as mock_log:
+        with patch("solei.worker._asyncio.log") as mock_log:
             watchdog.start()
             time.sleep(0.6)
             watchdog.stop()

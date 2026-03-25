@@ -4,27 +4,27 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.auth.models import AuthSubject
-from polar.benefit.grant.service import BenefitGrantService
-from polar.benefit.service import benefit as benefit_service
-from polar.benefit.service import (  # type: ignore[attr-defined]
+from solei.auth.models import AuthSubject
+from solei.benefit.grant.service import BenefitGrantService
+from solei.benefit.service import benefit as benefit_service
+from solei.benefit.service import (  # type: ignore[attr-defined]
     benefit_grant_service,
 )
-from polar.benefit.strategies import (
+from solei.benefit.strategies import (
     BenefitPropertiesValidationError,
     BenefitServiceProtocol,
 )
-from polar.benefit.strategies.custom.schemas import (
+from solei.benefit.strategies.custom.schemas import (
     BenefitCustomCreate,
     BenefitCustomCreateProperties,
     BenefitCustomUpdate,
 )
-from polar.exceptions import NotPermitted, PolarRequestValidationError
-from polar.kit.pagination import PaginationParams
-from polar.models import Benefit, Organization, User, UserOrganization
-from polar.models.benefit import BenefitType
-from polar.postgres import AsyncSession
-from polar.redis import Redis
+from solei.exceptions import NotPermitted, SoleiRequestValidationError
+from solei.kit.pagination import PaginationParams
+from solei.models import Benefit, Organization, User, UserOrganization
+from solei.models.benefit import BenefitType
+from solei.postgres import AsyncSession
+from solei.redis import Redis
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_benefit
@@ -32,7 +32,7 @@ from tests.fixtures.random_objects import create_benefit
 
 @pytest.fixture
 def enqueue_job_mock(mocker: MockerFixture) -> AsyncMock:
-    return mocker.patch("polar.benefit.service.enqueue_job")
+    return mocker.patch("solei.benefit.service.enqueue_job")
 
 
 @pytest.mark.asyncio
@@ -225,7 +225,7 @@ class TestUserCreate:
         # then
         session.expunge_all()
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await benefit_service.user_create(
                 session, redis, create_schema, auth_subject
             )
@@ -244,7 +244,7 @@ class TestUserCreate:
         # then
         session.expunge_all()
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await benefit_service.user_create(
                 session, redis, create_schema, auth_subject
             )
@@ -267,7 +267,7 @@ class TestUserCreate:
         # then
         session.expunge_all()
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await benefit_service.user_create(
                 session, redis, create_schema, auth_subject
             )
@@ -314,7 +314,7 @@ class TestUserCreate:
         # then
         session.expunge_all()
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await benefit_service.user_create(
                 session, redis, create_schema, auth_subject
             )
@@ -340,7 +340,7 @@ class TestUserCreate:
                 }
             ]
         )
-        mock = mocker.patch("polar.benefit.service.get_benefit_strategy")
+        mock = mocker.patch("solei.benefit.service.get_benefit_strategy")
         mock.return_value = service_mock
 
         create_schema = BenefitCustomCreate(

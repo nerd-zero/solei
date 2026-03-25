@@ -13,18 +13,18 @@ export const PolarVsPaddlePage = () => {
     { id: 'pricing', title: 'Pricing' },
     { id: 'developer-experience', title: 'Developer Experience' },
     { id: 'transparency', title: 'Transparency & Control' },
-    { id: 'why-polar', title: 'Why Choose Polar?' },
+    { id: 'why-polar', title: 'Why Choose Solei?' },
   ]
 
   return (
-    <ResourceLayout title="Polar vs Paddle" toc={tocItems}>
+    <ResourceLayout title="Solei vs Paddle" toc={tocItems}>
       <ResourceSection id="overview" title="Overview">
         <p className="text-lg">
           Comparing two Merchant of Record solutions for software businesses.
         </p>
         <p className="dark:text-polar-300 text-gray-500">
-          Both Polar and Paddle act as Merchant of Record (MoR), handling tax
-          compliance and payments for you. However, Polar is built by developers
+          Both Solei and Paddle act as Merchant of Record (MoR), handling tax
+          compliance and payments for you. However, Solei is built by developers
           for developers with modern tooling, transparent pricing, and an
           open-source approach that gives you full control and visibility.
         </p>
@@ -39,7 +39,7 @@ export const PolarVsPaddlePage = () => {
                   Feature
                 </th>
                 <th className="dark:border-polar-700 border-r border-gray-200 p-4 text-center font-medium">
-                  Polar
+                  Solei
                 </th>
                 <th className="p-4 text-center font-medium">Paddle</th>
               </tr>
@@ -131,7 +131,7 @@ export const PolarVsPaddlePage = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="dark:border-polar-700 flex flex-col gap-4 border border-gray-200 p-6">
             <div className="flex flex-col gap-2">
-              <h3 className="text-lg font-medium">Polar</h3>
+              <h3 className="text-lg font-medium">Solei</h3>
               <div className="text-4xl">4% + 40¢</div>
               <p className="dark:text-polar-300 text-sm text-gray-500">
                 per transaction
@@ -190,7 +190,7 @@ export const PolarVsPaddlePage = () => {
           </div>
         </div>
         <p className="dark:text-polar-300 text-sm text-gray-500">
-          On $100,000 in monthly revenue, Polar saves you ~$1,000/month compared
+          On $100,000 in monthly revenue, Solei saves you ~$1,000/month compared
           to Paddle ($4,000 vs $5,000 in fees).
         </p>
       </ResourceSection>
@@ -200,7 +200,7 @@ export const PolarVsPaddlePage = () => {
           <div className="flex flex-col gap-2">
             <h3 className="text-lg">Built for modern development</h3>
             <p className="dark:text-polar-300 text-gray-500">
-              Polar is designed from the ground up for today&apos;s developers,
+              Solei is designed from the ground up for today&apos;s developers,
               with modern tooling, framework adapters, and a TypeScript-first
               approach. Paddle&apos;s tools feel dated in comparison.
             </p>
@@ -209,21 +209,21 @@ export const PolarVsPaddlePage = () => {
             <li>
               <h4 className="font-medium">6-line integration</h4>
               <p className="dark:text-polar-300 text-gray-500">
-                Polar provides a 6-line integration with framework adapters,
+                Solei provides a 6-line integration with framework adapters,
                 making it easy to get started with minimal code.
               </p>
             </li>
             <li>
               <h4 className="font-medium">Framework adapters</h4>
               <p className="dark:text-polar-300 text-gray-500">
-                Polar provides native support for Next.js, BetterAuth, Laravel,
+                Solei provides native support for Next.js, BetterAuth, Laravel,
                 and more.
               </p>
             </li>
             <li>
               <h4 className="font-medium">Open source</h4>
               <p className="dark:text-polar-300 text-gray-500">
-                Polar is open source, so you can inspect and contribute to the
+                Solei is open source, so you can inspect and contribute to the
                 codebase.
               </p>
             </li>
@@ -235,15 +235,15 @@ export const PolarVsPaddlePage = () => {
         <div className="flex flex-col gap-4">
           <h3 className="text-lg">Open source vs closed platform</h3>
           <p className="dark:text-polar-300 text-gray-500">
-            One of the biggest differences between Polar and Paddle is
-            transparency. Polar is fully open source, giving you complete
+            One of the biggest differences between Solei and Paddle is
+            transparency. Solei is fully open source, giving you complete
             visibility into how the platform works and enabling community
             contributions.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="dark:bg-polar-800 flex flex-col gap-3 bg-gray-50 p-6">
-            <h4 className="font-medium">With Polar</h4>
+            <h4 className="font-medium">With Solei</h4>
             <ul className="flex flex-col gap-2">
               <li className="dark:text-polar-300 flex items-start gap-2 text-sm text-gray-600">
                 <CheckOutlined className="text-green-600" fontSize="small" />
@@ -288,13 +288,13 @@ export const PolarVsPaddlePage = () => {
         </div>
       </ResourceSection>
 
-      <ResourceSection id="why-polar" title="Why Choose Polar?">
+      <ResourceSection id="why-polar" title="Why Choose Solei?">
         <div className="flex flex-col gap-4">
           <h3 className="text-lg">
             A modern alternative to Paddle for forward-thinking teams
           </h3>
           <p className="dark:text-polar-300 text-gray-500">
-            If you&apos;re choosing a Merchant of Record, Polar offers
+            If you&apos;re choosing a Merchant of Record, Solei offers
             everything Paddle does but with better pricing, modern developer
             tools, and open source transparency.
           </p>

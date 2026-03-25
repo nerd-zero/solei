@@ -1,18 +1,18 @@
 import pytest
 
-from polar.account.service import (
+from solei.account.service import (
     CannotChangeAdminError,
     UserNotOrganizationMemberError,
 )
-from polar.account.service import (
+from solei.account.service import (
     account as account_service,
 )
-from polar.auth.models import AuthSubject
-from polar.kit.utils import utc_now
-from polar.models import Account, Organization, Transaction, User, UserOrganization
-from polar.models.transaction import Processor, TransactionType
-from polar.models.user import IdentityVerificationStatus
-from polar.postgres import AsyncSession
+from solei.auth.models import AuthSubject
+from solei.kit.utils import utc_now
+from solei.models import Account, Organization, Transaction, User, UserOrganization
+from solei.models.transaction import Processor, TransactionType
+from solei.models.user import IdentityVerificationStatus
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 
 from .conftest import create_account

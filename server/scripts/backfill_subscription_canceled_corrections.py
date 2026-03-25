@@ -10,19 +10,19 @@ from rich.progress import Progress
 from sqlalchemy import func, select, tuple_
 from sqlalchemy.orm import selectinload
 
-from polar.config import settings
-from polar.event.repository import EventRepository
-from polar.event.system import SubscriptionCanceledMetadata, SystemEvent
-from polar.integrations.tinybird.client import (
+from solei.config import settings
+from solei.event.repository import EventRepository
+from solei.event.system import SubscriptionCanceledMetadata, SystemEvent
+from solei.integrations.tinybird.client import (
     TinybirdClient,
     TinybirdPayloadTooLargeError,
 )
-from polar.integrations.tinybird.service import DATASOURCE_EVENTS, _event_to_tinybird
-from polar.kit.db.postgres import AsyncSession, create_async_sessionmaker
-from polar.kit.db.postgres import create_async_engine as _create_async_engine
-from polar.models import Event, Subscription
-from polar.models.event import EventSource
-from polar.models.subscription import CustomerCancellationReason
+from solei.integrations.tinybird.service import DATASOURCE_EVENTS, _event_to_tinybird
+from solei.kit.db.postgres import AsyncSession, create_async_sessionmaker
+from solei.kit.db.postgres import create_async_engine as _create_async_engine
+from solei.models import Event, Subscription
+from solei.models.event import EventSource
+from solei.models.subscription import CustomerCancellationReason
 
 from .helper import configure_script_logging, typer_async
 

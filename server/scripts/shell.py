@@ -9,11 +9,11 @@ import dramatiq
 import rich
 import structlog
 
-from polar import tasks  # noqa: F401
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.postgres import create_async_engine
-from polar.redis import create_redis
-from polar.worker import JobQueueManager
+from solei import tasks  # noqa: F401
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.postgres import create_async_engine
+from solei.redis import create_redis
+from solei.worker import JobQueueManager
 
 """
 This script allows interacting with the database and our services in a REPL.
@@ -22,7 +22,7 @@ Similar to how the `django shell` or `flask shell` commands work.
 I allows you to:
 
 >>> customer_repository = CustomerRepository.from_session(session)
->>> stmt = customer_repository.get_base_statement().where(Customer.email == 'test+customer045@polar.sh')
+>>> stmt = customer_repository.get_base_statement().where(Customer.email == 'test+customer045@solei.to')
 >>> await customer_repository.get_one_or_none(stmt)
 """
 

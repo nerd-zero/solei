@@ -2,11 +2,11 @@ from datetime import timedelta
 
 import pytest
 
-from polar.checkout.repository import CheckoutRepository
-from polar.kit.utils import utc_now
-from polar.models import Product
-from polar.models.checkout import CheckoutStatus
-from polar.postgres import AsyncSession
+from solei.checkout.repository import CheckoutRepository
+from solei.kit.utils import utc_now
+from solei.models import Product
+from solei.models.checkout import CheckoutStatus
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_checkout
 

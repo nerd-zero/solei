@@ -1,12 +1,12 @@
 import pytest
 from httpx import AsyncClient
 
-from polar.auth.scope import Scope
-from polar.models import User
-from polar.models.organization import Organization
-from polar.models.user_organization import UserOrganization
-from polar.models.webhook_delivery import WebhookDelivery
-from polar.models.webhook_endpoint import WebhookEndpoint
+from solei.auth.scope import Scope
+from solei.models import User
+from solei.models.organization import Organization
+from solei.models.user_organization import UserOrganization
+from solei.models.webhook_delivery import WebhookDelivery
+from solei.models.webhook_endpoint import WebhookEndpoint
 from tests.fixtures.auth import AuthSubjectFixture
 
 

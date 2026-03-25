@@ -7,11 +7,11 @@ import structlog
 import typer
 from sqlalchemy import select
 
-from polar.enums import AccountType
-from polar.integrations.stripe.service import stripe_lib  # type: ignore[attr-defined]
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Account
-from polar.postgres import create_async_engine
+from solei.enums import AccountType
+from solei.integrations.stripe.service import stripe_lib  # type: ignore[attr-defined]
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Account
+from solei.postgres import create_async_engine
 
 cli = typer.Typer()
 

@@ -235,11 +235,11 @@ export function LogoSection() {
           </div>
         </div>
 
-        {/* ── The Polar Wordmark ──────────────────────────────────────── */}
+        {/* ── The Solei Wordmark ──────────────────────────────────────── */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-16">
           {/* Title */}
           <div className="flex flex-col gap-6">
-            <Headline as="h2" text={['The Polar', 'Wordmark']} />
+            <Headline as="h2" text={['The Solei', 'Wordmark']} />
             <DownloadButton />
           </div>
 
@@ -247,10 +247,10 @@ export function LogoSection() {
           <div className="flex flex-col gap-20">
             <div className="flex flex-col gap-6 text-lg leading-relaxed md:text-xl">
               <p>
-                The Polar wordmark joins the globe mark with the logotype,
+                The Solei wordmark joins the globe mark with the logotype,
                 forming the complete brand signature. Use it wherever both the
                 symbol and the name need to be present — marketing materials,
-                landing pages, and any context where Polar is being introduced.
+                landing pages, and any context where Solei is being introduced.
               </p>
               <p>
                 The wordmark maintains a fixed spatial relationship between the
@@ -328,11 +328,11 @@ export function LogoSection() {
           </div>
         </div>
 
-        {/* ── The Polar Globe ─────────────────────────────────────────── */}
+        {/* ── The Solei Globe ─────────────────────────────────────────── */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-16">
           {/* Title */}
           <div className="flex flex-col gap-6">
-            <Headline as="h2" text="The Polar Globe" />
+            <Headline as="h2" text="The Solei Globe" />
             <DownloadButton />
           </div>
 
@@ -348,7 +348,7 @@ export function LogoSection() {
               <p>
                 The globe embodies that role: steady at the center, expansive at
                 the edges. As AI companies scale across borders and models
-                evolve in real time, Polar provides the infrastructure that
+                evolve in real time, Solei provides the infrastructure that
                 keeps value aligned with usage — globally, reliably, and without
                 friction.
               </p>

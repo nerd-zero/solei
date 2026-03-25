@@ -1,12 +1,12 @@
 import pytest
 import pytest_asyncio
 
-from polar.custom_field.schemas import CustomFieldUpdateText
-from polar.custom_field.service import custom_field as custom_field_service
-from polar.models import Customer, Order, Organization, Product
-from polar.models.custom_field import CustomFieldText, CustomFieldType
-from polar.order.repository import OrderRepository
-from polar.postgres import AsyncSession
+from solei.custom_field.schemas import CustomFieldUpdateText
+from solei.custom_field.service import custom_field as custom_field_service
+from solei.models import Customer, Order, Organization, Product
+from solei.models.custom_field import CustomFieldText, CustomFieldType
+from solei.order.repository import OrderRepository
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_custom_field, create_order
 

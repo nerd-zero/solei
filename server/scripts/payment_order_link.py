@@ -1,15 +1,15 @@
 import typer
 from sqlalchemy import select, update
 
-from polar.models import Order, Payment
-from polar.models.order import OrderBillingReason
-from polar.models.payment import PaymentStatus
 from scripts.helper import (
     configure_script_logging,
     limit_bindparam,
     run_batched_update,
     typer_async,
 )
+from solei.models import Order, Payment
+from solei.models.order import OrderBillingReason
+from solei.models.payment import PaymentStatus
 
 cli = typer.Typer()
 

@@ -148,7 +148,7 @@ export const AnalyticsPage = () => {
                 icon: <SpaceDashboardOutlined fontSize="large" />,
                 title: 'Dashboard built for SaaS',
                 description:
-                  'Get a 360° view of your business with the Polar Dashboard',
+                  'Get a 360° view of your business with the Solei Dashboard',
               },
               {
                 icon: <AssessmentOutlined fontSize="large" />,
@@ -189,7 +189,7 @@ export const AnalyticsPage = () => {
             className="dark:text-polar-500 text-lg text-gray-500 md:w-[480px]"
             variants={itemVariants}
           >
-            Join companies using Polar analytics to drive growth and make
+            Join companies using Solei analytics to drive growth and make
             data-driven decisions.
           </motion.p>
           <motion.div variants={itemVariants}>

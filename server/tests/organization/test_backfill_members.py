@@ -3,22 +3,22 @@ import uuid
 import pytest
 from sqlalchemy import select
 
-from polar.enums import SubscriptionRecurringInterval
-from polar.kit.db.postgres import AsyncSession
-from polar.kit.utils import utc_now
-from polar.models import Customer, CustomerSeat
-from polar.models.benefit import BenefitType
-from polar.models.benefit_grant import BenefitGrant
-from polar.models.customer import (
+from solei.enums import SubscriptionRecurringInterval
+from solei.kit.db.postgres import AsyncSession
+from solei.kit.utils import utc_now
+from solei.models import Customer, CustomerSeat
+from solei.models.benefit import BenefitType
+from solei.models.benefit_grant import BenefitGrant
+from solei.models.customer import (
     CustomerOAuthAccount,
     CustomerOAuthPlatform,
     CustomerType,
 )
-from polar.models.customer_seat import SeatStatus
-from polar.models.license_key import LicenseKey
-from polar.models.member import Member, MemberRole
-from polar.models.subscription import SubscriptionStatus
-from polar.organization.tasks import (
+from solei.models.customer_seat import SeatStatus
+from solei.models.license_key import LicenseKey
+from solei.models.member import Member, MemberRole
+from solei.models.subscription import SubscriptionStatus
+from solei.organization.tasks import (
     OrganizationDoesNotExist,
     backfill_members,
 )
@@ -834,7 +834,7 @@ class TestBackfillMembers:
             organization_id=organization.id,
             customer_id=seat_holder_customer.id,
             benefit_id=benefit.id,
-            key="POLAR-TEST-KEY-123",
+            key="SOLEI-TEST-KEY-123",
         )
         await save_fixture(license_key)
         lk_id = license_key.id
@@ -1377,7 +1377,7 @@ class TestBackfillMembersB2C:
             organization_id=organization.id,
             customer_id=customer.id,
             benefit_id=benefit.id,
-            key="POLAR-B2C-KEY-001",
+            key="SOLEI-B2C-KEY-001",
         )
         await save_fixture(license_key)
         lk_id = license_key.id
@@ -1799,7 +1799,7 @@ class TestBackfillMembersB2B:
             organization_id=organization.id,
             customer_id=holder.id,
             benefit_id=benefit.id,
-            key="POLAR-B2B-KEY-001",
+            key="SOLEI-B2B-KEY-001",
         )
         await save_fixture(license_key)
         lk_id = license_key.id

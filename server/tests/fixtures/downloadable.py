@@ -2,18 +2,18 @@ from collections.abc import Sequence
 
 from sqlalchemy.orm import contains_eager
 
-from polar.benefit.strategies.downloadables.properties import (
+from solei.benefit.strategies.downloadables.properties import (
     BenefitGrantDownloadablesProperties,
 )
-from polar.benefit.strategies.downloadables.schemas import (
+from solei.benefit.strategies.downloadables.schemas import (
     BenefitDownloadablesCreateProperties,
 )
-from polar.benefit.strategies.downloadables.service import BenefitDownloadablesService
-from polar.models import Benefit, Customer, Downloadable, File, Organization, Product
-from polar.models.benefit import BenefitType
-from polar.models.subscription import SubscriptionStatus
-from polar.postgres import AsyncSession, sql
-from polar.redis import Redis
+from solei.benefit.strategies.downloadables.service import BenefitDownloadablesService
+from solei.models import Benefit, Customer, Downloadable, File, Organization, Product
+from solei.models.benefit import BenefitType
+from solei.models.subscription import SubscriptionStatus
+from solei.postgres import AsyncSession, sql
+from solei.redis import Redis
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_benefit,

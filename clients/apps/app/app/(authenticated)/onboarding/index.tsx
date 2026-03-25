@@ -146,7 +146,7 @@ export default function Onboarding() {
                   <Touchable
                     onPress={() =>
                       Linking.openURL(
-                        'https://docs.polar.sh/merchant-of-record/acceptable-use',
+                        'https://docs.solei.to/merchant-of-record/acceptable-use',
                       )
                     }
                   >
@@ -162,7 +162,7 @@ export default function Onboarding() {
                 <Touchable
                   onPress={() =>
                     Linking.openURL(
-                      'https://docs.polar.sh/merchant-of-record/account-reviews',
+                      'https://docs.solei.to/merchant-of-record/account-reviews',
                     )
                   }
                 >
@@ -176,7 +176,7 @@ export default function Onboarding() {
               <Box>
                 <Touchable
                   onPress={() =>
-                    Linking.openURL('https://polar.sh/legal/terms')
+                    Linking.openURL('https://solei.to/legal/terms')
                   }
                 >
                   <Text color="primary">Terms of Service</Text>
@@ -186,7 +186,7 @@ export default function Onboarding() {
               <Box>
                 <Touchable
                   onPress={() =>
-                    Linking.openURL('https://polar.sh/legal/privacy')
+                    Linking.openURL('https://solei.to/legal/privacy')
                   }
                 >
                   <Text color="primary">Privacy Policy</Text>

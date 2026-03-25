@@ -1,16 +1,16 @@
 import pytest
 
-from polar.kit.db.postgres import AsyncSession
-from polar.kit.utils import utc_now
-from polar.models import Benefit, Customer, Organization, Product
-from polar.models.benefit import BenefitType
-from polar.models.benefit_grant import BenefitGrant
-from polar.models.license_key import LicenseKey, LicenseKeyStatus
-from polar.models.member import Member, MemberRole
 from scripts.migrate_organizations_members import (
     find_deleted_oneoff_grants,
     restore_oneoff_grant_batch,
 )
+from solei.kit.db.postgres import AsyncSession
+from solei.kit.utils import utc_now
+from solei.models import Benefit, Customer, Organization, Product
+from solei.models.benefit import BenefitType
+from solei.models.benefit_grant import BenefitGrant
+from solei.models.license_key import LicenseKey, LicenseKeyStatus
+from solei.models.member import Member, MemberRole
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_benefit,
@@ -471,7 +471,7 @@ class TestRestoreOneoffGrantBatch:
             organization_id=organization.id,
             customer_id=customer.id,
             benefit_id=benefit.id,
-            key="POLAR-RESTORE-TEST-KEY",
+            key="SOLEI-RESTORE-TEST-KEY",
             status=LicenseKeyStatus.revoked,
         )
         license_key.set_deleted_at()
@@ -582,7 +582,7 @@ class TestRestoreOneoffGrantBatch:
             customer_id=customer.id,
             benefit_id=benefit.id,
             member_id=owner.id,
-            key="POLAR-HEALTHY-KEY-001",
+            key="SOLEI-HEALTHY-KEY-001",
             status=LicenseKeyStatus.granted,
         )
         await save_fixture(license_key)
@@ -757,7 +757,7 @@ class TestRestoreOneoffGrantBatch:
             organization_id=organization.id,
             customer_id=other_customer.id,
             benefit_id=benefit.id,
-            key="POLAR-WRONG-OWNER-KEY",
+            key="SOLEI-WRONG-OWNER-KEY",
             status=LicenseKeyStatus.revoked,
         )
         wrong_lk.set_deleted_at()
@@ -870,7 +870,7 @@ class TestFindAndRestoreEndToEnd:
             customer_id=customer.id,
             benefit_id=benefit_lk.id,
             member_id=owner.id,
-            key="POLAR-SURVIVED-KEY",
+            key="SOLEI-SURVIVED-KEY",
             status=LicenseKeyStatus.granted,
         )
         await save_fixture(lk1)
@@ -879,7 +879,7 @@ class TestFindAndRestoreEndToEnd:
             organization_id=organization.id,
             customer_id=customer.id,
             benefit_id=benefit_lk.id,
-            key="POLAR-DELETED-KEY-01",
+            key="SOLEI-DELETED-KEY-01",
             status=LicenseKeyStatus.revoked,
         )
         lk2.set_deleted_at()

@@ -216,7 +216,7 @@ export default function InputPage() {
               <Headline as="h6" text="With value" />
             </div>
             <div className="col-span-3">
-              <Input type="text" defaultValue="Polar Software Inc" readOnly />
+              <Input type="text" defaultValue="Solei Software Inc" readOnly />
             </div>
           </div>
         </Stack>

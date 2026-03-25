@@ -18,7 +18,7 @@ export function TypographySection() {
               >
                 Inter
               </a>{' '}
-              is the primary typeface of the Polar identity. It was selected for
+              is the primary typeface of the Solei identity. It was selected for
               its clarity, neutrality, and structured geometry, aligning with
               the brand&apos;s emphasis on precision and controlled
               communication.

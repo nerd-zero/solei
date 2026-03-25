@@ -106,7 +106,7 @@ export enum PlatformFeeType {
 
   /**
    * Fee applied by the payment processor when money is transferred
-   * to a different country than Polar's.
+   * to a different country than Solei's.
    */
   CrossBorderTransfer = 'cross_border_transfer',
 
@@ -127,7 +127,7 @@ export enum PlatformFeeType {
   Dispute = 'dispute',
 
   /**
-   * Polar platform fee.
+   * Solei platform fee.
    * @deprecated We no longer have a generic platform fee. They're always associated with a specific reason.
    */
   Platform = 'platform',

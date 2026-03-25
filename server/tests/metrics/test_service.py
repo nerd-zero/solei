@@ -12,16 +12,16 @@ from alembic_utils.replaceable_entity import registry as entities_registry
 from sqlalchemy.schema import CreateSequence
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
-from polar.auth.models import AuthSubject
-from polar.auth.scope import Scope
-from polar.config import settings
-from polar.enums import SubscriptionRecurringInterval
-from polar.integrations.tinybird.client import TinybirdClient
-from polar.integrations.tinybird.service import DATASOURCE_EVENTS, _event_to_tinybird
-from polar.kit.db.postgres import create_async_engine, create_async_sessionmaker
-from polar.kit.time_queries import TimeInterval
-from polar.metrics.service import metrics as metrics_service
-from polar.models import (
+from solei.auth.models import AuthSubject
+from solei.auth.scope import Scope
+from solei.config import settings
+from solei.enums import SubscriptionRecurringInterval
+from solei.integrations.tinybird.client import TinybirdClient
+from solei.integrations.tinybird.service import DATASOURCE_EVENTS, _event_to_tinybird
+from solei.kit.db.postgres import create_async_engine, create_async_sessionmaker
+from solei.kit.time_queries import TimeInterval
+from solei.metrics.service import metrics as metrics_service
+from solei.models import (
     Customer,
     Discount,
     Event,
@@ -33,13 +33,13 @@ from polar.models import (
     User,
     UserOrganization,
 )
-from polar.models.checkout import CheckoutStatus
-from polar.models.discount import DiscountDuration, DiscountType
-from polar.models.event import EventSource
-from polar.models.order import OrderStatus
-from polar.models.product import ProductBillingType
-from polar.models.subscription import SubscriptionStatus
-from polar.postgres import AsyncSession
+from solei.models.checkout import CheckoutStatus
+from solei.models.discount import DiscountDuration, DiscountType
+from solei.models.event import EventSource
+from solei.models.order import OrderStatus
+from solei.models.product import ProductBillingType
+from solei.models.subscription import SubscriptionStatus
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture, get_database_url, save_fixture_factory
 from tests.fixtures.random_objects import (
     create_checkout,
@@ -2178,8 +2178,8 @@ async def metrics_harness(
 
     from unittest.mock import patch
 
-    from polar.integrations.tinybird import service as tinybird_service
-    from polar.metrics import queries_tinybird
+    from solei.integrations.tinybird import service as tinybird_service
+    from solei.metrics import queries_tinybird
 
     events: list[Event] = []
     organizations: dict[str, OrganizationContext] = {}

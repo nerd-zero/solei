@@ -8,8 +8,8 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from fastapi.exceptions import RequestValidationError
 from pytest_mock import MockerFixture
 
-from polar.integrations.github.service.secret_scanning import InvalidSignature
-from polar.integrations.github.service.secret_scanning import (
+from solei.integrations.github.service.secret_scanning import InvalidSignature
+from solei.integrations.github.service.secret_scanning import (
     secret_scanning as secret_scanning_service,
 )
 
@@ -84,12 +84,12 @@ class TestValidatePayload:
                 [
                     {
                         "token": "TOKEN",
-                        "type": "polar_personal_access_token",
+                        "type": "solei_personal_access_token",
                         "source": "github",
                     },
                     {
                         "token": "TOKEN",
-                        "type": "polar_client_secret",
+                        "type": "solei_client_secret",
                         "source": "github",
                         "url": "https://example.com",
                     },
@@ -100,7 +100,7 @@ class TestValidatePayload:
                 [
                     {
                         "token": "TOKEN",
-                        "type": "POLAR_PERSONAL_ACCESS_TOKEN",
+                        "type": "SOLEI_PERSONAL_ACCESS_TOKEN",
                         "source": "github",
                     }
                 ],

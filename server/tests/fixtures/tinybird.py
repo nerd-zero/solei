@@ -8,10 +8,10 @@ from unittest.mock import patch
 import httpx
 import pytest
 
-from polar.config import settings
-from polar.integrations.tinybird import service as tinybird_service
-from polar.integrations.tinybird.client import TinybirdClient
-from polar.metrics import queries_tinybird
+from solei.config import settings
+from solei.integrations.tinybird import service as tinybird_service
+from solei.integrations.tinybird.client import TinybirdClient
+from solei.metrics import queries_tinybird
 
 TINYBIRD_DIR = Path(__file__).parent.parent.parent / "tinybird"
 

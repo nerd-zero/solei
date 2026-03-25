@@ -16,11 +16,11 @@ import stripe as stripe_lib
 from alembic import op
 from pydantic import ValidationError
 
-from polar.config import settings
+from solei.config import settings
 
-# Polar Custom Imports
-from polar.integrations.stripe.utils import get_expandable_id
-from polar.kit.address import Address, AddressType
+# Solei Custom Imports
+from solei.integrations.stripe.utils import get_expandable_id
+from solei.kit.address import Address, AddressType
 
 # revision identifiers, used by Alembic.
 revision = "1769a6e618a4"

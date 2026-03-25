@@ -9,14 +9,14 @@
   "redirects": [
     {
       "source": "/docs",
-      "destination": "https://polar.sh/docs",
-      "has": [{ "type": "host", "value": "sandbox.polar.sh" }],
+      "destination": "https://solei.to/docs",
+      "has": [{ "type": "host", "value": "sandbox.solei.to" }],
       "permanent": true
     },
     {
       "source": "/docs/:path+",
-      "destination": "https://polar.sh/docs/:path+",
-      "has": [{ "type": "host", "value": "sandbox.polar.sh" }],
+      "destination": "https://solei.to/docs/:path+",
+      "has": [{ "type": "host", "value": "sandbox.solei.to" }],
       "permanent": true
     }
   ],

@@ -12,47 +12,47 @@ x-common-env-file: &common-env-file
   - ../../server/.env
 
 x-common-backend-env: &common-backend-env
-  POLAR_ENV: development
-  POLAR_LOG_LEVEL: DEBUG
-  POLAR_TESTING: "0"
-  POLAR_SQLALCHEMY_DEBUG: "0"
-  POLAR_POSTHOG_DEBUG: "1"
+  SOLEI_ENV: development
+  SOLEI_LOG_LEVEL: DEBUG
+  SOLEI_TESTING: "0"
+  SOLEI_SQLALCHEMY_DEBUG: "0"
+  SOLEI_POSTHOG_DEBUG: "1"
   # Database - uses service name for container networking
-  POLAR_POSTGRES_USER: ${POLAR_POSTGRES_USER:-polar}
-  POLAR_POSTGRES_PWD: ${POLAR_POSTGRES_PWD:-polar}
-  POLAR_POSTGRES_HOST: db
-  POLAR_POSTGRES_PORT: "5432"
-  POLAR_POSTGRES_DATABASE: ${POLAR_POSTGRES_DATABASE:-polar}
-  POLAR_POSTGRES_READ_USER: ${POLAR_POSTGRES_READ_USER:-polar_read}
-  POLAR_POSTGRES_READ_PWD: ${POLAR_POSTGRES_READ_PWD:-polar}
-  POLAR_POSTGRES_READ_HOST: db
-  POLAR_POSTGRES_READ_PORT: "5432"
-  POLAR_POSTGRES_READ_DATABASE: ${POLAR_POSTGRES_DATABASE:-polar}
+  SOLEI_POSTGRES_USER: ${SOLEI_POSTGRES_USER:-polar}
+  SOLEI_POSTGRES_PWD: ${SOLEI_POSTGRES_PWD:-polar}
+  SOLEI_POSTGRES_HOST: db
+  SOLEI_POSTGRES_PORT: "5432"
+  SOLEI_POSTGRES_DATABASE: ${SOLEI_POSTGRES_DATABASE:-polar}
+  SOLEI_POSTGRES_READ_USER: ${SOLEI_POSTGRES_READ_USER:-polar_read}
+  SOLEI_POSTGRES_READ_PWD: ${SOLEI_POSTGRES_READ_PWD:-polar}
+  SOLEI_POSTGRES_READ_HOST: db
+  SOLEI_POSTGRES_READ_PORT: "5432"
+  SOLEI_POSTGRES_READ_DATABASE: ${SOLEI_POSTGRES_DATABASE:-polar}
   # Redis - uses service name for container networking
-  POLAR_REDIS_HOST: redis
-  POLAR_REDIS_PORT: "6379"
-  POLAR_REDIS_DB: "0"
+  SOLEI_REDIS_HOST: redis
+  SOLEI_REDIS_PORT: "6379"
+  SOLEI_REDIS_DB: "0"
   # S3/MinIO - uses service name for container networking
-  POLAR_S3_ENDPOINT_URL: http://minio:9000
-  POLAR_AWS_ACCESS_KEY_ID: ${POLAR_AWS_ACCESS_KEY_ID:-polar-development}
-  POLAR_AWS_SECRET_ACCESS_KEY: ${POLAR_AWS_SECRET_ACCESS_KEY:-polar123456789}
-  POLAR_S3_FILES_BUCKET_NAME: ${POLAR_S3_FILES_BUCKET_NAME:-polar-s3}
-  POLAR_S3_FILES_PUBLIC_BUCKET_NAME: ${POLAR_S3_FILES_PUBLIC_BUCKET_NAME:-polar-s3-public}
-  POLAR_S3_CUSTOMER_INVOICES_BUCKET_NAME: ${POLAR_S3_FILES_BUCKET_NAME:-polar-s3}
-  POLAR_S3_PAYOUT_INVOICES_BUCKET_NAME: ${POLAR_S3_FILES_BUCKET_NAME:-polar-s3}
+  SOLEI_S3_ENDPOINT_URL: http://minio:9000
+  SOLEI_AWS_ACCESS_KEY_ID: ${SOLEI_AWS_ACCESS_KEY_ID:-polar-development}
+  SOLEI_AWS_SECRET_ACCESS_KEY: ${SOLEI_AWS_SECRET_ACCESS_KEY:-polar123456789}
+  SOLEI_S3_FILES_BUCKET_NAME: ${SOLEI_S3_FILES_BUCKET_NAME:-polar-s3}
+  SOLEI_S3_FILES_PUBLIC_BUCKET_NAME: ${SOLEI_S3_FILES_PUBLIC_BUCKET_NAME:-polar-s3-public}
+  SOLEI_S3_CUSTOMER_INVOICES_BUCKET_NAME: ${SOLEI_S3_FILES_BUCKET_NAME:-polar-s3}
+  SOLEI_S3_PAYOUT_INVOICES_BUCKET_NAME: ${SOLEI_S3_FILES_BUCKET_NAME:-polar-s3}
   # CORS and allowed hosts - configured for Docker networking
-  POLAR_CORS_ORIGINS: '["http://localhost:${WEB_PORT:-3000}", "http://127.0.0.1:${WEB_PORT:-3000}", "http://web:3000"]'
-  POLAR_ALLOWED_HOSTS: '["localhost:${WEB_PORT:-3000}", "127.0.0.1:${WEB_PORT:-3000}"]'
-  POLAR_FRONTEND_BASE_URL: http://localhost:${WEB_PORT:-3000}
-  POLAR_CHECKOUT_BASE_URL: http://localhost:${API_PORT:-8000}/v1/checkout-links/{client_secret}/redirect
-  POLAR_USER_SESSION_COOKIE_DOMAIN: localhost
+  SOLEI_CORS_ORIGINS: '["http://localhost:${WEB_PORT:-3000}", "http://127.0.0.1:${WEB_PORT:-3000}", "http://web:3000"]'
+  SOLEI_ALLOWED_HOSTS: '["localhost:${WEB_PORT:-3000}", "127.0.0.1:${WEB_PORT:-3000}"]'
+  SOLEI_FRONTEND_BASE_URL: http://localhost:${WEB_PORT:-3000}
+  SOLEI_CHECKOUT_BASE_URL: http://localhost:${API_PORT:-8000}/v1/checkout-links/{client_secret}/redirect
+  SOLEI_USER_SESSION_COOKIE_DOMAIN: localhost
   # OAuth insecure transport for development
   AUTHLIB_INSECURE_TRANSPORT: "true"
-  # Note: Secrets like POLAR_GITHUB_CLIENT_ID, POLAR_STRIPE_* are loaded from
+  # Note: Secrets like SOLEI_GITHUB_CLIENT_ID, SOLEI_STRIPE_* are loaded from
   # env_file (server/.env) and NOT set here. Setting them here with ${VAR:-default}
   # would read from the HOST shell, not from env_file.
   # Prometheus (optional)
-  POLAR_PROMETHEUS_REMOTE_WRITE_URL: ${POLAR_PROMETHEUS_REMOTE_WRITE_URL:-}
+  SOLEI_PROMETHEUS_REMOTE_WRITE_URL: ${SOLEI_PROMETHEUS_REMOTE_WRITE_URL:-}
 
 x-api-volumes: &api-volumes
   - ../../server:/app/server:cached
@@ -76,11 +76,11 @@ services:
   db:
     image: postgres:15.1-bullseye
     environment:
-      POSTGRES_USER: ${POLAR_POSTGRES_USER:-polar}
-      POSTGRES_PASSWORD: ${POLAR_POSTGRES_PWD:-polar}
-      POSTGRES_DB: ${POLAR_POSTGRES_DATABASE:-polar}
-      POLAR_READ_USER: ${POLAR_POSTGRES_READ_USER:-polar_read}
-      POLAR_READ_PASSWORD: ${POLAR_POSTGRES_READ_PWD:-polar}
+      POSTGRES_USER: ${SOLEI_POSTGRES_USER:-polar}
+      POSTGRES_PASSWORD: ${SOLEI_POSTGRES_PWD:-polar}
+      POSTGRES_DB: ${SOLEI_POSTGRES_DATABASE:-polar}
+      SOLEI_READ_USER: ${SOLEI_POSTGRES_READ_USER:-polar_read}
+      SOLEI_READ_PASSWORD: ${SOLEI_POSTGRES_READ_PWD:-polar}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ../../server/init-readonly-user.sql:/docker-entrypoint-initdb.d/init-readonly-user.sql:ro
@@ -93,9 +93,9 @@ services:
           "pg_isready",
           "-q",
           "-d",
-          "${POLAR_POSTGRES_DATABASE:-polar}",
+          "${SOLEI_POSTGRES_DATABASE:-polar}",
           "-U",
-          "${POLAR_POSTGRES_USER:-polar}",
+          "${SOLEI_POSTGRES_USER:-polar}",
         ]
       interval: 2s
       timeout: 40s
@@ -119,8 +119,8 @@ services:
     volumes:
       - minio_data:/minio
     environment:
-      MINIO_ROOT_USER: ${POLAR_MINIO_USER:-polar}
-      MINIO_ROOT_PASSWORD: ${POLAR_MINIO_PWD:-polarpolar}
+      MINIO_ROOT_USER: ${SOLEI_MINIO_USER:-polar}
+      MINIO_ROOT_PASSWORD: ${SOLEI_MINIO_PWD:-polarpolar}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 5s
@@ -136,13 +136,13 @@ services:
       - ../../server/.minio:/tmp/config:ro
     environment:
       MINIO_HOST: minio
-      MINIO_ROOT_USER: ${POLAR_MINIO_USER:-polar}
-      MINIO_ROOT_PASSWORD: ${POLAR_MINIO_PWD:-polarpolar}
-      BUCKET_NAME: ${POLAR_S3_FILES_BUCKET_NAME:-polar-s3}
-      PUBLIC_BUCKET_NAME: ${POLAR_S3_FILES_PUBLIC_BUCKET_NAME:-polar-s3-public}
-      BUCKET_TESTING_NAME: testing-${POLAR_S3_FILES_BUCKET_NAME:-polar-s3}
-      ACCESS_KEY: ${POLAR_AWS_ACCESS_KEY_ID:-polar-development}
-      SECRET_ACCESS_KEY: ${POLAR_AWS_SECRET_ACCESS_KEY:-polar123456789}
+      MINIO_ROOT_USER: ${SOLEI_MINIO_USER:-polar}
+      MINIO_ROOT_PASSWORD: ${SOLEI_MINIO_PWD:-polarpolar}
+      BUCKET_NAME: ${SOLEI_S3_FILES_BUCKET_NAME:-polar-s3}
+      PUBLIC_BUCKET_NAME: ${SOLEI_S3_FILES_PUBLIC_BUCKET_NAME:-polar-s3-public}
+      BUCKET_TESTING_NAME: testing-${SOLEI_S3_FILES_BUCKET_NAME:-polar-s3}
+      ACCESS_KEY: ${SOLEI_AWS_ACCESS_KEY_ID:-polar-development}
+      SECRET_ACCESS_KEY: ${SOLEI_AWS_SECRET_ACCESS_KEY:-polar123456789}
       POLICY_FILE: /tmp/config/policy.json
     entrypoint:
       ["bash", "-c", "bash /tmp/config/local.sh /tmp/config/configure.sh"]
@@ -203,8 +203,8 @@ services:
       NEXT_PUBLIC_BACKOFFICE_URL: http://localhost:${API_PORT:-8000}/backoffice
       # Note: NEXT_PUBLIC_STRIPE_KEY and NEXT_PUBLIC_GITHUB_APP_NAMESPACE
       # must be set in server/.env (they're loaded via env_file)
-      # POLAR_API_URL is for server-side requests (container-to-container)
-      POLAR_API_URL: http://api:8000
+      # SOLEI_API_URL is for server-side requests (container-to-container)
+      SOLEI_API_URL: http://api:8000
       S3_PUBLIC_IMAGES_BUCKET_PROTOCOL: http
       S3_PUBLIC_IMAGES_BUCKET_HOSTNAME: localhost
       S3_PUBLIC_IMAGES_BUCKET_PORT: "${MINIO_API_PORT:-9000}"

@@ -5,7 +5,7 @@ import EventsPage from './EventsPage'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Events', // " | Polar is added by the template"
+    title: 'Events', // " | Solei is added by the template"
   }
 }
 

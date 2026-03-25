@@ -5,15 +5,15 @@ import pytest
 from httpx import AsyncClient
 from pytest_mock import MockerFixture
 
-from polar.enums import AccountType
-from polar.models import Product, User
-from polar.models.account import Account
-from polar.models.organization import Organization, OrganizationStatus
-from polar.models.subscription import SubscriptionStatus
-from polar.models.user import IdentityVerificationStatus
-from polar.models.user_organization import UserOrganization
-from polar.postgres import AsyncSession
-from polar.user_organization.service import (
+from solei.enums import AccountType
+from solei.models import Product, User
+from solei.models.account import Account
+from solei.models.organization import Organization, OrganizationStatus
+from solei.models.subscription import SubscriptionStatus
+from solei.models.user import IdentityVerificationStatus
+from solei.models.user_organization import UserOrganization
+from solei.postgres import AsyncSession
+from solei.user_organization.service import (
     user_organization as user_organization_service,
 )
 from tests.fixtures.auth import AuthSubjectFixture
@@ -284,7 +284,7 @@ class TestInviteOrganization:
         )
         response = await client.post(
             f"/v1/organizations/{organization.id}/members/invite",
-            json={"email": "test@polar.sh"},
+            json={"email": "test@solei.to"},
         )
         assert response.status_code == 404
 
@@ -303,7 +303,7 @@ class TestInviteOrganization:
         organization: Organization,
         user_organization: UserOrganization,  # Makes this user part of the organization
     ) -> None:
-        email_to_invite = "test@polar.sh"
+        email_to_invite = "test@solei.to"
 
         members_before = await user_organization_service.list_by_org(
             session, organization.id
@@ -506,7 +506,7 @@ class TestGetPaymentStatus:
 
         # Mock the API key count
         mocker.patch(
-            "polar.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
+            "solei.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
             return_value=1,  # Has 1 API key
         )
 
@@ -583,7 +583,7 @@ class TestGetPaymentStatus:
 
         # Mock the API key count
         mocker.patch(
-            "polar.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
+            "solei.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
             return_value=1,  # Has 1 API key
         )
 
@@ -743,7 +743,7 @@ class TestDeleteOrganization:
         mocker: MockerFixture,
     ) -> None:
         # Mock the enqueue_job to prevent actual task execution
-        mock_enqueue = mocker.patch("polar.organization.service.enqueue_job")
+        mock_enqueue = mocker.patch("solei.organization.service.enqueue_job")
 
         response = await client.delete(f"/v1/organizations/{organization.id}")
 
@@ -776,7 +776,7 @@ class TestDeleteOrganization:
         await create_order(save_fixture, customer=customer, product=product)
 
         # Mock the enqueue_job to prevent actual task execution
-        mock_enqueue = mocker.patch("polar.organization.service.enqueue_job")
+        mock_enqueue = mocker.patch("solei.organization.service.enqueue_job")
 
         response = await client.delete(f"/v1/organizations/{organization.id}")
 
@@ -814,7 +814,7 @@ class TestDeleteOrganization:
         )
 
         # Mock the enqueue_job to prevent actual task execution
-        mock_enqueue = mocker.patch("polar.organization.service.enqueue_job")
+        mock_enqueue = mocker.patch("solei.organization.service.enqueue_job")
 
         response = await client.delete(f"/v1/organizations/{organization.id}")
 
@@ -854,10 +854,10 @@ class TestDeleteOrganization:
 
         # Mock Stripe account deletion to succeed (returns None on success)
         mock_stripe_delete = mocker.patch(
-            "polar.account.service.account.delete_stripe_account",
+            "solei.account.service.account.delete_stripe_account",
             return_value=None,
         )
-        mock_enqueue = mocker.patch("polar.organization.service.enqueue_job")
+        mock_enqueue = mocker.patch("solei.organization.service.enqueue_job")
 
         response = await client.delete(f"/v1/organizations/{organization.id}")
 
@@ -898,13 +898,13 @@ class TestDeleteOrganization:
         await save_fixture(organization)
 
         # Mock Stripe account deletion to fail with an exception
-        from polar.account.service import AccountServiceError
+        from solei.account.service import AccountServiceError
 
         mock_stripe_delete = mocker.patch(
-            "polar.account.service.account.delete_stripe_account",
+            "solei.account.service.account.delete_stripe_account",
             side_effect=AccountServiceError("Stripe account deletion failed"),
         )
-        mock_enqueue = mocker.patch("polar.organization.service.enqueue_job")
+        mock_enqueue = mocker.patch("solei.organization.service.enqueue_job")
 
         response = await client.delete(f"/v1/organizations/{organization.id}")
 

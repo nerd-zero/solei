@@ -13,30 +13,30 @@ from freezegun import freeze_time
 from pytest_mock import MockerFixture
 from sqlalchemy.util.typing import TypeAlias
 
-from polar.auth.models import AuthSubject
-from polar.billing_entry.repository import BillingEntryRepository
-from polar.checkout.eventstream import CheckoutEvent
-from polar.email.schemas import SubscriptionRevokedEmail
-from polar.enums import (
+from solei.auth.models import AuthSubject
+from solei.billing_entry.repository import BillingEntryRepository
+from solei.checkout.eventstream import CheckoutEvent
+from solei.email.schemas import SubscriptionRevokedEmail
+from solei.enums import (
     PaymentProcessor,
     SubscriptionProrationBehavior,
     SubscriptionRecurringInterval,
 )
-from polar.event.repository import EventRepository
-from polar.event.system import SystemEvent
-from polar.exceptions import (
+from solei.event.repository import EventRepository
+from solei.event.system import SystemEvent
+from solei.exceptions import (
     BadRequest,
-    PolarRequestValidationError,
     ResourceUnavailable,
+    SoleiRequestValidationError,
 )
-from polar.kit.currency import PresentmentCurrency
-from polar.kit.pagination import PaginationParams
-from polar.kit.trial import TrialInterval
-from polar.kit.utils import utc_now
-from polar.locker import Locker
-from polar.meter.aggregation import AggregationFunction, PropertyAggregation
-from polar.meter.filter import Filter, FilterConjunction
-from polar.models import (
+from solei.kit.currency import PresentmentCurrency
+from solei.kit.pagination import PaginationParams
+from solei.kit.trial import TrialInterval
+from solei.kit.utils import utc_now
+from solei.locker import Locker
+from solei.meter.aggregation import AggregationFunction, PropertyAggregation
+from solei.meter.filter import Filter, FilterConjunction
+from solei.models import (
     Benefit,
     BillingEntry,
     Customer,
@@ -50,29 +50,29 @@ from polar.models import (
     User,
     UserOrganization,
 )
-from polar.models.billing_entry import BillingEntryDirection, BillingEntryType
-from polar.models.checkout import CheckoutStatus
-from polar.models.customer import CustomerType
-from polar.models.customer_seat import SeatStatus
-from polar.models.discount import DiscountDuration, DiscountType
-from polar.models.order import OrderBillingReasonInternal
-from polar.models.product_price import ProductPriceSeatUnit
-from polar.models.subscription import SubscriptionStatus
-from polar.order.service import PaymentFailed, PaymentFailedReason
-from polar.postgres import AsyncSession
-from polar.product.guard import (
+from solei.models.billing_entry import BillingEntryDirection, BillingEntryType
+from solei.models.checkout import CheckoutStatus
+from solei.models.customer import CustomerType
+from solei.models.customer_seat import SeatStatus
+from solei.models.discount import DiscountDuration, DiscountType
+from solei.models.order import OrderBillingReasonInternal
+from solei.models.product_price import ProductPriceSeatUnit
+from solei.models.subscription import SubscriptionStatus
+from solei.order.service import PaymentFailed, PaymentFailedReason
+from solei.postgres import AsyncSession
+from solei.product.guard import (
     MeteredPrice,
     is_fixed_price,
     is_free_price,
     is_metered_price,
 )
-from polar.product.price_set import PriceSet
-from polar.subscription.repository import SubscriptionUpdateRepository
-from polar.subscription.schemas import (
+from solei.product.price_set import PriceSet
+from solei.subscription.repository import SubscriptionUpdateRepository
+from solei.subscription.schemas import (
     SubscriptionCreateCustomer,
     SubscriptionCreateExternalCustomer,
 )
-from polar.subscription.service import (
+from solei.subscription.service import (
     AboveMaximumSeats,
     AlreadyCanceledSubscription,
     BelowMinimumSeats,
@@ -83,8 +83,8 @@ from polar.subscription.service import (
     SeatsAlreadyAssigned,
     TrialingSubscription,
 )
-from polar.subscription.service import subscription as subscription_service
-from polar.subscription.update import generate_subscription_update
+from solei.subscription.service import subscription as subscription_service
+from solei.subscription.update import generate_subscription_update
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
@@ -160,7 +160,7 @@ def subscription_hooks(mocker: MockerFixture) -> Hooks:
 
 @pytest.fixture
 def publish_checkout_event_mock(mocker: MockerFixture) -> AsyncMock:
-    return mocker.patch("polar.subscription.service.publish_checkout_event")
+    return mocker.patch("solei.subscription.service.publish_checkout_event")
 
 
 @pytest.fixture
@@ -170,12 +170,12 @@ def enqueue_benefits_grants_mock(mocker: MockerFixture) -> MagicMock:
 
 @pytest.fixture
 def enqueue_job_mock(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch("polar.subscription.service.enqueue_job")
+    return mocker.patch("solei.subscription.service.enqueue_job")
 
 
 @pytest.fixture
 def enqueue_email_mock(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch("polar.subscription.service.enqueue_email_template")
+    return mocker.patch("solei.subscription.service.enqueue_email_template")
 
 
 @pytest.fixture
@@ -197,7 +197,7 @@ class TestCreate:
             customer_id=uuid.uuid4(),
         )
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await subscription_service.create(
                 session, subscription_create, auth_subject
             )
@@ -222,7 +222,7 @@ class TestCreate:
             customer_id=customer.id,
         )
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await subscription_service.create(
                 session, subscription_create, auth_subject
             )
@@ -245,7 +245,7 @@ class TestCreate:
             customer_id=customer.id,
         )
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await subscription_service.create(
                 session, subscription_create, auth_subject
             )
@@ -270,7 +270,7 @@ class TestCreate:
             customer_id=uuid.uuid4(),
         )
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await subscription_service.create(
                 session, subscription_create, auth_subject
             )
@@ -292,7 +292,7 @@ class TestCreate:
             external_customer_id="nonexistent",
         )
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await subscription_service.create(
                 session, subscription_create, auth_subject
             )
@@ -423,7 +423,7 @@ class TestCreate:
             customer_id=customer.id,
         )
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await subscription_service.create(
                 session, subscription_create, auth_subject
             )
@@ -471,7 +471,7 @@ class TestCreate:
             customer_id=customer.id,
         )
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await subscription_service.create(
                 session, subscription_create, auth_subject
             )
@@ -1870,7 +1870,7 @@ class TestEnqueueBenefitsGrants:
         benefits: list[Benefit],
         subscription: Subscription,
     ) -> None:
-        enqueue_job_mock = mocker.patch("polar.subscription.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.subscription.service.enqueue_job")
 
         product = await set_product_benefits(
             save_fixture,
@@ -1899,7 +1899,7 @@ class TestEnqueueBenefitsGrants:
         benefits: list[Benefit],
         subscription: Subscription,
     ) -> None:
-        enqueue_job_mock = mocker.patch("polar.subscription.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.subscription.service.enqueue_job")
 
         product = await set_product_benefits(
             save_fixture,
@@ -1944,7 +1944,7 @@ class TestEnqueueBenefitsGrants:
         benefits: list[Benefit],
         subscription: Subscription,
     ) -> None:
-        enqueue_job_mock = mocker.patch("polar.subscription.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.subscription.service.enqueue_job")
 
         product = await set_product_benefits(
             save_fixture,
@@ -1978,7 +1978,7 @@ class TestEnqueueBenefitsGrants:
         save_fixture: SaveFixture,
         organization: Organization,
     ) -> None:
-        enqueue_job_mock = mocker.patch("polar.subscription.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.subscription.service.enqueue_job")
 
         product = await create_product(
             save_fixture,
@@ -2009,7 +2009,7 @@ class TestEnqueueBenefitsGrants:
     ) -> None:
         from tests.fixtures.random_objects import create_customer
 
-        enqueue_job_mock = mocker.patch("polar.subscription.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.subscription.service.enqueue_job")
 
         product = await create_product(
             save_fixture,
@@ -2312,7 +2312,7 @@ class TestUpdateProduct:
         )
         assert len(subscription.prices) == 1
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await subscription_service.update_product(
                 session,
                 subscription,
@@ -2391,7 +2391,7 @@ class TestUpdateProduct:
             seats=2,
         )
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await subscription_service.update_product(
                 session,
                 subscription,
@@ -2424,7 +2424,7 @@ class TestUpdateProduct:
             customer=customer,
         )
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await subscription_service.update_product(
                 session,
                 subscription,
@@ -2607,7 +2607,7 @@ class TestUpdateDiscount:
             discount=discount_percentage_50,
         )
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await subscription_service.update_discount(
                 session, subscription, discount_id=uuid.uuid4()
             )
@@ -2628,7 +2628,7 @@ class TestUpdateDiscount:
             discount=discount_percentage_50,
         )
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await subscription_service.update_discount(
                 session, subscription, discount_id=discount_percentage_50.id
             )
@@ -2810,7 +2810,7 @@ class TestUpdateTrial:
             customer=customer,
         )
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await subscription_service.update_trial(
                 session, subscription, trial_end="now"
             )
@@ -2874,7 +2874,7 @@ class TestUpdateTrial:
         assert subscription.current_period_end is not None
         trial_end_before_period = subscription.current_period_end - timedelta(days=1)
 
-        with pytest.raises(PolarRequestValidationError) as exc_info:
+        with pytest.raises(SoleiRequestValidationError) as exc_info:
             await subscription_service.update_trial(
                 session, subscription, trial_end=trial_end_before_period
             )
@@ -4258,7 +4258,7 @@ class TestEnqueueBenefitsGrantsGracePeriod:
         subscription.past_due_at = utc_now() - timedelta(days=2)
         await save_fixture(subscription)
 
-        enqueue_job_mock = mocker.patch("polar.subscription.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.subscription.service.enqueue_job")
         await subscription_service.enqueue_benefits_grants(session, subscription)
         enqueue_job_mock.assert_not_called()
 
@@ -4284,7 +4284,7 @@ class TestEnqueueBenefitsGrantsGracePeriod:
         subscription.past_due_at = utc_now() - timedelta(days=8)
         await save_fixture(subscription)
 
-        enqueue_job_mock = mocker.patch("polar.subscription.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.subscription.service.enqueue_job")
 
         await subscription_service.enqueue_benefits_grants(session, subscription)
         enqueue_job_mock.assert_called_once_with(
@@ -4318,7 +4318,7 @@ class TestEnqueueBenefitsGrantsGracePeriod:
         subscription.past_due_at = utc_now() - timedelta(minutes=1)
         await save_fixture(subscription)
 
-        enqueue_job_mock = mocker.patch("polar.subscription.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.subscription.service.enqueue_job")
 
         await subscription_service.enqueue_benefits_grants(session, subscription)
         enqueue_job_mock.assert_called_once_with(
@@ -4351,7 +4351,7 @@ class TestEnqueueBenefitsGrantsGracePeriod:
         subscription.status = SubscriptionStatus.canceled
         await save_fixture(subscription)
 
-        enqueue_job_mock = mocker.patch("polar.subscription.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.subscription.service.enqueue_job")
         await subscription_service.enqueue_benefits_grants(session, subscription)
         enqueue_job_mock.assert_called_once_with(
             "benefit.enqueue_benefits_grants",

@@ -152,7 +152,7 @@ export const DashboardSidebar = ({
       </SidebarContent>
       <SidebarFooter>
         <Link
-          href="mailto:support@polar.sh"
+          href="mailto:support@solei.to"
           className={twMerge(
             'mt-2 flex cursor-pointer flex-row items-center rounded-lg border border-transparent px-2 text-sm transition-colors dark:border-transparent',
             'dark:text-polar-500 dark:hover:text-polar-200 text-gray-500 hover:text-black',
@@ -168,7 +168,7 @@ export const DashboardSidebar = ({
             'dark:text-polar-500 dark:hover:text-polar-200 text-gray-500 hover:text-black',
             isCollapsed && '!dark:text-polar-600',
           )}
-          href="https://polar.sh/docs"
+          href="https://solei.to/docs"
           target="_blank"
         >
           <ArrowOutwardOutlined className="ml-2" fontSize="inherit" />
@@ -236,7 +236,7 @@ export const DashboardSidebar = ({
                   {!CONFIG.IS_SANDBOX && (
                     <DropdownMenuItem
                       onClick={() =>
-                        router.push('https://sandbox.polar.sh/start')
+                        router.push('https://sandbox.solei.to/start')
                       }
                     >
                       Go to Sandbox

@@ -42,28 +42,26 @@ plugins.push('@bacons/apple-targets')
 
 module.exports = {
   expo: {
-    name: 'Polar',
-    slug: 'Polar',
+    name: 'Solei',
+    slug: 'Solei',
     version: '1.2.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
-    scheme: 'polar',
+    scheme: 'solei',
     userInterfaceStyle: 'dark',
     newArchEnabled: true,
     owner: 'polar-sh',
     ios: {
       appleTeamId: '55U3YA3QTA',
       supportsTablet: false,
-      bundleIdentifier: 'com.polarsource.Polar',
+      bundleIdentifier: 'to.solei.Solei',
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
       },
       icon: './assets/images/ios-dark.png',
       entitlements: {
         'com.apple.developer.applesignin': ['Default'],
-        'com.apple.security.application-groups': [
-          'group.com.polarsource.Polar',
-        ],
+        'com.apple.security.application-groups': ['group.to.solei.Solei'],
       },
       associatedDomains: ['applinks:polar.godetour.link'],
     },
@@ -72,8 +70,8 @@ module.exports = {
         foregroundImage: './assets/images/adaptive-icon.png',
         backgroundColor: '#0D0E10',
       },
-      package: 'com.polarsource.Polar',
-      scheme: 'polar',
+      package: 'to.solei.Solei',
+      scheme: 'solei',
       googleServicesFile: './google-services.json',
       intentFilters: [
         {

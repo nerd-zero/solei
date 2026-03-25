@@ -4,23 +4,23 @@ from unittest.mock import MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.config import settings
-from polar.email.schemas import PersonalAccessTokenLeakedEmail
-from polar.enums import TokenType
-from polar.kit.crypto import get_token_hash
-from polar.kit.utils import utc_now
-from polar.models import PersonalAccessToken, User
-from polar.personal_access_token.service import (
+from solei.config import settings
+from solei.email.schemas import PersonalAccessTokenLeakedEmail
+from solei.enums import TokenType
+from solei.kit.crypto import get_token_hash
+from solei.kit.utils import utc_now
+from solei.models import PersonalAccessToken, User
+from solei.personal_access_token.service import (
     personal_access_token as personal_access_token_service,
 )
-from polar.postgres import AsyncSession
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 
 
 @pytest.fixture(autouse=True)
 def enqueue_email_mock(mocker: MockerFixture) -> MagicMock:
     return mocker.patch(
-        "polar.personal_access_token.service.enqueue_email_template", autospec=True
+        "solei.personal_access_token.service.enqueue_email_template", autospec=True
     )
 
 
@@ -31,7 +31,7 @@ class TestRevokeLeaked:
     ) -> None:
         result = await personal_access_token_service.revoke_leaked(
             session,
-            "polar_pat_123",
+            "solei_pat_123",
             TokenType.personal_access_token,
             notifier="github",
             url="https://github.com",
@@ -48,7 +48,7 @@ class TestRevokeLeaked:
         mocker: MockerFixture,
         enqueue_email_mock: MagicMock,
     ) -> None:
-        token_hash = get_token_hash("polar_pat_123", secret=settings.SECRET)
+        token_hash = get_token_hash("solei_pat_123", secret=settings.SECRET)
         personal_access_token = PersonalAccessToken(
             comment="Test",
             token=token_hash,
@@ -60,7 +60,7 @@ class TestRevokeLeaked:
 
         result = await personal_access_token_service.revoke_leaked(
             session,
-            "polar_pat_123",
+            "solei_pat_123",
             TokenType.personal_access_token,
             notifier="github",
             url="https://github.com",

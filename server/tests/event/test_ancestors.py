@@ -1,12 +1,12 @@
 import pytest
 from sqlalchemy import select
 
-from polar.auth.models import AuthSubject
-from polar.event.repository import EventRepository
-from polar.event.schemas import EventCreateExternalCustomer, EventsIngest
-from polar.event.service import event as event_service
-from polar.kit.db.postgres import AsyncSession
-from polar.models import Event, Organization
+from solei.auth.models import AuthSubject
+from solei.event.repository import EventRepository
+from solei.event.schemas import EventCreateExternalCustomer, EventsIngest
+from solei.event.service import event as event_service
+from solei.kit.db.postgres import AsyncSession
+from solei.models import Event, Organization
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (

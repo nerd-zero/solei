@@ -7,11 +7,11 @@ import structlog
 import typer
 from sqlalchemy import select
 
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import IssueReward, Pledge, Transaction
-from polar.models.transaction import TransactionType
-from polar.postgres import create_async_engine
-from polar.transaction.service.platform_fee import (
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import IssueReward, Pledge, Transaction
+from solei.models.transaction import TransactionType
+from solei.postgres import create_async_engine
+from solei.transaction.service.platform_fee import (
     platform_fee_transaction as platform_fee_transaction_service,
 )
 

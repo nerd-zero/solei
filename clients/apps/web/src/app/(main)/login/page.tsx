@@ -4,7 +4,7 @@ import { CONFIG } from '@/utils/config'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Log in to Polar',
+  title: 'Log in to Solei',
 }
 
 export default async function Page(props: {
@@ -25,8 +25,8 @@ export default async function Page(props: {
           <div className="flex flex-col gap-4">
             <h2 className="text-2xl text-black dark:text-white">
               {CONFIG.IS_SANDBOX
-                ? 'Welcome to the Polar Sandbox'
-                : 'Welcome to Polar'}
+                ? 'Welcome to the Solei Sandbox'
+                : 'Welcome to Solei'}
             </h2>
             <span className="dark:text-polar-400 text-lg text-balance text-gray-500">
               {CONFIG.IS_SANDBOX ? (

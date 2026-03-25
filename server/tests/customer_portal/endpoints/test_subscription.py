@@ -3,11 +3,11 @@ import uuid
 import pytest
 from httpx import AsyncClient
 
-from polar.enums import SubscriptionRecurringInterval
-from polar.models import Customer, Member, Organization, Product, Subscription
-from polar.models.product import ProductVisibility
-from polar.models.subscription import SubscriptionStatus
-from polar.postgres import AsyncSession
+from solei.enums import SubscriptionRecurringInterval
+from solei.models import Customer, Member, Organization, Product, Subscription
+from solei.models.product import ProductVisibility
+from solei.models.subscription import SubscriptionStatus
+from solei.postgres import AsyncSession
 from tests.fixtures.auth import (
     CUSTOMER_AUTH_SUBJECT,
     MEMBER_AUTH_SUBJECT,

@@ -3,16 +3,16 @@ import uuid
 import pytest
 from httpx import AsyncClient
 
-from polar.member.repository import MemberRepository
-from polar.models import (
+from solei.member.repository import MemberRepository
+from solei.models import (
     Benefit,
     Customer,
     Organization,
     Product,
     UserOrganization,
 )
-from polar.postgres import AsyncSession
-from polar.tax.tax_id import TaxIDFormat
+from solei.postgres import AsyncSession
+from solei.tax.tax_id import TaxIDFormat
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
@@ -342,12 +342,12 @@ class TestCreateCustomer:
         response = await client.post(
             "/v1/customers/",
             json={
-                "email": "customer@polar.sh",
+                "email": "customer@solei.to",
                 "name": "Customer Name",
                 "external_id": "customer_ext_123",
                 "organization_id": str(organization.id),
                 "owner": {
-                    "email": "owner@polar.sh",
+                    "email": "owner@solei.to",
                     "name": "Owner Name",
                     "external_id": "owner_ext_456",
                 },
@@ -357,7 +357,7 @@ class TestCreateCustomer:
         assert response.status_code == 201
 
         json = response.json()
-        assert json["email"] == "customer@polar.sh"
+        assert json["email"] == "customer@solei.to"
         assert json["name"] == "Customer Name"
         assert json["external_id"] == "customer_ext_123"
 
@@ -366,7 +366,7 @@ class TestCreateCustomer:
             session, uuid.UUID(json["id"])
         )
         assert owner is not None
-        assert owner.email == "owner@polar.sh"
+        assert owner.email == "owner@solei.to"
         assert owner.name == "Owner Name"
         assert owner.external_id == "owner_ext_456"
         assert owner.role == "owner"
@@ -561,7 +561,7 @@ class TestDeleteCustomerWithAnonymize:
         assert deleted is not None
 
         # Email should be hashed
-        assert deleted.email.endswith("@anonymized.polar.sh")
+        assert deleted.email.endswith("@anonymized.solei.to")
         assert deleted.email_verified is False
 
         # Name should be hashed (64-char hex string from SHA-256)
@@ -599,7 +599,7 @@ class TestDeleteCustomerWithAnonymize:
         assert deleted is not None
 
         # Email should be hashed
-        assert deleted.email.endswith("@anonymized.polar.sh")
+        assert deleted.email.endswith("@anonymized.solei.to")
 
         # Name should be PRESERVED for businesses
         assert deleted.name == "Acme Corp"
@@ -702,7 +702,7 @@ class TestDeleteCustomerExternalWithAnonymize:
         assert deleted is not None
 
         # Email should be hashed
-        assert deleted.email.endswith("@anonymized.polar.sh")
+        assert deleted.email.endswith("@anonymized.solei.to")
 
         # External ID should be preserved
         assert deleted.external_id == "ext-anon-123"

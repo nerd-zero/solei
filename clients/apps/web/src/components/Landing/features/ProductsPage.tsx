@@ -195,7 +195,7 @@ export const ProductsPage = () => {
             className="dark:text-polar-500 text-lg text-gray-500 md:w-[480px]"
             variants={itemVariants}
           >
-            Join companies using Polar for reliable, scalable subscription
+            Join companies using Solei for reliable, scalable subscription
             billing.
           </motion.p>
           <motion.div variants={itemVariants}>

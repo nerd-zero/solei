@@ -31,8 +31,8 @@ export const getSSRHeaders = (): Record<string, string> => {
     headers['X-Github-Token'] = process.env.GITHUB_TOKEN
   }
 
-  if (process.env.POLAR_PREVIEW_ACCESS_TOKEN) {
-    headers['X-Preview-Token'] = process.env.POLAR_PREVIEW_ACCESS_TOKEN
+  if (process.env.SOLEI_PREVIEW_ACCESS_TOKEN) {
+    headers['X-Preview-Token'] = process.env.SOLEI_PREVIEW_ACCESS_TOKEN
   }
 
   return headers
@@ -68,17 +68,17 @@ export const createServerSideAPI = async (
   }
 
   // Preview environments: include access token so SSR calls pass through the funnel gate
-  if (process.env.POLAR_PREVIEW_ACCESS_TOKEN) {
+  if (process.env.SOLEI_PREVIEW_ACCESS_TOKEN) {
     apiHeaders = {
       ...apiHeaders,
-      'X-Preview-Token': process.env.POLAR_PREVIEW_ACCESS_TOKEN,
+      'X-Preview-Token': process.env.SOLEI_PREVIEW_ACCESS_TOKEN,
     }
   }
 
-  // Use POLAR_API_URL for server-side requests (e.g., in Docker containers)
+  // Use SOLEI_API_URL for server-side requests (e.g., in Docker containers)
   // Fall back to NEXT_PUBLIC_API_URL for local development
   const apiUrl =
-    process.env.POLAR_API_URL || (process.env.NEXT_PUBLIC_API_URL as string)
+    process.env.SOLEI_API_URL || (process.env.NEXT_PUBLIC_API_URL as string)
 
   const client = baseCreateClient(apiUrl, token, apiHeaders)
 
