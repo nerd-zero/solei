@@ -8,12 +8,12 @@ import typer
 from rich.progress import Progress
 from sqlalchemy import select
 
-from polar.config import settings
-from polar.integrations.tinybird.client import TinybirdClient
-from polar.integrations.tinybird.service import _event_to_tinybird
-from polar.kit.db.postgres import create_async_engine as _create_async_engine
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Event
+from solei.config import settings
+from solei.integrations.tinybird.client import TinybirdClient
+from solei.integrations.tinybird.service import _event_to_tinybird
+from solei.kit.db.postgres import create_async_engine as _create_async_engine
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Event
 
 from .helper import configure_script_logging, typer_async
 

@@ -8,7 +8,7 @@ Create Date: 2025-12-11 10:51:08.709436
 
 from alembic import op
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "aa7611c80a41"

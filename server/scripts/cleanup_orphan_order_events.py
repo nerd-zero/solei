@@ -6,11 +6,11 @@ from uuid import UUID
 import typer
 from sqlalchemy import delete, select
 
-from polar.integrations.tinybird.client import client as tinybird_client
-from polar.integrations.tinybird.service import DATASOURCE_EVENTS
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Event, Order
-from polar.postgres import create_async_engine
+from solei.integrations.tinybird.client import client as tinybird_client
+from solei.integrations.tinybird.service import DATASOURCE_EVENTS
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Event, Order
+from solei.postgres import create_async_engine
 
 from .helper import configure_script_logging, typer_async
 

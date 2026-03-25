@@ -11,7 +11,7 @@ from datetime import UTC, datetime, timezone
 import sqlalchemy as sa
 from alembic import op
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "25b8cacd8269"

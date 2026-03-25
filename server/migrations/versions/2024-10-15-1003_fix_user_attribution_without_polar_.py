@@ -9,7 +9,7 @@ Create Date: 2024-10-15 10:03:14.641317
 import sqlalchemy as sa
 from alembic import op
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "4f890422b67a"
@@ -73,7 +73,7 @@ def upgrade() -> None:
             WHERE 1 = 1
                 AND subscriptions.user_id IS NOT NULL
                 AND subscriptions.stripe_subscription_id IS NULL
-                -- Exclude historic Polar Newsletter subscription (created first on new signups)
+                -- Exclude historic Solei Newsletter subscription (created first on new signups)
                 AND subscriptions.product_id != 'd3d1a7ed-f045-43e3-8365-4c216a1b9949'
         ), user_creators AS (
             SELECT

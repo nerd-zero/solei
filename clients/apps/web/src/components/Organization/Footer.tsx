@@ -22,11 +22,11 @@ const Footer = () => {
                 href="/signup"
                 className="flex w-fit flex-row items-center gap-x-2 border-b border-black pb-0.5 dark:border-white"
               >
-                <span>Join Polar today</span>
+                <span>Join Solei today</span>
                 <ArrowOutwardOutlined fontSize="inherit" />
               </Link>
               <span className="dark:text-polar-500 w-full text-gray-500">
-                &copy; Polar Software, Inc. {new Date().getFullYear()}
+                &copy; Solei Software, Inc. {new Date().getFullYear()}
               </span>
             </div>
           </div>
@@ -45,7 +45,7 @@ const Footer = () => {
           <div className="flex flex-col gap-y-4 text-sm">
             <h3 className="dark:text-polar-500 text-gray-500">Resources</h3>
             <div className="flex flex-col gap-y-3">
-              <FooterLink href="/resources/why">Why Polar</FooterLink>
+              <FooterLink href="/resources/why">Why Solei</FooterLink>
               <FooterLink href="/resources/merchant-of-record">
                 Merchant of Record
               </FooterLink>
@@ -56,7 +56,7 @@ const Footer = () => {
           <div className="flex flex-col gap-y-4 text-sm">
             <h3 className="dark:text-polar-500 text-gray-500">Company</h3>
             <div className="flex flex-col gap-y-3">
-              <FooterLink href="/company">About Polar</FooterLink>
+              <FooterLink href="/company">About Solei</FooterLink>
               <FooterLink href="https://github.com/polarsource">
                 GitHub
               </FooterLink>
@@ -64,13 +64,13 @@ const Footer = () => {
               <FooterLink href="https://discord.gg/Pnhfz3UThd">
                 Discord
               </FooterLink>
-              <FooterLink href="https://polar.sh/assets/brand/polar_brand.zip">
+              <FooterLink href="https://solei.to/assets/brand/polar_brand.zip">
                 Brand Assets
               </FooterLink>
-              <FooterLink href="https://polar.sh/legal/terms">
+              <FooterLink href="https://solei.to/legal/terms">
                 Terms of Service
               </FooterLink>
-              <FooterLink href="https://polar.sh/legal/privacy">
+              <FooterLink href="https://solei.to/legal/privacy">
                 Privacy Policy
               </FooterLink>
               <CookiePreferencesButton />
@@ -79,9 +79,9 @@ const Footer = () => {
           <div className="flex flex-col gap-y-4 text-sm">
             <h3 className="dark:text-polar-500 text-gray-500">Support</h3>
             <div className="flex flex-col gap-y-3">
-              <FooterLink href="https://polar.sh/docs">Docs</FooterLink>
-              <FooterLink href="mailto:support@polar.sh">Contact</FooterLink>
-              <FooterLink href="https://status.polar.sh">
+              <FooterLink href="https://solei.to/docs">Docs</FooterLink>
+              <FooterLink href="mailto:support@solei.to">Contact</FooterLink>
+              <FooterLink href="https://status.solei.to">
                 Service Status
               </FooterLink>
             </div>

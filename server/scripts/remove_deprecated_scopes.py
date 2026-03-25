@@ -7,9 +7,9 @@ import structlog
 import typer
 from sqlalchemy import CursorResult, text
 
-from polar.config import settings
-from polar.kit.db.postgres import AsyncSession, create_async_sessionmaker
-from polar.kit.db.postgres import create_async_engine as _create_async_engine
+from solei.config import settings
+from solei.kit.db.postgres import AsyncSession, create_async_sessionmaker
+from solei.kit.db.postgres import create_async_engine as _create_async_engine
 
 cli = typer.Typer()
 

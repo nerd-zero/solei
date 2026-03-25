@@ -9,24 +9,24 @@ import pytest
 import pytest_asyncio
 from pytest_mock import MockerFixture
 
-from polar.auth.models import AuthSubject
-from polar.enums import SubscriptionRecurringInterval
-from polar.event.service import event as event_service
-from polar.event.system import SystemEvent
-from polar.exceptions import PolarRequestValidationError
-from polar.kit.time_queries import TimeInterval
-from polar.kit.utils import utc_now
-from polar.meter.aggregation import (
+from solei.auth.models import AuthSubject
+from solei.enums import SubscriptionRecurringInterval
+from solei.event.service import event as event_service
+from solei.event.system import SystemEvent
+from solei.exceptions import SoleiRequestValidationError
+from solei.kit.time_queries import TimeInterval
+from solei.kit.utils import utc_now
+from solei.meter.aggregation import (
     Aggregation,
     AggregationFunction,
     CountAggregation,
     PropertyAggregation,
     UniqueAggregation,
 )
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.meter.schemas import MeterCreate, MeterUpdate
-from polar.meter.service import meter as meter_service
-from polar.models import (
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.meter.schemas import MeterCreate, MeterUpdate
+from solei.meter.service import meter as meter_service
+from solei.models import (
     Customer,
     Event,
     Meter,
@@ -35,10 +35,10 @@ from polar.models import (
     Product,
     Subscription,
 )
-from polar.models.billing_entry import BillingEntryDirection
-from polar.models.customer_seat import SeatStatus
-from polar.models.event import EventSource
-from polar.postgres import AsyncSession
+from solei.models.billing_entry import BillingEntryDirection
+from solei.models.customer_seat import SeatStatus
+from solei.models.event import EventSource
+from solei.postgres import AsyncSession
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
@@ -56,7 +56,7 @@ from tests.fixtures.random_objects import (
 
 @pytest.fixture
 def enqueue_job_mock(mocker: MockerFixture) -> AsyncMock:
-    return mocker.patch("polar.meter.service.enqueue_job")
+    return mocker.patch("solei.meter.service.enqueue_job")
 
 
 @pytest.mark.asyncio
@@ -149,7 +149,7 @@ class TestUpdate:
             save_fixture, organization=organization, last_billed_event=event
         )
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await meter_service.update(session, meter, meter_update)
 
     @pytest.mark.parametrize(

@@ -181,7 +181,7 @@ export const CustomersPage = () => {
             className="dark:text-polar-500 text-lg text-gray-500 md:w-[480px]"
             variants={itemVariants}
           >
-            Join companies using Polar to deliver exceptional customer
+            Join companies using Solei to deliver exceptional customer
             experiences.
           </motion.p>
           <motion.div variants={itemVariants}>

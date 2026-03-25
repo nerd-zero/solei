@@ -3,11 +3,11 @@ import uuid
 import pytest
 from httpx import AsyncClient
 
-from polar.customer_session.service import CUSTOMER_SESSION_TOKEN_PREFIX
-from polar.models import Customer, Member, Organization, UserOrganization
-from polar.models.customer import CustomerType
-from polar.models.member import MemberRole
-from polar.models.member_session import MEMBER_SESSION_TOKEN_PREFIX
+from solei.customer_session.service import CUSTOMER_SESSION_TOKEN_PREFIX
+from solei.models import Customer, Member, Organization, UserOrganization
+from solei.models.customer import CustomerType
+from solei.models.member import MemberRole
+from solei.models.member_session import MEMBER_SESSION_TOKEN_PREFIX
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer

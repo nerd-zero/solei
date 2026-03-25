@@ -4,18 +4,18 @@ import pytest
 from dateutil.relativedelta import relativedelta
 from httpx import AsyncClient
 
-from polar.auth.models import AuthSubject
-from polar.benefit.strategies.license_keys.schemas import (
+from solei.auth.models import AuthSubject
+from solei.benefit.strategies.license_keys.schemas import (
     BenefitLicenseKeyActivationCreateProperties,
     BenefitLicenseKeysCreateProperties,
 )
-from polar.kit.pagination import PaginationParams
-from polar.kit.utils import generate_uuid, utc_now
-from polar.license_key.repository import LicenseKeyRepository
-from polar.license_key.service import license_key as license_key_service
-from polar.models import Customer, Organization, Product, User, UserOrganization
-from polar.postgres import AsyncSession
-from polar.redis import Redis
+from solei.kit.pagination import PaginationParams
+from solei.kit.utils import generate_uuid, utc_now
+from solei.license_key.repository import LicenseKeyRepository
+from solei.license_key.service import license_key as license_key_service
+from solei.models import Customer, Organization, Product, User, UserOrganization
+from solei.postgres import AsyncSession
+from solei.redis import Redis
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.license_key import TestLicenseKey

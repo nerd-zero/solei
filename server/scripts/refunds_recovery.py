@@ -8,17 +8,17 @@ import dramatiq
 import structlog
 import typer
 
-from polar.integrations.stripe.service import stripe as stripe_service
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Refund
-from polar.models.refund import RefundReason, RefundStatus
-from polar.order.repository import OrderRepository
-from polar.payment.repository import PaymentRepository
-from polar.postgres import create_async_engine
-from polar.redis import create_redis
-from polar.refund.repository import RefundRepository
-from polar.refund.service import refund as refund_service
-from polar.worker import JobQueueManager
+from solei.integrations.stripe.service import stripe as stripe_service
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Refund
+from solei.models.refund import RefundReason, RefundStatus
+from solei.order.repository import OrderRepository
+from solei.payment.repository import PaymentRepository
+from solei.postgres import create_async_engine
+from solei.redis import create_redis
+from solei.refund.repository import RefundRepository
+from solei.refund.service import refund as refund_service
+from solei.worker import JobQueueManager
 
 cli = typer.Typer()
 

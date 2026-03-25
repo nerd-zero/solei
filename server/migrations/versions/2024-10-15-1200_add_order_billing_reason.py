@@ -16,8 +16,8 @@ import sqlalchemy as sa
 import stripe as stripe_lib
 from alembic import op
 
-# Polar Custom Imports
-from polar.config import settings
+# Solei Custom Imports
+from solei.config import settings
 
 # revision identifiers, used by Alembic.
 revision = "c4cf133e597c"

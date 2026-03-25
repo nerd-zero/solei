@@ -3,7 +3,7 @@ import BodyText from '../components/BodyText'
 import Button from '../components/Button'
 import Footer from '../components/Footer'
 import Intro from '../components/Intro'
-import WrapperPolar from '../components/WrapperPolar'
+import WrapperSolei from '../components/WrapperSolei'
 import type { schemas } from '../types'
 
 export function OrganizationUnderReview({
@@ -11,7 +11,7 @@ export function OrganizationUnderReview({
   organization,
 }: schemas['OrganizationUnderReviewProps']) {
   return (
-    <WrapperPolar>
+    <WrapperSolei>
       <Preview>
         Your organization is under review - a standard part of our onboarding
         process
@@ -23,7 +23,7 @@ export function OrganizationUnderReview({
       <Section>
         <BodyText>
           This is a completely normal step that all organizations go through
-          when joining Polar. As a Merchant of Record, we need to ensure
+          when joining Solei. As a Merchant of Record, we need to ensure
           compliance with our acceptable use policies and verify account
           information.
         </BodyText>
@@ -38,11 +38,11 @@ export function OrganizationUnderReview({
         </BodyText>
         <BodyText>
           During this review period, you can continue setting up your products
-          and integrate Polar. We&apos;ll notify you as soon as the review is
+          and integrate Solei. We&apos;ll notify you as soon as the review is
           complete.
         </BodyText>
         <BodyText>
-          <Button href="https://polar.sh/docs/merchant-of-record/account-reviews">
+          <Button href="https://solei.to/docs/merchant-of-record/account-reviews">
             Read more about our review process
           </Button>
         </BodyText>
@@ -52,7 +52,7 @@ export function OrganizationUnderReview({
         </BodyText>
       </Section>
       <Footer email={email} />
-    </WrapperPolar>
+    </WrapperSolei>
   )
 }
 

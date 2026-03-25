@@ -17,19 +17,19 @@ import typer
 from rich.console import Console
 from sqlalchemy import select
 
-import polar.customer.tasks
-import polar.webhook.tasks  # noqa: F401 - register dramatiq actors
-from polar.config import settings
-from polar.integrations.aws.s3 import S3Service
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.kit.utils import utc_now
-from polar.models import BenefitGrant, Customer, Order, Subscription
-from polar.models.webhook_endpoint import WebhookEventType
-from polar.postgres import create_async_engine
-from polar.redis import create_redis
-from polar.subscription.repository import SubscriptionRepository
-from polar.webhook.service import webhook as webhook_service
-from polar.worker import JobQueueManager, enqueue_job
+import solei.customer.tasks
+import solei.webhook.tasks  # noqa: F401 - register dramatiq actors
+from solei.config import settings
+from solei.integrations.aws.s3 import S3Service
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.kit.utils import utc_now
+from solei.models import BenefitGrant, Customer, Order, Subscription
+from solei.models.webhook_endpoint import WebhookEventType
+from solei.postgres import create_async_engine
+from solei.redis import create_redis
+from solei.subscription.repository import SubscriptionRepository
+from solei.webhook.service import webhook as webhook_service
+from solei.worker import JobQueueManager, enqueue_job
 
 cli = typer.Typer()
 console = Console()

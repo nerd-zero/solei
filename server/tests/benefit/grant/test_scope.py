@@ -2,15 +2,15 @@ import uuid
 
 import pytest
 
-from polar.benefit.grant.scope import (
+from solei.benefit.grant.scope import (
     CustomerDoesntHaveOwnerMember,
     MemberIdRequired,
     MemberNotFound,
     resolve_member,
 )
-from polar.models import Member
-from polar.models.member import MemberRole
-from polar.postgres import AsyncSession
+from solei.models import Member
+from solei.models.member import MemberRole
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer, create_organization
 

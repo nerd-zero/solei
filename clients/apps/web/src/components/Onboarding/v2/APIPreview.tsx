@@ -161,7 +161,7 @@ export function APIPreview({
           <span className="text-gray-400 dark:text-gray-600">{path}</span>
         </div>
         <div className="flex flex-col gap-0.5 text-[10px] text-gray-400 dark:text-gray-600">
-          <span>Host: api.polar.sh</span>
+          <span>Host: api.solei.to</span>
           <span>Content-Type: application/json</span>
           <span>Content-Length: {contentLength}</span>
           <span>Authorization: Bearer polar_sk_Yj1mbihldmVudHMp</span>

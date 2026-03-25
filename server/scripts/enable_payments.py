@@ -6,19 +6,19 @@ import dramatiq
 import typer
 from sqlalchemy import select
 
-import polar.tasks  # noqa: F401
-from polar.enums import AccountType
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.kit.utils import utc_now
-from polar.models.account import Account
-from polar.models.organization import Organization, OrganizationStatus
-from polar.models.organization_review import OrganizationReview
-from polar.models.user import IdentityVerificationStatus
-from polar.models.user_organization import UserOrganization
-from polar.postgres import create_async_engine
-from polar.redis import create_redis
-from polar.user.repository import UserRepository
-from polar.worker import JobQueueManager
+import solei.tasks  # noqa: F401
+from solei.enums import AccountType
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.kit.utils import utc_now
+from solei.models.account import Account
+from solei.models.organization import Organization, OrganizationStatus
+from solei.models.organization_review import OrganizationReview
+from solei.models.user import IdentityVerificationStatus
+from solei.models.user_organization import UserOrganization
+from solei.postgres import create_async_engine
+from solei.redis import create_redis
+from solei.user.repository import UserRepository
+from solei.worker import JobQueueManager
 
 cli = typer.Typer()
 

@@ -1,6 +1,6 @@
-from polar.enums import AccountType
-from polar.models import Account, User
-from polar.postgres import AsyncSession
+from solei.enums import AccountType
+from solei.models import Account, User
+from solei.postgres import AsyncSession
 
 
 def generate_account(

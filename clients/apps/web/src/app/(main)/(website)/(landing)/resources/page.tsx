@@ -4,15 +4,15 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Resources',
-  description: 'Handy links related to the Polar platform',
+  description: 'Handy links related to the Solei platform',
   keywords:
     'monetization, merchant of record, saas, digital products, platform, developer, open source, funding, open source, economy',
   openGraph: {
-    siteName: 'Polar',
+    siteName: 'Solei',
     type: 'website',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
       },
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Polar',
+        alt: 'Solei',
       },
     ],
   },
@@ -34,14 +34,14 @@ export const metadata: Metadata = {
 const resourceLinks = [
   {
     title: 'Documentation',
-    description: 'Learn the ins and outs of the Polar platform',
-    href: 'https://polar.sh/docs',
+    description: 'Learn the ins and outs of the Solei platform',
+    href: 'https://solei.to/docs',
     target: '_blank',
   },
   {
-    title: 'Why Polar',
+    title: 'Why Solei',
     description:
-      'Learn why Polar is the best choice for monetizing your business',
+      'Learn why Solei is the best choice for monetizing your business',
     href: '/resources/why',
   },
   {
@@ -58,22 +58,22 @@ const resourceLinks = [
 
 const comparisonLinks = [
   {
-    title: 'Polar vs. Stripe',
+    title: 'Solei vs. Stripe',
     href: '/resources/comparison/stripe',
-    description: 'Compare Polar with Stripe',
+    description: 'Compare Solei with Stripe',
     target: '_blank',
   },
 
   {
-    title: 'Polar vs. Paddle',
+    title: 'Solei vs. Paddle',
     href: '/resources/comparison/paddle',
-    description: 'Compare Polar with Paddle',
+    description: 'Compare Solei with Paddle',
     target: '_blank',
   },
   {
-    title: 'Polar vs. Lemon Squeezy',
+    title: 'Solei vs. Lemon Squeezy',
     href: '/resources/comparison/lemon-squeezy',
-    description: 'Compare Polar with Lemon Squeezy',
+    description: 'Compare Solei with Lemon Squeezy',
     target: '_blank',
   },
 ]

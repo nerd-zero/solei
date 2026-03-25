@@ -1,9 +1,9 @@
 import pytest
 from httpx import AsyncClient
 
-from polar.auth.scope import Scope
-from polar.kit.time_queries import TimeInterval
-from polar.models import UserOrganization
+from solei.auth.scope import Scope
+from solei.kit.time_queries import TimeInterval
+from solei.models import UserOrganization
 from tests.fixtures.auth import AuthSubjectFixture
 
 

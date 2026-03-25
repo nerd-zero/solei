@@ -3,17 +3,17 @@ from uuid import UUID
 
 import pytest
 
-from polar.benefit.strategies.downloadables.properties import (
+from solei.benefit.strategies.downloadables.properties import (
     BenefitDownloadablesProperties,
 )
-from polar.benefit.strategies.downloadables.schemas import (
+from solei.benefit.strategies.downloadables.schemas import (
     BenefitDownloadablesCreateProperties,
 )
-from polar.file.schemas import FileRead
-from polar.models import Customer, Downloadable, Organization, Product
-from polar.models.downloadable import DownloadableStatus
-from polar.postgres import AsyncSession
-from polar.redis import Redis
+from solei.file.schemas import FileRead
+from solei.models import Customer, Downloadable, Organization, Product
+from solei.models.downloadable import DownloadableStatus
+from solei.postgres import AsyncSession
+from solei.redis import Redis
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.downloadable import TestDownloadable
 

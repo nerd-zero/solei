@@ -1,9 +1,9 @@
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from polar.enums import SubscriptionRecurringInterval
-from polar.kit.utils import utc_now
-from polar.models import (
+from solei.enums import SubscriptionRecurringInterval
+from solei.kit.utils import utc_now
+from solei.models import (
     Checkout,
     Customer,
     Order,
@@ -12,9 +12,9 @@ from polar.models import (
     User,
     UserOrganization,
 )
-from polar.models.customer_seat import CustomerSeat, SeatStatus
-from polar.models.order import OrderStatus
-from polar.models.subscription import SubscriptionStatus
+from solei.models.customer_seat import CustomerSeat, SeatStatus
+from solei.models.order import OrderStatus
+from solei.models.subscription import SubscriptionStatus
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_checkout,

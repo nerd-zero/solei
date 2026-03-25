@@ -38,7 +38,7 @@ export const MORPage = () => {
   ]
 
   return (
-    <ResourceLayout title="Polar as a Merchant of Record" toc={tocItems}>
+    <ResourceLayout title="Solei as a Merchant of Record" toc={tocItems}>
       <ResourceSection id="introduction" title="Introduction">
         <p className="text-lg">What is a Merchant of Record?</p>
         <p className="dark:text-polar-300 text-gray-500">
@@ -130,7 +130,7 @@ export const MORPage = () => {
 
           <div className="flex flex-col gap-y-6">
             <div className="flex flex-col gap-4">
-              <h3 className="text-lg">Go with Polar if...</h3>
+              <h3 className="text-lg">Go with Solei if...</h3>
             </div>
             <div className="flex flex-col gap-2">
               <ul className="dark:border-polar-700 dark:divide-polar-700 divide-y divide-gray-200 border-y border-gray-200 [&>li]:py-2">
@@ -184,7 +184,7 @@ export const MORPage = () => {
           <p className="dark:text-polar-300 text-gray-500">
             Charging the Swedish consumer $12.5/month and saving $2.5/month for
             the Swedish tax authorities. Stripe Tax is an excellent service to
-            automate this and the one Polar uses today.
+            automate this and the one Solei uses today.
           </p>
         </div>
 
@@ -284,7 +284,7 @@ export const MORPage = () => {
             <h3 className="text-xl">Ready to make the switch?</h3>
             <p className="dark:text-polar-300 text-center text-gray-700 md:w-[440px]">
               Join thousands of teams who have already transformed their payment
-              infrastructure with Polar.
+              infrastructure with Solei.
             </p>
           </div>
           <GetStartedButton

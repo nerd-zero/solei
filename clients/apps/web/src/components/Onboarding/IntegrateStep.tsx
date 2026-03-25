@@ -45,7 +45,7 @@ const frameworks = (products: schemas['Product'][]) =>
     {
       slug: 'nextjs',
       name: 'Next.js',
-      link: 'https://polar.sh/docs/integrate/sdk/adapters/nextjs',
+      link: 'https://solei.to/docs/integrate/sdk/adapters/nextjs',
       icon: <NextJsIcon size={24} />,
       packages: '@polar-sh/nextjs',
       code: `import { Checkout } from "@polar-sh/nextjs";
@@ -58,14 +58,14 @@ export const GET = Checkout({
     {
       slug: 'better-auth',
       name: 'BetterAuth',
-      link: 'https://polar.sh/docs/integrate/sdk/adapters/better-auth',
+      link: 'https://solei.to/docs/integrate/sdk/adapters/better-auth',
       icon: <BetterAuthIcon size={24} />,
       packages: 'better-auth @polar-sh/better-auth @polar-sh/sdk',
       code: `import { betterAuth } from "better-auth";
 import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth";
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@polar-sh/sdk";
 
-const polarClient = new Polar({
+const polarClient = new Solei({
     accessToken: process.env.POLAR_ACCESS_TOKEN
 });
 
@@ -98,12 +98,12 @@ ${products
     {
       slug: 'nodejs',
       name: 'Node.js',
-      link: 'https://polar.sh/docs/integrate/sdk/typescript',
+      link: 'https://solei.to/docs/integrate/sdk/typescript',
       icon: <NodeJsIcon size={24} />,
       packages: '@polar-sh/sdk',
-      code: `import { Polar } from "@polar-sh/sdk";
+      code: `import { Solei } from "@polar-sh/sdk";
 
-const polar = new Polar({
+const polar = new Solei({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
 });
 
@@ -119,13 +119,13 @@ redirect(checkout.url)`,
     {
       slug: 'python',
       name: 'Python',
-      link: 'https://polar.sh/docs/integrate/sdk/python',
+      link: 'https://solei.to/docs/integrate/sdk/python',
       icon: <PythonIcon size={24} />,
       pythonInstall: 'pip install polar-sdk',
       code: `import os
-from polar_sdk import Polar
+from polar_sdk import Solei
 
-with Polar(
+with Solei(
     access_token=os.environ.get("POLAR_ACCESS_TOKEN"),
 ) as polar:
 
@@ -222,7 +222,7 @@ export const IntegrateStep = ({ products }: IntegrateStepProps) => {
           </div>
           <div className="flex flex-col gap-y-4">
             <Link
-              href={`https://polar.sh/docs/integrate/sdk/adapters/nextjs`}
+              href={`https://solei.to/docs/integrate/sdk/adapters/nextjs`}
               target="_blank"
               className="w-full"
             >

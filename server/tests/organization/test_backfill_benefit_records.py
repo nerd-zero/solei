@@ -2,19 +2,19 @@ import uuid
 
 import pytest
 
-from polar.enums import SubscriptionRecurringInterval
-from polar.kit.db.postgres import AsyncSession
-from polar.kit.utils import utc_now
-from polar.models.benefit import BenefitType
-from polar.models.downloadable import Downloadable, DownloadableStatus
-from polar.models.file import File, FileServiceTypes
-from polar.models.license_key import LicenseKey
-from polar.models.member import MemberRole
-from polar.models.subscription import SubscriptionStatus
 from scripts.migrate_organizations_members import (
     _backfill_downloadables,
     _backfill_license_keys,
 )
+from solei.enums import SubscriptionRecurringInterval
+from solei.kit.db.postgres import AsyncSession
+from solei.kit.utils import utc_now
+from solei.models.benefit import BenefitType
+from solei.models.downloadable import Downloadable, DownloadableStatus
+from solei.models.file import File, FileServiceTypes
+from solei.models.license_key import LicenseKey
+from solei.models.member import MemberRole
+from solei.models.subscription import SubscriptionStatus
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_benefit,
@@ -69,7 +69,7 @@ class TestBackfillLicenseKeys:
             organization_id=organization.id,
             customer_id=customer.id,
             benefit_id=benefit.id,
-            key="POLAR-TEST-KEY-001",
+            key="SOLEI-TEST-KEY-001",
         )
         await save_fixture(license_key)
         lk_id = license_key.id
@@ -134,7 +134,7 @@ class TestBackfillLicenseKeys:
             customer_id=customer.id,
             benefit_id=benefit.id,
             member_id=member.id,
-            key="POLAR-ALREADY-LINKED",
+            key="SOLEI-ALREADY-LINKED",
         )
         await save_fixture(license_key)
         lk_id = license_key.id
@@ -189,7 +189,7 @@ class TestBackfillLicenseKeys:
             organization_id=organization.id,
             customer_id=customer.id,
             benefit_id=benefit.id,
-            key="POLAR-NO-MEMBER-GRANT",
+            key="SOLEI-NO-MEMBER-GRANT",
         )
         await save_fixture(license_key)
         lk_id = license_key.id
@@ -252,7 +252,7 @@ class TestBackfillLicenseKeys:
             organization_id=organization.id,
             customer_id=customer.id,
             benefit_id=benefit.id,
-            key="POLAR-DELETED-GRANT",
+            key="SOLEI-DELETED-GRANT",
         )
         await save_fixture(license_key)
         lk_id = license_key.id
@@ -318,7 +318,7 @@ class TestBackfillLicenseKeys:
             organization_id=organization.id,
             customer_id=customer.id,
             benefit_id=benefit.id,
-            key="POLAR-IDEMPOTENT",
+            key="SOLEI-IDEMPOTENT",
         )
         await save_fixture(license_key)
         lk_id = license_key.id
@@ -386,7 +386,7 @@ class TestBackfillLicenseKeys:
                 organization_id=organization.id,
                 customer_id=customer.id,
                 benefit_id=benefit.id,
-                key=f"POLAR-MULTI-{i}",
+                key=f"SOLEI-MULTI-{i}",
             )
             await save_fixture(lk)
             lk_ids.append(lk.id)

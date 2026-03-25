@@ -2,10 +2,10 @@ from datetime import UTC, datetime
 
 import pytest
 
-from polar.kit.address import Address, CountryAlpha2
-from polar.models import Product
-from polar.models.checkout import BillingAddressFieldMode, CheckoutStatus
-from polar.postgres import AsyncSession
+from solei.kit.address import Address, CountryAlpha2
+from solei.models import Product
+from solei.models.checkout import BillingAddressFieldMode, CheckoutStatus
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_checkout
 

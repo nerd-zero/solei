@@ -6,9 +6,9 @@ from uuid import uuid4
 import pytest
 from httpx import AsyncClient
 
-from polar.kit.utils import utc_now
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.models import Organization, UserOrganization
+from solei.kit.utils import utc_now
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.models import Organization, UserOrganization
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_event

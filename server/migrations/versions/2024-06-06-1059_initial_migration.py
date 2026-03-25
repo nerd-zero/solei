@@ -13,9 +13,9 @@ from alembic import op
 from sqlalchemy.dialects import postgresql
 from sqlalchemy_utils.types.ts_vector import TSVectorType
 
-from polar.enums import Platforms
-from polar.kit.extensions.sqlalchemy import StringEnum
-from polar.models import Account
+from solei.enums import Platforms
+from solei.kit.extensions.sqlalchemy import StringEnum
+from solei.models import Account
 
 
 # This enum has been removed from the codebase since this migration was created

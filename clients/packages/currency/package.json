@@ -1,7 +1,7 @@
 {
   "name": "@polar-sh/currency",
-  "description": "Polar Currency Utilities",
-  "author": "Polar",
+  "description": "Solei Currency Utilities",
+  "author": "Solei",
   "license": "Apache-2.0",
   "type": "module",
   "private": true,

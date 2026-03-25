@@ -53,10 +53,10 @@ from plain_client.input_types import DatetimeFilter
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
-from polar.config import settings
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Organization, User
-from polar.postgres import AsyncSession, create_async_engine
+from solei.config import settings
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Organization, User
+from solei.postgres import AsyncSession, create_async_engine
 
 log = structlog.get_logger()
 
@@ -230,7 +230,7 @@ def build_review_message(organization_name: str, issues: OrgIssues) -> str:
     lines.append("")
     lines.append(
         "You can learn more about our review process on our website: "
-        "https://polar.sh/docs/merchant-of-record/account-reviews. "
+        "https://solei.to/docs/merchant-of-record/account-reviews. "
         "Any other questions? Just reply to this message."
     )
     lines.append("")

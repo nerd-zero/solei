@@ -3,17 +3,17 @@ from unittest.mock import MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.enums import PaymentProcessor
-from polar.integrations.stripe.service import StripeService
-from polar.models import Customer, PaymentMethod, Product
-from polar.models.subscription import SubscriptionStatus
-from polar.payment_method.service import (
+from solei.enums import PaymentProcessor
+from solei.integrations.stripe.service import StripeService
+from solei.models import Customer, PaymentMethod, Product
+from solei.models.subscription import SubscriptionStatus
+from solei.payment_method.service import (
     PaymentMethodInUseByActiveSubscription,
 )
-from polar.payment_method.service import (
+from solei.payment_method.service import (
     payment_method as payment_method_service,
 )
-from polar.postgres import AsyncSession
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_active_subscription,
@@ -87,7 +87,7 @@ class TestDelete:
     @pytest.fixture(autouse=True)
     def stripe_service_mock(self, mocker: MockerFixture) -> MagicMock:
         mock = MagicMock(spec=StripeService)
-        mocker.patch("polar.payment_method.service.stripe_service", new=mock)
+        mocker.patch("solei.payment_method.service.stripe_service", new=mock)
         return mock
 
     async def test_delete_payment_method_with_no_subscriptions(

@@ -3,12 +3,12 @@ from datetime import UTC, timedelta
 import pytest
 from pydantic import ValidationError
 
-from polar.event.repository import EventRepository
-from polar.kit.utils import utc_now
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.models import Event, Organization
-from polar.models.event import EventSource
-from polar.postgres import AsyncSession
+from solei.event.repository import EventRepository
+from solei.kit.utils import utc_now
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.models import Event, Organization
+from solei.models.event import EventSource
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_event
 

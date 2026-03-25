@@ -5,10 +5,10 @@ from datetime import timedelta
 import pytest
 from httpx import AsyncClient
 
-from polar.auth.scope import Scope
-from polar.kit.utils import utc_now
-from polar.models import EventType, Organization, UserOrganization
-from polar.models.event import EventSource
+from solei.auth.scope import Scope
+from solei.kit.utils import utc_now
+from solei.models import EventType, Organization, UserOrganization
+from solei.models.event import EventSource
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_event, create_event_type

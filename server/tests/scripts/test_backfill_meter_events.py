@@ -1,16 +1,16 @@
 import pytest
 from sqlalchemy import func, select
 
-from polar.kit.db.postgres import AsyncSession
-from polar.meter.aggregation import (
+from scripts.backfill_meter_events import run_backfill
+from solei.kit.db.postgres import AsyncSession
+from solei.meter.aggregation import (
     AggregationFunction,
     CountAggregation,
     PropertyAggregation,
 )
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.models import Event, Meter, MeterEvent, Organization
-from polar.models.event import EventSource
-from scripts.backfill_meter_events import run_backfill
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.models import Event, Meter, MeterEvent, Organization
+from solei.models.event import EventSource
 from tests.fixtures.database import SaveFixture
 
 

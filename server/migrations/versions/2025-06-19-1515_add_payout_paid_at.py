@@ -13,12 +13,12 @@ from datetime import UTC, datetime
 
 import sqlalchemy as sa
 
-# Polar Custom Imports
+# Solei Custom Imports
 import stripe as stripe_lib
 from alembic import op
 from sqlalchemy.util.typing import TypedDict
 
-from polar.config import settings
+from solei.config import settings
 
 # revision identifiers, used by Alembic.
 revision = "d21ac0812338"

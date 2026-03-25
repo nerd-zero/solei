@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
   let aupContent = AUP_FALLBACK
   try {
-    const aupRes = await fetch('https://polar.sh/legal/acceptable-use-policy', {
+    const aupRes = await fetch('https://solei.to/legal/acceptable-use-policy', {
       next: { revalidate: 86400 },
     })
     if (aupRes.ok) {
@@ -73,9 +73,9 @@ export async function POST(req: Request) {
           'A concise explanation for DENY, or a single clarifying question for CLARIFY. Empty for APPROVE.',
         ),
     }),
-    system: `You are a compliance reviewer for Polar, a Merchant of Record (MoR) platform for digital products only.
+    system: `You are a compliance reviewer for Solei, a Merchant of Record (MoR) platform for digital products only.
 
-Your job is to review a seller's product description against Polar's Acceptable Use Policy and determine if it complies.
+Your job is to review a seller's product description against Solei's Acceptable Use Policy and determine if it complies.
 
 Judge the product as described, not as it could theoretically be misused. Do not invent concerns or speculate about edge cases the description doesn't raise.
 Most products you review should be fine. Approach each one looking for reasons to approve, not reasons to escalate.

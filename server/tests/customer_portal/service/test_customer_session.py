@@ -4,29 +4,29 @@ from datetime import timedelta
 import pytest
 from sqlalchemy import select
 
-from polar.customer.schemas.customer import CustomerUpdate
-from polar.customer.service import customer as customer_service
-from polar.customer_portal.service.customer_session import (
+from solei.customer.schemas.customer import CustomerUpdate
+from solei.customer.service import customer as customer_service
+from solei.customer_portal.service.customer_session import (
     CustomerDoesNotExist,
     CustomerSelectionRequired,
     CustomerSessionCodeInvalidOrExpired,
     OrganizationDoesNotExist,
 )
-from polar.customer_portal.service.customer_session import (
+from solei.customer_portal.service.customer_session import (
     customer_session as customer_session_service,
 )
-from polar.customer_session.service import CUSTOMER_SESSION_TOKEN_PREFIX
-from polar.kit.utils import utc_now
-from polar.models import (
+from solei.customer_session.service import CUSTOMER_SESSION_TOKEN_PREFIX
+from solei.kit.utils import utc_now
+from solei.models import (
     CustomerSession,
     CustomerSessionCode,
     Member,
     MemberSession,
     Organization,
 )
-from polar.models.member import MemberRole
-from polar.models.member_session import MEMBER_SESSION_TOKEN_PREFIX
-from polar.postgres import AsyncSession
+from solei.models.member import MemberRole
+from solei.models.member_session import MEMBER_SESSION_TOKEN_PREFIX
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer, create_organization
 

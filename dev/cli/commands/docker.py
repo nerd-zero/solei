@@ -26,28 +26,28 @@ VALID_SERVICES = ["api", "worker", "web", "db", "redis", "minio", "minio-setup",
 
 
 def _read_stored_instance() -> int | None:
-    """Read POLAR_DOCKER_INSTANCE from .env.docker if set."""
+    """Read SOLEI_DOCKER_INSTANCE from .env.docker if set."""
     if not ENV_FILE.exists():
         return None
     for line in ENV_FILE.read_text().splitlines():
         line = line.strip()
         if line.startswith("#") or not line:
             continue
-        match = re.match(r"^POLAR_DOCKER_INSTANCE\s*=\s*(\d+)\s*$", line)
+        match = re.match(r"^SOLEI_DOCKER_INSTANCE\s*=\s*(\d+)\s*$", line)
         if match:
             return int(match.group(1))
     return None
 
 
 def _write_stored_instance(instance: int) -> None:
-    """Write POLAR_DOCKER_INSTANCE to .env.docker."""
+    """Write SOLEI_DOCKER_INSTANCE to .env.docker."""
     _ensure_env_file()
     content = ENV_FILE.read_text()
     # Replace existing line (commented or not)
-    new_line = f"POLAR_DOCKER_INSTANCE={instance}"
-    if re.search(r"^#?\s*POLAR_DOCKER_INSTANCE\s*=", content, re.MULTILINE):
+    new_line = f"SOLEI_DOCKER_INSTANCE={instance}"
+    if re.search(r"^#?\s*SOLEI_DOCKER_INSTANCE\s*=", content, re.MULTILINE):
         content = re.sub(
-            r"^#?\s*POLAR_DOCKER_INSTANCE\s*=.*$",
+            r"^#?\s*SOLEI_DOCKER_INSTANCE\s*=.*$",
             new_line,
             content,
             flags=re.MULTILINE,
@@ -58,14 +58,14 @@ def _write_stored_instance(instance: int) -> None:
 
 
 def _clear_stored_instance() -> bool:
-    """Comment out POLAR_DOCKER_INSTANCE in .env.docker. Returns True if found."""
+    """Comment out SOLEI_DOCKER_INSTANCE in .env.docker. Returns True if found."""
     if not ENV_FILE.exists():
         return False
     content = ENV_FILE.read_text()
-    if re.search(r"^POLAR_DOCKER_INSTANCE\s*=", content, re.MULTILINE):
+    if re.search(r"^SOLEI_DOCKER_INSTANCE\s*=", content, re.MULTILINE):
         content = re.sub(
-            r"^POLAR_DOCKER_INSTANCE\s*=.*$",
-            "# POLAR_DOCKER_INSTANCE=",
+            r"^SOLEI_DOCKER_INSTANCE\s*=.*$",
+            "# SOLEI_DOCKER_INSTANCE=",
             content,
             flags=re.MULTILINE,
         )
@@ -78,7 +78,7 @@ def _detect_instance() -> tuple[int, str]:
     """Auto-detect instance number from environment.
 
     Priority:
-    1. POLAR_DOCKER_INSTANCE in .env.docker
+    1. SOLEI_DOCKER_INSTANCE in .env.docker
     2. CONDUCTOR_PORT env var → (port - 55000) / 10 + 1
     3. Workspace path hash → stable instance derived from ROOT_DIR
 
@@ -137,13 +137,13 @@ def _ensure_server_env() -> None:
     central_secrets = _load_central_secrets()
 
     # Map backend secrets to frontend env vars
-    if "POLAR_STRIPE_PUBLISHABLE_KEY" in central_secrets:
+    if "SOLEI_STRIPE_PUBLISHABLE_KEY" in central_secrets:
         central_secrets["NEXT_PUBLIC_STRIPE_KEY"] = central_secrets[
-            "POLAR_STRIPE_PUBLISHABLE_KEY"
+            "SOLEI_STRIPE_PUBLISHABLE_KEY"
         ]
-    if "POLAR_GITHUB_APP_NAMESPACE" in central_secrets:
+    if "SOLEI_GITHUB_APP_NAMESPACE" in central_secrets:
         central_secrets["NEXT_PUBLIC_GITHUB_APP_NAMESPACE"] = central_secrets[
-            "POLAR_GITHUB_APP_NAMESPACE"
+            "SOLEI_GITHUB_APP_NAMESPACE"
         ]
 
     with open(SERVER_ENV_FILE, "w") as f:

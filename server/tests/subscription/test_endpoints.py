@@ -4,18 +4,18 @@ from datetime import UTC, datetime, timedelta
 import pytest
 from httpx import AsyncClient
 
-from polar.enums import SubscriptionRecurringInterval
-from polar.models import (
+from solei.enums import SubscriptionRecurringInterval
+from solei.models import (
     Customer,
     Organization,
     Product,
     Subscription,
     UserOrganization,
 )
-from polar.models.customer_seat import SeatStatus
-from polar.models.product import ProductVisibility
-from polar.models.subscription import SubscriptionStatus
-from polar.postgres import AsyncSession
+from solei.models.customer_seat import SeatStatus
+from solei.models.product import ProductVisibility
+from solei.models.subscription import SubscriptionStatus
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_active_subscription,

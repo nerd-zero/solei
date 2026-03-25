@@ -4,11 +4,11 @@ import pytest
 from httpx import AsyncClient
 from pytest_mock import MockerFixture
 
-from polar.models import Organization, User, UserOrganization
-from polar.models.transaction import TransactionType
-from polar.payout.endpoints import payout_service  # type: ignore[attr-defined]
-from polar.payout.service import PayoutService
-from polar.postgres import AsyncSession
+from solei.models import Organization, User, UserOrganization
+from solei.models.transaction import TransactionType
+from solei.payout.endpoints import payout_service  # type: ignore[attr-defined]
+from solei.payout.service import PayoutService
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_account, create_payout
 from tests.transaction.conftest import create_transaction

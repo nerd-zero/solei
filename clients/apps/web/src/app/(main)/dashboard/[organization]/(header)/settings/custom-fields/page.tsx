@@ -7,7 +7,7 @@ import CustomFieldsPage from './CustomFieldsPage'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Custom Fields', // " | Polar is added by the template"
+    title: 'Custom Fields', // " | Solei is added by the template"
   }
 }
 

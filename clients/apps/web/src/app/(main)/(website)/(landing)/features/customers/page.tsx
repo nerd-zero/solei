@@ -2,17 +2,17 @@ import { CustomersPage } from '@/components/Landing/features/CustomersPage'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Customer Management — Polar',
+  title: 'Customer Management — Solei',
   description:
     'Streamlined customer lifecycle management with detailed profiles, subscription management, and customer analytics.',
   keywords:
     'customer management, customer portal, subscription management, customer analytics, saas customers',
   openGraph: {
-    siteName: 'Polar',
+    siteName: 'Solei',
     type: 'website',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
       },
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Polar',
+        alt: 'Solei',
       },
     ],
   },

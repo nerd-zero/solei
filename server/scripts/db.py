@@ -7,7 +7,7 @@ from alembic.command import upgrade as alembic_upgrade
 from alembic.config import Config
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
-from polar.config import settings
+from solei.config import settings
 
 cli = typer.Typer()
 

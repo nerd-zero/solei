@@ -55,22 +55,22 @@ from sqlalchemy import String, func, or_, select, update
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.orm import aliased, joinedload
 
-from polar.customer.repository import CustomerRepository
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.member.repository import MemberRepository
-from polar.models import Customer, CustomerSeat, Organization
-from polar.models.benefit_grant import BenefitGrant
-from polar.models.customer_seat import SeatStatus
-from polar.models.member import Member
-from polar.organization.repository import OrganizationRepository
-from polar.organization.tasks import (
+from solei.customer.repository import CustomerRepository
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.member.repository import MemberRepository
+from solei.models import Customer, CustomerSeat, Organization
+from solei.models.benefit_grant import BenefitGrant
+from solei.models.customer_seat import SeatStatus
+from solei.models.member import Member
+from solei.organization.repository import OrganizationRepository
+from solei.organization.tasks import (
     _backfill_benefit_grants,
     _backfill_owner_members,
     _backfill_seats,
     _cleanup_orphaned_seat_customers,
     _get_or_create_member_for_backfill,
 )
-from polar.postgres import AsyncSession, create_async_engine
+from solei.postgres import AsyncSession, create_async_engine
 
 cli = typer.Typer()
 
@@ -463,7 +463,7 @@ async def _prepare_seats(
     or set customer.type = team. It only adds member references
     so merchants can start reading them during Phase 1.
     """
-    from polar.models import Order, Product, Subscription
+    from solei.models import Order, Product, Subscription
 
     member_repository = MemberRepository.from_session(session)
     customer_repo = CustomerRepository.from_session(session)
@@ -590,7 +590,7 @@ async def _prepare_benefit_grants(
     Since seat.customer_id is unchanged (prepare didn't rewrite it), we can
     match seats by customer_id + subscription/order to find the right member.
     """
-    from polar.models import Order, Subscription
+    from solei.models import Order, Subscription
 
     member_repository = MemberRepository.from_session(session)
 
@@ -863,7 +863,7 @@ async def find_deleted_oneoff_grants(
 
     When eager_load=True, the customer and benefit relationships are loaded.
     """
-    from polar.models import Benefit
+    from solei.models import Benefit
 
     sibling = aliased(BenefitGrant)
     sibling_exists = (
@@ -916,8 +916,8 @@ async def restore_oneoff_grant_batch(
 
     Returns (grants_restored, license_keys_restored).
     """
-    from polar.kit.utils import utc_now
-    from polar.models.license_key import LicenseKey, LicenseKeyStatus
+    from solei.kit.utils import utc_now
+    from solei.models.license_key import LicenseKey, LicenseKeyStatus
 
     # Re-fetch with qualifying filters so the function is safe
     # regardless of what IDs are passed in.
@@ -1112,7 +1112,7 @@ async def restore_oneoff_grants(
 
 async def _backfill_license_keys(session: AsyncSession) -> int:
     """Backfill member_id on license keys using the grant's properties->>'license_key_id'."""
-    from polar.models.license_key import LicenseKey
+    from solei.models.license_key import LicenseKey
 
     lk_subq = (
         select(
@@ -1146,7 +1146,7 @@ async def _backfill_downloadables(session: AsyncSession) -> int:
 
     Uses DISTINCT ON to pick the most recently granted grant.
     """
-    from polar.models.downloadable import Downloadable
+    from solei.models.downloadable import Downloadable
 
     dl_subq = (
         select(
@@ -1198,8 +1198,8 @@ async def backfill_benefit_records(
     Downloadables are matched via (customer_id, benefit_id) with DISTINCT ON
     to pick the most recently granted grant.
     """
-    from polar.models.downloadable import Downloadable
-    from polar.models.license_key import LicenseKey
+    from solei.models.downloadable import Downloadable
+    from solei.models.license_key import LicenseKey
 
     engine = create_async_engine("script")
     sessionmaker = create_async_sessionmaker(engine)

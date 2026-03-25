@@ -21,7 +21,7 @@ METER_SLUG_WEIGHTS = [0.6, 0.4]
 def generate_random_email() -> str:
     """Generate a random test email address."""
     random_str = "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
-    return f"loadtest+{random_str}@polar.sh"
+    return f"loadtest+{random_str}@solei.to"
 
 
 def generate_customer_data() -> dict[str, Any]:

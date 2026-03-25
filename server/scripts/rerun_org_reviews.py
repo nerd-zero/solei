@@ -44,20 +44,20 @@ import structlog
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
-import polar.tasks  # noqa: F401 — registers actors with dramatiq
-from polar.integrations.plain.service import plain as plain_service
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Organization
-from polar.models.organization import OrganizationStatus
-from polar.organization.repository import OrganizationRepository
-from polar.organization.service import organization as organization_service
-from polar.organization_review.agent import run_organization_review
-from polar.organization_review.report import build_agent_report
-from polar.organization_review.repository import OrganizationReviewRepository
-from polar.organization_review.schemas import ReviewContext, ReviewVerdict
-from polar.postgres import create_async_engine
-from polar.redis import create_redis
-from polar.worker import JobQueueManager
+import solei.tasks  # noqa: F401 — registers actors with dramatiq
+from solei.integrations.plain.service import plain as plain_service
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Organization
+from solei.models.organization import OrganizationStatus
+from solei.organization.repository import OrganizationRepository
+from solei.organization.service import organization as organization_service
+from solei.organization_review.agent import run_organization_review
+from solei.organization_review.report import build_agent_report
+from solei.organization_review.repository import OrganizationReviewRepository
+from solei.organization_review.schemas import ReviewContext, ReviewVerdict
+from solei.postgres import create_async_engine
+from solei.redis import create_redis
+from solei.worker import JobQueueManager
 
 log = structlog.get_logger()
 
@@ -105,7 +105,7 @@ async def process_organizations(
             statement = statement.where(Organization.id == org_id)
 
         if only_unreviewed:
-            from polar.models.organization_agent_review import (
+            from solei.models.organization_agent_review import (
                 OrganizationAgentReview,
             )
 

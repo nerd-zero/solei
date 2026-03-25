@@ -4,10 +4,10 @@ import pytest
 from httpx import AsyncClient
 from pytest_mock import MockerFixture
 
-from polar.integrations.stripe.service import StripeService
-from polar.models import Customer, Product
-from polar.models.subscription import SubscriptionStatus
-from polar.postgres import AsyncSession
+from solei.integrations.stripe.service import StripeService
+from solei.models import Customer, Product
+from solei.models.subscription import SubscriptionStatus
+from solei.postgres import AsyncSession
 from tests.fixtures.auth import CUSTOMER_AUTH_SUBJECT
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
@@ -20,7 +20,7 @@ from tests.fixtures.random_objects import (
 @pytest.fixture(autouse=True)
 def stripe_service_mock(mocker: MockerFixture) -> MagicMock:
     mock = MagicMock(spec=StripeService)
-    mocker.patch("polar.payment_method.service.stripe_service", new=mock)
+    mocker.patch("solei.payment_method.service.stripe_service", new=mock)
     return mock
 
 

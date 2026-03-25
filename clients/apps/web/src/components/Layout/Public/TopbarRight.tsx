@@ -47,7 +47,7 @@ const TopbarRight = ({
           <GetStartedButton
             className="hidden md:flex"
             size="default"
-            text="Sell with Polar"
+            text="Sell with Solei"
           />
 
           <Modal

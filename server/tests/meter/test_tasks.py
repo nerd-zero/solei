@@ -4,15 +4,15 @@ import pytest
 from pytest_mock import MockerFixture
 from sqlalchemy import func, select
 
-from polar.meter.aggregation import CountAggregation
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.meter.tasks import (
+from solei.meter.aggregation import CountAggregation
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.meter.tasks import (
     BACKFILL_BATCH_SIZE,
     MeterDoesNotExist,
     meter_backfill_events,
 )
-from polar.models import MeterEvent, Organization
-from polar.postgres import AsyncSession
+from solei.models import MeterEvent, Organization
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer, create_event, create_meter
 
@@ -71,7 +71,7 @@ class TestMeterBackfillEvents:
 
         session.expunge_all()
 
-        enqueue_job_mock = mocker.patch("polar.meter.tasks.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.meter.tasks.enqueue_job")
 
         await meter_backfill_events(meter.id)
 
@@ -172,7 +172,7 @@ class TestMeterBackfillEvents:
 
         session.expunge_all()
 
-        enqueue_job_mock = mocker.patch("polar.meter.tasks.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.meter.tasks.enqueue_job")
 
         await meter_backfill_events(meter.id)
 

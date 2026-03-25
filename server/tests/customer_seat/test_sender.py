@@ -1,8 +1,8 @@
 from pytest_mock import MockerFixture
 
-from polar.customer_seat.sender import send_seat_invitation_email
-from polar.email.schemas import SeatInvitationEmail
-from polar.models import CustomerSeat, Organization
+from solei.customer_seat.sender import send_seat_invitation_email
+from solei.email.schemas import SeatInvitationEmail
+from solei.models import CustomerSeat, Organization
 
 
 class TestSendSeatInvitationEmail:
@@ -12,7 +12,7 @@ class TestSendSeatInvitationEmail:
         customer_seat_pending: CustomerSeat,
         seat_enabled_organization: Organization,
     ) -> None:
-        mock_enqueue = mocker.patch("polar.customer_seat.sender.enqueue_email_template")
+        mock_enqueue = mocker.patch("solei.customer_seat.sender.enqueue_email_template")
 
         send_seat_invitation_email(
             customer_email="test@example.com",
@@ -41,8 +41,8 @@ class TestSendSeatInvitationEmail:
     ) -> None:
         customer_seat_claimed.invitation_token = None
 
-        mock_enqueue = mocker.patch("polar.customer_seat.sender.enqueue_email_template")
-        mock_log = mocker.patch("polar.customer_seat.sender.log")
+        mock_enqueue = mocker.patch("solei.customer_seat.sender.enqueue_email_template")
+        mock_log = mocker.patch("solei.customer_seat.sender.log")
 
         send_seat_invitation_email(
             customer_email="test@example.com",
@@ -61,7 +61,7 @@ class TestSendSeatInvitationEmail:
         customer_seat_pending: CustomerSeat,
         seat_enabled_organization: Organization,
     ) -> None:
-        mock_enqueue = mocker.patch("polar.customer_seat.sender.enqueue_email_template")
+        mock_enqueue = mocker.patch("solei.customer_seat.sender.enqueue_email_template")
 
         send_seat_invitation_email(
             customer_email="test@example.com",

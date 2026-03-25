@@ -14,7 +14,7 @@ import {
   useGetNotificationRecipient,
 } from './polar/notifications'
 
-const widgetStorage = new ExtensionStorage('group.com.polarsource.Polar')
+const widgetStorage = new ExtensionStorage('group.to.solei.Solei')
 
 export const useLogout = () => {
   const { session, setSession } = useSession()

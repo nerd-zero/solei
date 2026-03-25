@@ -4,10 +4,10 @@ from typing import Any
 import pytest
 from pydantic import TypeAdapter, ValidationError
 
-from polar.enums import SubscriptionRecurringInterval
-from polar.kit.currency import PresentmentCurrency
-from polar.models.product_price import ProductPriceAmountType
-from polar.product.schemas import (
+from solei.enums import SubscriptionRecurringInterval
+from solei.kit.currency import PresentmentCurrency
+from solei.models.product_price import ProductPriceAmountType
+from solei.product.schemas import (
     ProductCreate,
     ProductCreateOneTime,
     ProductCreateRecurring,

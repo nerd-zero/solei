@@ -6,17 +6,17 @@ from unittest.mock import MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.config import settings
-from polar.exceptions import PolarRequestValidationError
-from polar.integrations.stripe.service import StripeService
-from polar.kit.address import Address, CountryAlpha2
-from polar.kit.utils import utc_now
-from polar.locker import Locker
-from polar.models import Organization, Transaction, User
-from polar.models.payout import PayoutStatus
-from polar.models.transaction import Processor, TransactionType
-from polar.payout.schemas import PayoutGenerateInvoice
-from polar.payout.service import (
+from solei.config import settings
+from solei.exceptions import SoleiRequestValidationError
+from solei.integrations.stripe.service import StripeService
+from solei.kit.address import Address, CountryAlpha2
+from solei.kit.utils import utc_now
+from solei.locker import Locker
+from solei.models import Organization, Transaction, User
+from solei.models.payout import PayoutStatus
+from solei.models.transaction import Processor, TransactionType
+from solei.payout.schemas import PayoutGenerateInvoice
+from solei.payout.service import (
     InsufficientBalance,
     InvoiceAlreadyExists,
     MissingInvoiceBillingDetails,
@@ -24,12 +24,12 @@ from polar.payout.service import (
     PayoutNotCancelable,
     PayoutNotSucceeded,
 )
-from polar.payout.service import payout as payout_service
-from polar.postgres import AsyncSession
-from polar.transaction.repository import (
+from solei.payout.service import payout as payout_service
+from solei.postgres import AsyncSession
+from solei.transaction.repository import (
     PayoutTransactionRepository,
 )
-from polar.transaction.service.payout import (
+from solei.transaction.service.payout import (
     PayoutTransactionService,
 )
 from tests.fixtures import random_objects as ro
@@ -41,14 +41,14 @@ from tests.transaction.conftest import create_transaction
 @pytest.fixture(autouse=True)
 def payout_transaction_service_mock(mocker: MockerFixture) -> MagicMock:
     mock = MagicMock(spec=PayoutTransactionService)
-    mocker.patch("polar.payout.service.payout_transaction_service", new=mock)
+    mocker.patch("solei.payout.service.payout_transaction_service", new=mock)
     return mock
 
 
 @pytest.fixture(autouse=True)
 def stripe_service_mock(mocker: MockerFixture) -> MagicMock:
     mock = MagicMock(spec=StripeService)
-    mocker.patch("polar.payout.service.stripe_service", new=mock)
+    mocker.patch("solei.payout.service.stripe_service", new=mock)
     return mock
 
 
@@ -235,7 +235,7 @@ class TestEstimate:
     ) -> None:
         """Test that regular currencies return net_amount unchanged."""
         mocker.patch(
-            "polar.payout.service.platform_fee_transaction_service.get_payout_fees",
+            "solei.payout.service.platform_fee_transaction_service.get_payout_fees",
             return_value=[],
         )
 
@@ -260,7 +260,7 @@ class TestTriggerStripePayouts:
         organization_second: Organization,
         user_second: User,
     ) -> None:
-        enqueue_job_mock = mocker.patch("polar.payout.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.payout.service.enqueue_job")
 
         account_1 = await create_account(save_fixture, organization, user)
         account_2 = await create_account(save_fixture, organization_second, user_second)
@@ -558,7 +558,7 @@ class TestTriggerInvoiceGeneration:
         await save_fixture(payout2)
 
         # Try to set the same invoice number on the second payout
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await payout_service.trigger_invoice_generation(
                 session, payout2, PayoutGenerateInvoice(invoice_number=invoice_number)
             )
@@ -571,7 +571,7 @@ class TestTriggerInvoiceGeneration:
         organization: Organization,
         user: User,
     ) -> None:
-        enqueue_job_mock = mocker.patch("polar.payout.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.payout.service.enqueue_job")
 
         account = await create_account(
             save_fixture,
@@ -604,7 +604,7 @@ class TestTriggerInvoiceGeneration:
         organization: Organization,
         user: User,
     ) -> None:
-        enqueue_job_mock = mocker.patch("polar.payout.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.payout.service.enqueue_job")
 
         account = await create_account(
             save_fixture,
@@ -614,7 +614,7 @@ class TestTriggerInvoiceGeneration:
             billing_address=Address(country=CountryAlpha2("US"), line1="123 Test St"),
         )
 
-        original_invoice_number = "POLAR-12345"
+        original_invoice_number = "SOLEI-12345"
         payout = await create_payout(
             save_fixture,
             account=account,

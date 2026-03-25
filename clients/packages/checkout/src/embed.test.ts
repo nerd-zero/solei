@@ -6,7 +6,7 @@ const ALLOWED_ORIGIN = 'http://127.0.0.1:3000'
 beforeAll(() => {
   // Define the build-time global that embed.ts expects
   // @ts-expect-error - Global defined at build time by tsup
-  globalThis.__POLAR_CHECKOUT_EMBED_SCRIPT_ALLOWED_ORIGINS__ = ALLOWED_ORIGIN
+  globalThis.__SOLEI_CHECKOUT_EMBED_SCRIPT_ALLOWED_ORIGINS__ = ALLOWED_ORIGIN
 })
 
 describe('PolarEmbedCheckout', () => {
@@ -61,7 +61,7 @@ describe('PolarEmbedCheckout', () => {
 
     it('creates an iframe with the correct src', async () => {
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       // Simulate the loaded event from the iframe
@@ -87,7 +87,7 @@ describe('PolarEmbedCheckout', () => {
 
     it('sets theme query parameter when provided', async () => {
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
         { theme: 'dark' },
       )
 
@@ -109,7 +109,7 @@ describe('PolarEmbedCheckout', () => {
 
     it('adds polar-no-scroll class to body', async () => {
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       expect(document.body.classList.contains('polar-no-scroll')).toBe(true)
@@ -129,7 +129,7 @@ describe('PolarEmbedCheckout', () => {
       const onLoaded = vi.fn()
 
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
         { onLoaded },
       )
 
@@ -158,7 +158,7 @@ describe('PolarEmbedCheckout', () => {
 
     it('removes the iframe from the DOM', async () => {
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       window.dispatchEvent(
@@ -179,7 +179,7 @@ describe('PolarEmbedCheckout', () => {
 
     it('removes polar-no-scroll class from body', async () => {
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       window.dispatchEvent(
@@ -206,7 +206,7 @@ describe('PolarEmbedCheckout', () => {
 
     it('dispatches close event and removes iframe', async () => {
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       window.dispatchEvent(
@@ -233,7 +233,7 @@ describe('PolarEmbedCheckout', () => {
 
     it('prevents close after confirmed event', async () => {
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       window.dispatchEvent(
@@ -271,7 +271,7 @@ describe('PolarEmbedCheckout', () => {
       const closeListener = vi.fn()
 
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       window.dispatchEvent(
@@ -301,7 +301,7 @@ describe('PolarEmbedCheckout', () => {
       const closeListener = vi.fn()
 
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       window.dispatchEvent(
@@ -328,7 +328,7 @@ describe('PolarEmbedCheckout', () => {
 
     it('re-enables closing after success event', async () => {
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       window.dispatchEvent(
@@ -387,7 +387,7 @@ describe('PolarEmbedCheckout', () => {
       const listener = vi.fn()
 
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       window.dispatchEvent(
@@ -416,7 +416,7 @@ describe('PolarEmbedCheckout', () => {
       const listener = vi.fn()
 
       const promise = PolarEmbedCheckout.create(
-        'https://buy.polar.sh/polar_cl_123',
+        'https://buy.solei.to/polar_cl_123',
       )
 
       window.dispatchEvent(
@@ -456,7 +456,7 @@ describe('PolarEmbedCheckout', () => {
 
     it('attaches click handlers to elements with data-polar-checkout', () => {
       const link = document.createElement('a')
-      link.href = 'https://buy.polar.sh/polar_cl_123'
+      link.href = 'https://buy.solei.to/polar_cl_123'
       link.setAttribute('data-polar-checkout', '')
       document.body.appendChild(link)
 
@@ -470,10 +470,10 @@ describe('PolarEmbedCheckout', () => {
     })
   })
 
-  describe('window.Polar', () => {
-    it('exposes EmbedCheckout on window.Polar', () => {
-      expect(window.Polar).toBeDefined()
-      expect(window.Polar.EmbedCheckout).toBe(PolarEmbedCheckout)
+  describe('window.Solei', () => {
+    it('exposes EmbedCheckout on window.Solei', () => {
+      expect(window.Solei).toBeDefined()
+      expect(window.Solei.EmbedCheckout).toBe(PolarEmbedCheckout)
     })
   })
 })

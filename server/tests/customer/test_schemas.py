@@ -3,9 +3,9 @@ from typing import Any
 
 import pytest
 
-from polar.customer.schemas.customer import Customer
-from polar.customer.schemas.state import CustomerState
-from polar.models import Organization
+from solei.customer.schemas.customer import Customer
+from solei.customer.schemas.state import CustomerState
+from solei.models import Organization
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer
 

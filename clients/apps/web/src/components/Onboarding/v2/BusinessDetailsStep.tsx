@@ -94,7 +94,7 @@ function SlugPreview({
 
   return (
     <span className="dark:text-polar-500 flex items-center gap-1 text-xs text-gray-400">
-      <span>polar.sh/</span>
+      <span>solei.to/</span>
       {editingSlug ? (
         <input
           value={orgSlug}
@@ -300,7 +300,7 @@ export function BusinessDetailsStep() {
             name="organizationType"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Using Polar as</FormLabel>
+                <FormLabel>Using Solei as</FormLabel>
                 <FormControl>
                   <Tabs
                     value={field.value}
@@ -382,9 +382,9 @@ export function BusinessDetailsStep() {
                       htmlFor="terms"
                       className="cursor-pointer leading-snug font-medium"
                     >
-                      I agree to Polar&apos;s{' '}
+                      I agree to Solei&apos;s{' '}
                       <a
-                        href="https://polar.sh/legal/terms"
+                        href="https://solei.to/legal/terms"
                         className="text-gray-900 underline dark:text-white"
                         target="_blank"
                         rel="noreferrer"
@@ -393,7 +393,7 @@ export function BusinessDetailsStep() {
                       </a>
                       ,{' '}
                       <a
-                        href="https://polar.sh/legal/privacy"
+                        href="https://solei.to/legal/privacy"
                         className="text-gray-900 underline dark:text-white"
                         target="_blank"
                         rel="noreferrer"
@@ -402,7 +402,7 @@ export function BusinessDetailsStep() {
                       </a>{' '}
                       &amp;{' '}
                       <a
-                        href="https://polar.sh/docs/merchant-of-record/account-reviews"
+                        href="https://solei.to/docs/merchant-of-record/account-reviews"
                         className="text-gray-900 underline dark:text-white"
                         target="_blank"
                         rel="noreferrer"

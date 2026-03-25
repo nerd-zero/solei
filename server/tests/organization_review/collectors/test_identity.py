@@ -4,9 +4,9 @@ import pytest
 import stripe as stripe_lib
 from pytest_mock import MockerFixture
 
-from polar.models.user import IdentityVerificationStatus
-from polar.organization_review.collectors.identity import collect_identity_data
-from polar.organization_review.schemas import IdentityData
+from solei.models.user import IdentityVerificationStatus
+from solei.organization_review.collectors.identity import collect_identity_data
+from solei.organization_review.schemas import IdentityData
 
 
 def _build_account(
@@ -60,7 +60,7 @@ class TestCollectIdentityData:
             }
         )
         mocker.patch(
-            "polar.organization_review.collectors.identity.stripe_service.get_verification_session",
+            "solei.organization_review.collectors.identity.stripe_service.get_verification_session",
             return_value=vs,
         )
 
@@ -90,7 +90,7 @@ class TestCollectIdentityData:
             }
         )
         mocker.patch(
-            "polar.organization_review.collectors.identity.stripe_service.get_verification_session",
+            "solei.organization_review.collectors.identity.stripe_service.get_verification_session",
             return_value=vs,
         )
 
@@ -121,7 +121,7 @@ class TestCollectIdentityData:
             }
         )
         mocker.patch(
-            "polar.organization_review.collectors.identity.stripe_service.get_verification_session",
+            "solei.organization_review.collectors.identity.stripe_service.get_verification_session",
             return_value=vs,
         )
 
@@ -146,7 +146,7 @@ class TestCollectIdentityData:
             }
         )
         mocker.patch(
-            "polar.organization_review.collectors.identity.stripe_service.get_verification_session",
+            "solei.organization_review.collectors.identity.stripe_service.get_verification_session",
             return_value=vs,
         )
 
@@ -158,7 +158,7 @@ class TestCollectIdentityData:
     async def test_stripe_error_handled(self, mocker: MockerFixture) -> None:
         account = _build_account()
         mocker.patch(
-            "polar.organization_review.collectors.identity.stripe_service.get_verification_session",
+            "solei.organization_review.collectors.identity.stripe_service.get_verification_session",
             side_effect=stripe_lib.StripeError("API error"),
         )
 

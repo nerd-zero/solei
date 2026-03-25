@@ -7,10 +7,10 @@ import typer
 from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 from sqlalchemy import select, text
 
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Organization
-from polar.postgres import create_async_engine
 from scripts.helper import configure_script_logging
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Organization
+from solei.postgres import create_async_engine
 
 cli = typer.Typer()
 

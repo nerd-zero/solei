@@ -22,9 +22,9 @@ export const EventCostCreationGuideModal = () => {
         <Well className="dark:bg-polar-800 rounded-lg bg-gray-100 p-4 text-sm">
           <SyntaxHighlighterClient
             lang="typescript"
-            code={`import { Polar } from "@polar-sh/sdk";
+            code={`import { Solei } from "@polar-sh/sdk";
 
-const polar = new Polar({
+const polar = new Solei({
   accessToken: process.env["POLAR_ACCESS_TOKEN"] ?? "",
 });
 
@@ -47,7 +47,7 @@ const result = await polar.events.ingest({
         </Well>
         <div className="flex flex-row items-center gap-x-4">
           <Link
-            href="https://docs.polar.sh/features/cost-insights/cost-events"
+            href="https://docs.solei.to/features/cost-insights/cost-events"
             target="_blank"
             className="flex flex-row items-center"
           >

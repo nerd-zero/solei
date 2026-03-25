@@ -5,9 +5,9 @@ from uuid import uuid4
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.event.tinybird_repository import TinybirdEventRepository
-from polar.integrations.tinybird.service import TinybirdEventTypeStats
-from polar.models.event import EventSource
+from solei.event.tinybird_repository import TinybirdEventRepository
+from solei.integrations.tinybird.service import TinybirdEventTypeStats
+from solei.models.event import EventSource
 
 
 @pytest.mark.asyncio
@@ -30,12 +30,12 @@ class TestTinybirdEventRepository:
         ]
 
         materialized_view_mock = mocker.patch(
-            "polar.event.tinybird_repository.TinybirdEventTypesQuery.get_event_type_stats",
+            "solei.event.tinybird_repository.TinybirdEventTypesQuery.get_event_type_stats",
             new_callable=AsyncMock,
             return_value=expected,
         )
         raw_table_mock = mocker.patch(
-            "polar.event.tinybird_repository.TinybirdEventsQuery.get_event_type_stats",
+            "solei.event.tinybird_repository.TinybirdEventsQuery.get_event_type_stats",
             new_callable=AsyncMock,
         )
 
@@ -67,12 +67,12 @@ class TestTinybirdEventRepository:
         ]
 
         raw_table_mock = mocker.patch(
-            "polar.event.tinybird_repository.TinybirdEventsQuery.get_event_type_stats",
+            "solei.event.tinybird_repository.TinybirdEventsQuery.get_event_type_stats",
             new_callable=AsyncMock,
             return_value=expected,
         )
         materialized_view_mock = mocker.patch(
-            "polar.event.tinybird_repository.TinybirdEventTypesQuery.get_event_type_stats",
+            "solei.event.tinybird_repository.TinybirdEventTypesQuery.get_event_type_stats",
             new_callable=AsyncMock,
         )
 
@@ -91,7 +91,7 @@ class TestTinybirdEventRepository:
     ) -> None:
         repository = TinybirdEventRepository()
         query_mock = mocker.patch(
-            "polar.event.tinybird_repository.TinybirdEventsQuery.get_event_ids_and_count",
+            "solei.event.tinybird_repository.TinybirdEventsQuery.get_event_ids_and_count",
             new_callable=AsyncMock,
             return_value=(["event-id"], 1),
         )

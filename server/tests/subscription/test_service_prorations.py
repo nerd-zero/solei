@@ -8,24 +8,24 @@ import pytest
 from dateutil.relativedelta import relativedelta
 from pytest_mock import MockerFixture
 
-from polar.billing_entry.repository import BillingEntryRepository
-from polar.enums import SubscriptionProrationBehavior, SubscriptionRecurringInterval
-from polar.event.repository import EventRepository
-from polar.event.system import SystemEvent
-from polar.models import (
+from solei.billing_entry.repository import BillingEntryRepository
+from solei.enums import SubscriptionProrationBehavior, SubscriptionRecurringInterval
+from solei.event.repository import EventRepository
+from solei.event.system import SystemEvent
+from solei.models import (
     Customer,
     Event,
     Meter,
     Organization,
     Subscription,
 )
-from polar.models.billing_entry import BillingEntryDirection
-from polar.postgres import AsyncSession
-from polar.product.guard import (
+from solei.models.billing_entry import BillingEntryDirection
+from solei.postgres import AsyncSession
+from solei.product.guard import (
     is_fixed_price,
     is_free_price,
 )
-from polar.subscription.service import subscription as subscription_service
+from solei.subscription.service import subscription as subscription_service
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_active_subscription,

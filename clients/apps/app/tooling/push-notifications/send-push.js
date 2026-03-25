@@ -4,7 +4,7 @@ const path = require('path')
 // eslint-disable-next-line no-undef
 const TEMP_FILE = path.join(__dirname, '.push-payload-temp.json')
 const payloads = require('./push-payload')
-const BUNDLE_ID = 'com.polarsource.Polar'
+const BUNDLE_ID = 'to.solei.Solei'
 
 // Update this with one of the push notification names in push-payload.js
 const SELECTED_PUSH_NOTIFICATION = 'newOrder'

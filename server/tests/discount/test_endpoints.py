@@ -3,15 +3,15 @@ from typing import Any
 import pytest
 from httpx import AsyncClient
 
-from polar.discount.repository import DiscountRepository
-from polar.models import Organization, UserOrganization
-from polar.models.discount import (
+from solei.discount.repository import DiscountRepository
+from solei.models import Organization, UserOrganization
+from solei.models.discount import (
     DiscountDuration,
     DiscountFixed,
     DiscountPercentage,
     DiscountType,
 )
-from polar.postgres import AsyncSession
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_discount
 

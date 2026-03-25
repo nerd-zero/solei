@@ -10,8 +10,8 @@ import sqlalchemy as sa
 from alembic import op
 from sqlalchemy.dialects import postgresql
 
-# Polar Custom Imports
-import polar.kit.address
+# Solei Custom Imports
+import solei.kit.address
 
 # revision identifiers, used by Alembic.
 revision = "5f981f48beef"
@@ -47,7 +47,7 @@ def upgrade() -> None:
         sa.Column("customer_ip_address", sa.String(), nullable=True),
         sa.Column(
             "customer_billing_address",
-            polar.kit.address.AddressType(astext_type=sa.Text()),
+            solei.kit.address.AddressType(astext_type=sa.Text()),
             nullable=True,
         ),
         sa.Column("id", sa.Uuid(), nullable=False),

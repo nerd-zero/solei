@@ -2,16 +2,16 @@ import { PolarVsLemonSqueezyPage } from '@/components/Landing/comparison/PolarLe
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Polar vs Lemon Squeezy',
-  description: 'Comparing Polar and Lemon Squeezy',
+  title: 'Solei vs Lemon Squeezy',
+  description: 'Comparing Solei and Lemon Squeezy',
   keywords:
     'polar vs lemon squeezy, lemon squeezy, polar, comparison, pricing, pricing for polar, pricing for polar, pricing for polar',
   openGraph: {
-    siteName: 'Polar',
+    siteName: 'Solei',
     type: 'website',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
       },
@@ -21,10 +21,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Polar',
+        alt: 'Solei',
       },
     ],
   },

@@ -9,7 +9,7 @@ import { createContext, PropsWithChildren, useEffect, useMemo } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { useSession } from './SessionProvider'
 
-const storage = new ExtensionStorage('group.com.polarsource.Polar')
+const storage = new ExtensionStorage('group.to.solei.Solei')
 
 export interface OrganizationContextValue {
   isLoading: boolean

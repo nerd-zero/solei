@@ -177,7 +177,7 @@ class EmbedCheckout {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const origins = __POLAR_CHECKOUT_EMBED_SCRIPT_ALLOWED_ORIGINS__
+    const origins = __SOLEI_CHECKOUT_EMBED_SCRIPT_ALLOWED_ORIGINS__
       .split(',')
       .join(' ')
     iframe.allow = `payment 'self' ${origins}; publickey-credentials-get 'self' ${origins};`
@@ -207,7 +207,7 @@ class EmbedCheckout {
    *
    * @example
    * ```html
-   * <a href="https://buy.polar.sh/polar_cl_123" data-polar-checkout data-polar-checkout-theme="dark">Checkout</a>
+   * <a href="https://buy.solei.to/polar_cl_123" data-polar-checkout data-polar-checkout-theme="dark">Checkout</a>
    * ```
    */
   public static init(): void {
@@ -384,7 +384,7 @@ class EmbedCheckout {
     if (
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      !__POLAR_CHECKOUT_EMBED_SCRIPT_ALLOWED_ORIGINS__
+      !__SOLEI_CHECKOUT_EMBED_SCRIPT_ALLOWED_ORIGINS__
         .split(',')
         .includes(origin)
     ) {
@@ -401,14 +401,14 @@ class EmbedCheckout {
 
 declare global {
   interface Window {
-    Polar: {
+    Solei: {
       EmbedCheckout: typeof EmbedCheckout
     }
   }
 }
 
 if (typeof window !== 'undefined') {
-  window.Polar = {
+  window.Solei = {
     EmbedCheckout,
   }
 }

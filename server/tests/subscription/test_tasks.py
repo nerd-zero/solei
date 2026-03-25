@@ -3,10 +3,10 @@ import uuid
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.models import Product
-from polar.postgres import AsyncSession
-from polar.subscription.service import SubscriptionService
-from polar.subscription.tasks import (  # type: ignore[attr-defined]
+from solei.models import Product
+from solei.postgres import AsyncSession
+from solei.subscription.service import SubscriptionService
+from solei.subscription.tasks import (  # type: ignore[attr-defined]
     SubscriptionTierDoesNotExist,
     subscription_service,
     subscription_update_product_benefits_grants,

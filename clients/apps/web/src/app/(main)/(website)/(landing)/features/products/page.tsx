@@ -2,17 +2,17 @@ import { ProductsPage } from '@/components/Landing/features/ProductsPage'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Subscription billing for SaaS — Polar',
+  title: 'Subscription billing for SaaS — Solei',
   description:
     'Flexible subscription billing with multiple pricing models, trial periods, and seamless plan management.',
   keywords:
     'subscription billing, recurring payments, saas subscriptions, pricing tiers, billing management',
   openGraph: {
-    siteName: 'Polar',
+    siteName: 'Solei',
     type: 'website',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
       },
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Polar',
+        alt: 'Solei',
       },
     ],
   },

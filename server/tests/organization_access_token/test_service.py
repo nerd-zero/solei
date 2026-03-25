@@ -4,23 +4,23 @@ from unittest.mock import MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.config import settings
-from polar.email.schemas import OrganizationAccessTokenLeakedEmail
-from polar.enums import TokenType
-from polar.kit.crypto import get_token_hash
-from polar.kit.utils import utc_now
-from polar.models import Organization, OrganizationAccessToken, UserOrganization
-from polar.organization_access_token.service import (
+from solei.config import settings
+from solei.email.schemas import OrganizationAccessTokenLeakedEmail
+from solei.enums import TokenType
+from solei.kit.crypto import get_token_hash
+from solei.kit.utils import utc_now
+from solei.models import Organization, OrganizationAccessToken, UserOrganization
+from solei.organization_access_token.service import (
     organization_access_token as organization_access_token_service,
 )
-from polar.postgres import AsyncSession
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 
 
 @pytest.fixture(autouse=True)
 def enqueue_email_mock(mocker: MockerFixture) -> MagicMock:
     return mocker.patch(
-        "polar.organization_access_token.service.enqueue_email_template", autospec=True
+        "solei.organization_access_token.service.enqueue_email_template", autospec=True
     )
 
 
@@ -31,7 +31,7 @@ class TestRevokeLeaked:
     ) -> None:
         result = await organization_access_token_service.revoke_leaked(
             session,
-            "polar_pat_123",
+            "solei_pat_123",
             TokenType.organization_access_token,
             notifier="github",
             url="https://github.com",
@@ -48,7 +48,7 @@ class TestRevokeLeaked:
         user_organization: UserOrganization,
         enqueue_email_mock: MagicMock,
     ) -> None:
-        token_hash = get_token_hash("polar_pat_123", secret=settings.SECRET)
+        token_hash = get_token_hash("solei_pat_123", secret=settings.SECRET)
         organization_access_token = OrganizationAccessToken(
             comment="Test",
             token=token_hash,
@@ -60,7 +60,7 @@ class TestRevokeLeaked:
 
         result = await organization_access_token_service.revoke_leaked(
             session,
-            "polar_pat_123",
+            "solei_pat_123",
             TokenType.organization_access_token,
             notifier="github",
             url="https://github.com",

@@ -3,14 +3,14 @@ from unittest.mock import MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.customer_portal.schemas.customer import CustomerPortalCustomerUpdate
-from polar.customer_portal.service.customer import customer as customer_service
-from polar.exceptions import PolarRequestValidationError
-from polar.integrations.stripe.service import StripeService
-from polar.kit.address import Address, AddressInput, CountryAlpha2, CountryAlpha2Input
-from polar.models import Organization
-from polar.postgres import AsyncSession
-from polar.tax.tax_id import TaxIDFormat
+from solei.customer_portal.schemas.customer import CustomerPortalCustomerUpdate
+from solei.customer_portal.service.customer import customer as customer_service
+from solei.exceptions import SoleiRequestValidationError
+from solei.integrations.stripe.service import StripeService
+from solei.kit.address import Address, AddressInput, CountryAlpha2, CountryAlpha2Input
+from solei.models import Organization
+from solei.postgres import AsyncSession
+from solei.tax.tax_id import TaxIDFormat
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_customer
 
@@ -18,7 +18,7 @@ from tests.fixtures.random_objects import create_customer
 @pytest.fixture(autouse=True)
 def stripe_service_mock(mocker: MockerFixture) -> MagicMock:
     mock = MagicMock(spec=StripeService)
-    mocker.patch("polar.customer_portal.service.customer.stripe_service", new=mock)
+    mocker.patch("solei.customer_portal.service.customer.stripe_service", new=mock)
     return mock
 
 
@@ -36,7 +36,7 @@ class TestUpdate:
             billing_address=None,
             tax_id=None,
         )
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.update(
                 session,
                 customer,
@@ -57,7 +57,7 @@ class TestUpdate:
             billing_address=Address(country=CountryAlpha2("GB")),
             tax_id=None,
         )
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.update(
                 session,
                 customer,
@@ -78,7 +78,7 @@ class TestUpdate:
             billing_address=Address(country=CountryAlpha2("FR")),
             tax_id=("FR61954506077", TaxIDFormat.eu_vat),
         )
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.update(
                 session,
                 customer,
@@ -98,7 +98,7 @@ class TestUpdate:
             organization=organization,
             billing_address=Address(country=CountryAlpha2("FR")),
         )
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await customer_service.update(
                 session, customer, CustomerPortalCustomerUpdate(billing_address=None)
             )
@@ -119,11 +119,11 @@ class TestUpdate:
             session,
             customer,
             CustomerPortalCustomerUpdate(
-                billing_name="Polar Software Inc.",
+                billing_name="Nerd Zero",
             ),
         )
 
-        assert updated_customer.billing_name == "Polar Software Inc."
+        assert updated_customer.billing_name == "Nerd Zero"
 
     async def test_valid(
         self,
@@ -138,13 +138,13 @@ class TestUpdate:
             session,
             customer,
             CustomerPortalCustomerUpdate(
-                billing_name="Polar Software Inc.",
+                billing_name="Nerd Zero",
                 billing_address=AddressInput(country=CountryAlpha2Input("FR")),
                 tax_id="FR61954506077",
             ),
         )
 
-        assert updated_customer.billing_name == "Polar Software Inc."
+        assert updated_customer.billing_name == "Nerd Zero"
         assert updated_customer.billing_address is not None
         assert updated_customer.billing_address.country == "FR"
         assert updated_customer.tax_id is not None

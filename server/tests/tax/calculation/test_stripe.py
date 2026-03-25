@@ -4,9 +4,9 @@ from unittest.mock import patch
 import pytest
 import stripe as stripe_lib
 
-from polar.kit.address import Address, CountryAlpha2
-from polar.tax.calculation import TaxCalculationTechnicalError, TaxCode
-from polar.tax.calculation.stripe import stripe_tax_service
+from solei.kit.address import Address, CountryAlpha2
+from solei.tax.calculation import TaxCalculationTechnicalError, TaxCode
+from solei.tax.calculation.stripe import stripe_tax_service
 
 
 @pytest.fixture
@@ -33,11 +33,11 @@ class TestStripeCalculateTax:
 
         with (
             patch(
-                "polar.tax.calculation.stripe.stripe_service.create_tax_calculation",
+                "solei.tax.calculation.stripe.stripe_service.create_tax_calculation",
                 side_effect=rate_limit_error,
             ),
             patch(
-                "polar.tax.calculation.stripe.settings.is_sandbox", return_value=True
+                "solei.tax.calculation.stripe.settings.is_sandbox", return_value=True
             ),
         ):
             result = await stripe_tax_service.calculate(
@@ -66,11 +66,11 @@ class TestStripeCalculateTax:
 
         with (
             patch(
-                "polar.tax.calculation.stripe.stripe_service.create_tax_calculation",
+                "solei.tax.calculation.stripe.stripe_service.create_tax_calculation",
                 side_effect=rate_limit_error,
             ),
             patch(
-                "polar.tax.calculation.stripe.settings.is_sandbox", return_value=False
+                "solei.tax.calculation.stripe.settings.is_sandbox", return_value=False
             ),
         ):
             with pytest.raises(TaxCalculationTechnicalError):

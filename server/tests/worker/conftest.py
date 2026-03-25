@@ -1,7 +1,7 @@
 """Conftest for worker tests - isolated from main infrastructure fixtures.
 
 These tests use FakeRedis and mock objects, so they don't need the full
-Polar infrastructure (database, Minio, etc.). We override the session-scoped
+Solei infrastructure (database, Minio, etc.). We override the session-scoped
 autouse fixtures from the main test suite to prevent connection attempts.
 """
 

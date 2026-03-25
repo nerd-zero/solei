@@ -2,9 +2,9 @@ from datetime import datetime
 
 import typer
 
-from polar.integrations.tinybird.service import reconcile_events
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.postgres import create_async_engine
+from solei.integrations.tinybird.service import reconcile_events
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.postgres import create_async_engine
 
 from .helper import configure_script_logging, typer_async
 

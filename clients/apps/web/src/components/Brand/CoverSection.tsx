@@ -6,7 +6,7 @@ export function CoverSection() {
   return (
     <div className="relative flex h-screen w-full flex-col justify-between p-8 md:p-16">
       <div className="flex items-start justify-between">
-        <Headline as="span" text="Polar Software Inc" />
+        <Headline as="span" text="Solei Software Inc" />
         <span className="font-medium">{new Date().getFullYear()}</span>
       </div>
       <div className="absolute inset-0">

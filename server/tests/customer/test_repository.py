@@ -1,10 +1,10 @@
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.customer.repository import CustomerRepository
-from polar.models import Customer, Organization
-from polar.models.webhook_endpoint import WebhookEventType
-from polar.postgres import AsyncSession
+from solei.customer.repository import CustomerRepository
+from solei.models import Customer, Organization
+from solei.models.webhook_endpoint import WebhookEventType
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 
 
@@ -34,7 +34,7 @@ async def test_create_context(
     repository: CustomerRepository,
     organization: Organization,
 ) -> None:
-    enqueue_job_mock = mocker.patch("polar.customer.repository.enqueue_job")
+    enqueue_job_mock = mocker.patch("solei.customer.repository.enqueue_job")
 
     async with repository.create_context(
         Customer(email="customer@example.com", organization=organization)

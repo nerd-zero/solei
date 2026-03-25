@@ -3,13 +3,13 @@ import uuid
 import pytest
 from httpx import AsyncClient
 
-from polar.auth.scope import Scope
-from polar.enums import SubscriptionRecurringInterval
-from polar.models import (
+from solei.auth.scope import Scope
+from solei.enums import SubscriptionRecurringInterval
+from solei.models import (
     Organization,
     UserOrganization,
 )
-from polar.postgres import AsyncSession
+from solei.postgres import AsyncSession
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (

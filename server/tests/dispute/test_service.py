@@ -4,16 +4,16 @@ from unittest.mock import MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.benefit.grant.service import BenefitGrantService
-from polar.dispute.service import DisputePaymentNotFoundError
-from polar.dispute.service import dispute as dispute_service
-from polar.enums import PaymentProcessor
-from polar.integrations.chargeback_stop.types import ChargebackStopAlert
-from polar.models import Customer, Organization, Product
-from polar.models.dispute import DisputeAlertProcessor, DisputeStatus
-from polar.postgres import AsyncSession
-from polar.refund.service import RefundService
-from polar.transaction.service.dispute import DisputeTransactionService
+from solei.benefit.grant.service import BenefitGrantService
+from solei.dispute.service import DisputePaymentNotFoundError
+from solei.dispute.service import dispute as dispute_service
+from solei.enums import PaymentProcessor
+from solei.integrations.chargeback_stop.types import ChargebackStopAlert
+from solei.models import Customer, Organization, Product
+from solei.models.dispute import DisputeAlertProcessor, DisputeStatus
+from solei.postgres import AsyncSession
+from solei.refund.service import RefundService
+from solei.transaction.service.dispute import DisputeTransactionService
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_active_subscription,
@@ -32,20 +32,20 @@ from tests.fixtures.stripe import (
 @pytest.fixture
 def dispute_transaction_service_mock(mocker: MockerFixture) -> MagicMock:
     return mocker.patch(
-        "polar.dispute.service.dispute_transaction_service",
+        "solei.dispute.service.dispute_transaction_service",
         spec=DisputeTransactionService,
     )
 
 
 @pytest.fixture
 def refund_service_mock(mocker: MockerFixture) -> MagicMock:
-    return mocker.patch("polar.dispute.service.refund_service", spec=RefundService)
+    return mocker.patch("solei.dispute.service.refund_service", spec=RefundService)
 
 
 @pytest.fixture
 def benefit_grant_service_mock(mocker: MockerFixture) -> MagicMock:
     return mocker.patch(
-        "polar.dispute.service.benefit_grant_service", spec=BenefitGrantService
+        "solei.dispute.service.benefit_grant_service", spec=BenefitGrantService
     )
 
 
@@ -499,7 +499,7 @@ class TestUpsertFromChargebackStop:
             id=payment_intent_id, latest_charge=charge_id
         )
         mocker.patch(
-            "polar.dispute.service.stripe_service.get_payment_intent",
+            "solei.dispute.service.stripe_service.get_payment_intent",
             return_value=payment_intent,
         )
 
@@ -530,7 +530,7 @@ class TestUpsertFromChargebackStop:
             id=payment_intent_id, latest_charge=charge_id
         )
         mocker.patch(
-            "polar.dispute.service.stripe_service.get_payment_intent",
+            "solei.dispute.service.stripe_service.get_payment_intent",
             return_value=payment_intent,
         )
 
@@ -574,7 +574,7 @@ class TestUpsertFromChargebackStop:
             id=payment_intent_id, latest_charge=charge_id
         )
         mocker.patch(
-            "polar.dispute.service.stripe_service.get_payment_intent",
+            "solei.dispute.service.stripe_service.get_payment_intent",
             return_value=payment_intent,
         )
 
@@ -619,7 +619,7 @@ class TestUpsertFromChargebackStop:
             id=payment_intent_id, latest_charge=charge_id
         )
         mocker.patch(
-            "polar.dispute.service.stripe_service.get_payment_intent",
+            "solei.dispute.service.stripe_service.get_payment_intent",
             return_value=payment_intent,
         )
 

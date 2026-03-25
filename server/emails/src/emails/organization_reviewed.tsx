@@ -2,7 +2,7 @@ import { Preview, Section } from '@react-email/components'
 import BodyText from '../components/BodyText'
 import Footer from '../components/Footer'
 import Intro from '../components/Intro'
-import WrapperPolar from '../components/WrapperPolar'
+import WrapperSolei from '../components/WrapperSolei'
 import type { schemas } from '../types'
 
 export function OrganizationReviewed({
@@ -10,7 +10,7 @@ export function OrganizationReviewed({
   organization,
 }: schemas['OrganizationReviewedProps']) {
   return (
-    <WrapperPolar>
+    <WrapperSolei>
       <Preview>
         Great news! Your organization has been approved and you&apos;re ready to
         start selling
@@ -21,7 +21,7 @@ export function OrganizationReviewed({
       </Intro>
       <Section>
         <BodyText>
-          You&apos;re now all set to start selling on Polar. You can create
+          You&apos;re now all set to start selling on Solei. You can create
           products, set up subscriptions, and start accepting payments from
           customers around the world.
         </BodyText>
@@ -30,7 +30,7 @@ export function OrganizationReviewed({
         </BodyText>
         <BodyText>
           Head to your dashboard to finish setting up your products and
-          integrate Polar into your workflow. Then, you can start selling right
+          integrate Solei into your workflow. Then, you can start selling right
           away!
         </BodyText>
         <BodyText>
@@ -39,7 +39,7 @@ export function OrganizationReviewed({
         </BodyText>
       </Section>
       <Footer email={email} />
-    </WrapperPolar>
+    </WrapperSolei>
   )
 }
 

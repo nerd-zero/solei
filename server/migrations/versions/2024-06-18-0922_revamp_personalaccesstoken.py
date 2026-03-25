@@ -9,11 +9,11 @@ Create Date: 2024-06-18 09:22:33.706790
 import sqlalchemy as sa
 from alembic import op
 
-# Polar Custom Imports
-from polar.auth.service import AuthService
-from polar.config import settings
-from polar.kit import jwt
-from polar.kit.crypto import get_token_hash
+# Solei Custom Imports
+from solei.auth.service import AuthService
+from solei.config import settings
+from solei.kit import jwt
+from solei.kit.crypto import get_token_hash
 
 # revision identifiers, used by Alembic.
 revision = "8e40457497a3"

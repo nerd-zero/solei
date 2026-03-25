@@ -20,7 +20,7 @@ export const Products = () => {
         </h2>
         <p className="dark:text-polar-500 text-lg leading-relaxed text-pretty text-gray-500">
           Define feature flags as benefits and attach them to your subscription
-          tiers. Polar automatically enables and revokes them as customers
+          tiers. Solei automatically enables and revokes them as customers
           subscribe and churn.
         </p>
       </div>

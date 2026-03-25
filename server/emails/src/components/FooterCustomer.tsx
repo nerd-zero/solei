@@ -38,7 +38,7 @@ const FooterCustomer = ({
         Merchant of Record services provided to{' '}
         <span className="font-medium text-gray-500">{organization.name}</span>{' '}
         by{' '}
-        <span className="font-medium text-gray-500">Polar Software, Inc.</span>
+        <span className="font-medium text-gray-500">Nerd Zero</span>
       </Text>
     </Section>
   </>

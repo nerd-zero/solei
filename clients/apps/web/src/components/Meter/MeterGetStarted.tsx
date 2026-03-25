@@ -43,16 +43,16 @@ export const MeterGetStarted = ({ meter }: MeterGetStartedProps) => {
         <h2 className="text-xl">Get started with metering</h2>
         <p className="dark:text-polar-500 text-gray-500">
           Meter usage by sending events which match the Meter Filter, to the
-          Polar Ingestion API.
+          Solei Ingestion API.
         </p>
       </div>
       <pre className="dark:bg-polar-900 rounded-lg bg-white p-4 font-mono text-sm">
         <SyntaxHighlighterProvider>
           <SyntaxHighlighterClient
             lang="typescript"
-            code={`import { Polar } from "@polar-sh/sdk";
+            code={`import { Solei } from "@polar-sh/sdk";
 
-const polar = new Polar({
+const polar = new Solei({
   accessToken: process.env["POLAR_ACCESS_TOKEN"] ?? "",${
     CONFIG.IS_SANDBOX
       ? `

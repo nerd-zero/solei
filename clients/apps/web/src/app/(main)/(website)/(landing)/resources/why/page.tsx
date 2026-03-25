@@ -2,16 +2,16 @@ import { WhyPolarPage } from '@/components/Landing/resources/WhyPolarPage'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Why Polar is the best way to monetize your software',
-  description: 'Learn why Polar is the best way to monetize your software',
+  title: 'Why Solei is the best way to monetize your software',
+  description: 'Learn why Solei is the best way to monetize your software',
   keywords:
     'monetize, monetization, switch, migration, payment infrastructure, saas, monetization, developer tools',
   openGraph: {
-    siteName: 'Polar',
+    siteName: 'Solei',
     type: 'website',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
       },
@@ -21,10 +21,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Polar',
+        alt: 'Solei',
       },
     ],
   },

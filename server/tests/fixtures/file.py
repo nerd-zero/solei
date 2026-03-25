@@ -15,21 +15,21 @@ from botocore.config import Config
 from httpx import AsyncClient, Response
 from minio import Minio
 
-from polar.config import settings
-from polar.file.repository import FileRepository
-from polar.file.s3 import S3_SERVICES
-from polar.file.schemas import DownloadableFileCreate, FileUpload, FileUploadCompleted
-from polar.file.service import file as file_service
-from polar.integrations.aws.s3.schemas import (
+from solei.config import settings
+from solei.file.repository import FileRepository
+from solei.file.s3 import S3_SERVICES
+from solei.file.schemas import DownloadableFileCreate, FileUpload, FileUploadCompleted
+from solei.file.service import file as file_service
+from solei.integrations.aws.s3.schemas import (
     S3FileCreateMultipart,
     S3FileCreatePart,
     S3FileUploadCompleted,
     S3FileUploadCompletedPart,
     S3FileUploadPart,
 )
-from polar.models import File, Organization
-from polar.models.file import FileServiceTypes
-from polar.postgres import AsyncSession
+from solei.models import File, Organization
+from solei.models.file import FileServiceTypes
+from solei.postgres import AsyncSession
 
 pwd = Path(__file__).parent.absolute()
 

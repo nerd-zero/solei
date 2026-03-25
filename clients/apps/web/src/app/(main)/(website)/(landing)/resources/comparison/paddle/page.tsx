@@ -2,16 +2,16 @@ import { PolarVsPaddlePage } from '@/components/Landing/comparison/PolarPaddlePa
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Polar vs Paddle',
-  description: 'Comparing Polar and Paddle',
+  title: 'Solei vs Paddle',
+  description: 'Comparing Solei and Paddle',
   keywords:
     'polar vs paddle, paddle, polar, comparison, pricing, pricing for polar, pricing for polar, pricing for polar',
   openGraph: {
-    siteName: 'Polar',
+    siteName: 'Solei',
     type: 'website',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
       },
@@ -21,10 +21,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://polar.sh/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/assets/brand/polar_og.jpg',
         width: 1200,
         height: 630,
-        alt: 'Polar',
+        alt: 'Solei',
       },
     ],
   },

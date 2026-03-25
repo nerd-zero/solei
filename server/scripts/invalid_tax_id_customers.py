@@ -7,10 +7,10 @@ import structlog
 import typer
 from sqlalchemy import select
 
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Customer
-from polar.postgres import create_async_engine
-from polar.tax.tax_id import InvalidTaxID, validate_tax_id
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Customer
+from solei.postgres import create_async_engine
+from solei.tax.tax_id import InvalidTaxID, validate_tax_id
 
 cli = typer.Typer()
 

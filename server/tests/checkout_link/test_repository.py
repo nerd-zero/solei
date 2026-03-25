@@ -1,9 +1,9 @@
 import pytest
 from sqlalchemy.orm import selectinload
 
-from polar.checkout_link.repository import CheckoutLinkRepository
-from polar.models import CheckoutLink, Product
-from polar.postgres import AsyncSession
+from solei.checkout_link.repository import CheckoutLinkRepository
+from solei.models import CheckoutLink, Product
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_checkout_link
 

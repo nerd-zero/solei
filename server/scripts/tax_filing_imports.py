@@ -15,10 +15,10 @@ from rich.progress import Progress
 from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import contains_eager
 
-from polar.kit.db.postgres import AsyncSession, create_async_sessionmaker
-from polar.models import Order, Refund, Transaction
-from polar.models.transaction import TransactionType
-from polar.postgres import create_async_engine
+from solei.kit.db.postgres import AsyncSession, create_async_sessionmaker
+from solei.models import Order, Refund, Transaction
+from solei.models.transaction import TransactionType
+from solei.postgres import create_async_engine
 
 cli = typer.Typer()
 

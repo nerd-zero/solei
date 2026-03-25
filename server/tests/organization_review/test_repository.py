@@ -2,15 +2,15 @@ from datetime import UTC, datetime
 
 import pytest
 
-from polar.models.organization import Organization
-from polar.models.payment import PaymentStatus
-from polar.models.user import User
-from polar.organization_review.report import (
+from solei.models.organization import Organization
+from solei.models.payment import PaymentStatus
+from solei.models.user import User
+from solei.organization_review.report import (
     AgentReportV2,
     AnyAgentReport,
 )
-from polar.organization_review.repository import OrganizationReviewRepository
-from polar.organization_review.schemas import (
+from solei.organization_review.repository import OrganizationReviewRepository
+from solei.organization_review.schemas import (
     AccountData,
     DataSnapshot,
     DimensionAssessment,
@@ -26,7 +26,7 @@ from polar.organization_review.schemas import (
     RiskLevel,
     UsageInfo,
 )
-from polar.postgres import AsyncSession
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_customer,

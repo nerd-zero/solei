@@ -39,7 +39,7 @@ export function MissionSection() {
                 className="text-center text-pretty"
                 text={['From prompt to revenue.', 'Automatically.']}
               />
-              <span className="font-louize text-xl md:text-4xl">polar.sh</span>
+              <span className="font-louize text-xl md:text-4xl">solei.to</span>
             </div>
           </ShaderCanvas>
           <ShaderCanvas
@@ -54,7 +54,7 @@ export function MissionSection() {
                 className="text-center text-pretty"
                 text={['We count tokens.', "So you don't have to."]}
               />
-              <span className="font-louize text-xl md:text-4xl">polar.sh</span>
+              <span className="font-louize text-xl md:text-4xl">solei.to</span>
             </div>
           </ShaderCanvas>
         </div>

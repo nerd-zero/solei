@@ -1,10 +1,10 @@
 from unittest.mock import MagicMock
 
-from polar.organization_review.collectors.setup import (
+from solei.organization_review.collectors.setup import (
     _extract_domain,
     collect_setup_data,
 )
-from polar.organization_review.schemas import (
+from solei.organization_review.schemas import (
     CheckoutLinksData,
     CheckoutReturnUrlData,
     CheckoutSuccessUrlData,

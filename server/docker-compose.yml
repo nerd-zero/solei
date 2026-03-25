@@ -2,24 +2,24 @@ services:
   redis:
     image: redis
     ports:
-      - "${POLAR_REDIS_PORT}:6379"
+      - "${SOLEI_REDIS_PORT}:6379"
 
   db:
     image: postgres:15.1-bullseye
     environment:
-      - POSTGRES_USER=${POLAR_POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POLAR_POSTGRES_PWD}
-      - POSTGRES_DB=${POLAR_POSTGRES_DATABASE}
-      - POSTGRES_PORT=${POLAR_POSTGRES_PORT}
-      - POLAR_READ_USER=${POLAR_POSTGRES_READ_USER:-polar_read}
-      - POLAR_READ_PASSWORD=${POLAR_POSTGRES_READ_PWD}
+      - POSTGRES_USER=${SOLEI_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${SOLEI_POSTGRES_PWD}
+      - POSTGRES_DB=${SOLEI_POSTGRES_DATABASE}
+      - POSTGRES_PORT=${SOLEI_POSTGRES_PORT}
+      - SOLEI_READ_USER=${SOLEI_POSTGRES_READ_USER:-solei_read}
+      - SOLEI_READ_PASSWORD=${SOLEI_POSTGRES_READ_PWD}
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - ./init-readonly-user.sql:/docker-entrypoint-initdb.d/init-readonly-user.sql
     ports:
-      - "${POLAR_POSTGRES_PORT}:5432"
+      - "${SOLEI_POSTGRES_PORT}:5432"
     expose:
-      - ${POLAR_POSTGRES_PORT}
+      - ${SOLEI_POSTGRES_PORT}
     healthcheck:
       test:
         [
@@ -27,9 +27,9 @@ services:
           "pg_isready",
           "-q",
           "-d",
-          "${POLAR_POSTGRES_DATABASE}",
+          "${SOLEI_POSTGRES_DATABASE}",
           "-U",
-          "${POLAR_POSTGRES_USER}",
+          "${SOLEI_POSTGRES_USER}",
         ]
       timeout: 40s
       interval: 2s
@@ -43,8 +43,8 @@ services:
     volumes:
       - "minio_data:/minio"
     environment:
-      - MINIO_ROOT_USER=${POLAR_MINIO_USER}
-      - MINIO_ROOT_PASSWORD=${POLAR_MINIO_PWD}
+      - MINIO_ROOT_USER=${SOLEI_MINIO_USER}
+      - MINIO_ROOT_PASSWORD=${SOLEI_MINIO_PWD}
 
   minio-setup:
     image: bitnamilegacy/minio-client:2024.5.24
@@ -54,14 +54,14 @@ services:
       - ./.minio:/tmp/config
     environment:
       - MINIO_HOST=minio
-      - MINIO_ROOT_USER=${POLAR_MINIO_USER}
-      - MINIO_ROOT_PASSWORD=${POLAR_MINIO_PWD}
-      - BUCKET_NAME=${POLAR_S3_FILES_BUCKET_NAME}
-      - PUBLIC_BUCKET_NAME=${POLAR_S3_FILES_PUBLIC_BUCKET_NAME}
-      - BUCKET_TESTING_NAME=testing-${POLAR_S3_FILES_BUCKET_NAME}
+      - MINIO_ROOT_USER=${SOLEI_MINIO_USER}
+      - MINIO_ROOT_PASSWORD=${SOLEI_MINIO_PWD}
+      - BUCKET_NAME=${SOLEI_S3_FILES_BUCKET_NAME}
+      - PUBLIC_BUCKET_NAME=${SOLEI_S3_FILES_PUBLIC_BUCKET_NAME}
+      - BUCKET_TESTING_NAME=testing-${SOLEI_S3_FILES_BUCKET_NAME}
       - POLICY_FILE=/tmp/config/policy.json
-      - ACCESS_KEY=${POLAR_AWS_ACCESS_KEY_ID}
-      - SECRET_ACCESS_KEY=${POLAR_AWS_SECRET_ACCESS_KEY}
+      - ACCESS_KEY=${SOLEI_AWS_ACCESS_KEY_ID}
+      - SECRET_ACCESS_KEY=${SOLEI_AWS_SECRET_ACCESS_KEY}
     entrypoint:
       [
         "bash",
@@ -94,8 +94,8 @@ services:
       - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
       - grafana_data:/var/lib/grafana
     environment:
-      - GF_SECURITY_ADMIN_USER=polar
-      - GF_SECURITY_ADMIN_PASSWORD=polar
+      - GF_SECURITY_ADMIN_USER=solei
+      - GF_SECURITY_ADMIN_PASSWORD=solei
       - GF_USERS_ALLOW_SIGN_UP=false
     depends_on:
       - prometheus

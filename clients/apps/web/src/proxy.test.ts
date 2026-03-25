@@ -212,7 +212,7 @@ describe('middleware function', () => {
     })
 
     const request = new NextRequest('https://example.com/dashboard')
-    request.cookies.set('polar_session', 'valid-session-token')
+    request.cookies.set('solei_session', 'valid-session-token')
 
     const response = await proxy(request)
 
@@ -253,7 +253,7 @@ describe('middleware function', () => {
     })
 
     const request = new NextRequest('https://example.com/dashboard')
-    request.cookies.set('polar_session', 'valid-session-token')
+    request.cookies.set('solei_session', 'valid-session-token')
 
     await expect(proxy(request)).rejects.toThrow(
       'Unexpected response status while fetching authenticated user',
@@ -269,7 +269,7 @@ describe('middleware function', () => {
     })
 
     const request = new NextRequest('https://example.com/dashboard')
-    request.cookies.set('polar_session', 'invalid-session-token')
+    request.cookies.set('solei_session', 'invalid-session-token')
 
     const response = await proxy(request)
 

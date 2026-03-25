@@ -102,9 +102,9 @@ export default function OrbitIntroductionPage() {
   return (
     <Stack vertical gap={10}>
       <OrbitPageHeader
-        label="v0.1 — Polar Software Inc."
+        label="v0.1 — Solei Software Inc."
         title="Orbit"
-        description="The design system for Polar — unifying design philosophies, guidelines, design tokens, and components to guardrail building exceptional user experiences."
+        description="The design system for Solei — unifying design philosophies, guidelines, design tokens, and components to guardrail building exceptional user experiences."
       />
 
       {/* What is Orbit */}
@@ -113,7 +113,7 @@ export default function OrbitIntroductionPage() {
         <div className="dark:border-polar-800 border-t border-neutral-200" />
         <Stack vertical gap={2}>
           <Text variant="subtle">
-            Orbit is the shared design language across every Polar product. It
+            Orbit is the shared design language across every Solei product. It
             captures decisions that would otherwise be made inconsistently
             across teams — how things move, how type is set, what surfaces look
             like in the dark — and promotes them to named, reusable primitives.

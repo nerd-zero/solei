@@ -3,8 +3,8 @@ from typing import Any
 
 import pytest
 
-from polar.models import Meter, Product
-from polar.models.product_price import ProductPriceSeatUnit, SeatTierType
+from solei.models import Meter, Product
+from solei.models.product_price import ProductPriceSeatUnit, SeatTierType
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_product_price_metered_unit
 

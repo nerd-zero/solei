@@ -4,17 +4,17 @@ from functools import wraps
 import typer
 from sqlalchemy import select, update
 
-from polar.enums import TaxBehavior, TaxBehaviorOption
-from polar.models import (
-    Checkout,
-    Order,
-    Organization,
-    Subscription,
-)
 from scripts.helper import (
     configure_script_logging,
     limit_bindparam,
     run_batched_update,
+)
+from solei.enums import TaxBehavior, TaxBehaviorOption
+from solei.models import (
+    Checkout,
+    Order,
+    Organization,
+    Subscription,
 )
 
 cli = typer.Typer()

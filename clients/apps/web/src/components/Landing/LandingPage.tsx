@@ -42,7 +42,7 @@ const PageContent = () => {
             className="dark:text-polar-400 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
           >
             <Button variant="secondary" size="lg">
-              Why Polar
+              Why Solei
             </Button>
           </Link>
         </Hero>

@@ -213,7 +213,7 @@ export const BenefitsPage = () => {
             className="dark:text-polar-500 text-lg text-gray-500 md:w-[480px]"
             variants={itemVariants}
           >
-            Join companies using Polar to deliver seamless product benefits to
+            Join companies using Solei to deliver seamless product benefits to
             their customers.
           </motion.p>
           <motion.div variants={itemVariants}>

@@ -14,10 +14,10 @@ from datetime import UTC, datetime
 
 import pytest
 
-from polar.backoffice.organizations_v2.endpoints import count_test_sales
-from polar.models import UserOrganization
-from polar.models.order import OrderStatus
-from polar.postgres import AsyncSession
+from solei.backoffice.organizations_v2.endpoints import count_test_sales
+from solei.models import UserOrganization
+from solei.models.order import OrderStatus
+from solei.postgres import AsyncSession
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_customer,

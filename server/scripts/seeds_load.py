@@ -8,45 +8,45 @@ import dramatiq
 import typer
 from sqlalchemy import select
 
-import polar.tasks  # noqa: F401
-from polar.auth.models import AuthSubject
-from polar.benefit.service import benefit as benefit_service
-from polar.benefit.strategies.custom.schemas import BenefitCustomCreate
-from polar.benefit.strategies.downloadables.schemas import BenefitDownloadablesCreate
+import solei.tasks  # noqa: F401
+from solei.auth.models import AuthSubject
+from solei.benefit.service import benefit as benefit_service
+from solei.benefit.strategies.custom.schemas import BenefitCustomCreate
+from solei.benefit.strategies.downloadables.schemas import BenefitDownloadablesCreate
 
 # Import tasks to register all dramatiq actors
-from polar.benefit.strategies.license_keys.schemas import BenefitLicenseKeysCreate
-from polar.checkout_link.schemas import CheckoutLinkCreateProducts
-from polar.checkout_link.service import checkout_link as checkout_link_service
-from polar.customer.schemas.customer import CustomerCreate
-from polar.customer.service import customer as customer_service
-from polar.discount.schemas import DiscountPercentageOnceForeverDurationCreate
-from polar.discount.service import discount as discount_service
-from polar.enums import AccountType, PaymentProcessor, SubscriptionRecurringInterval
-from polar.event.repository import EventRepository
-from polar.kit.currency import PresentmentCurrency
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.kit.utils import utc_now
-from polar.meter.aggregation import CountAggregation
-from polar.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
-from polar.meter.schemas import MeterCreate
-from polar.meter.service import meter as meter_service
-from polar.models.account import Account
-from polar.models.benefit import BenefitType
-from polar.models.customer_seat import CustomerSeat, SeatStatus
-from polar.models.discount import DiscountDuration, DiscountType
-from polar.models.file import File, FileServiceTypes
-from polar.models.member import Member, MemberRole
-from polar.models.organization import OrganizationDetails, OrganizationStatus
-from polar.models.organization_review import OrganizationReview
-from polar.models.product_price import ProductPriceAmountType, ProductPriceSeatUnit
-from polar.models.subscription import Subscription, SubscriptionStatus
-from polar.models.subscription_product_price import SubscriptionProductPrice
-from polar.models.user import IdentityVerificationStatus
-from polar.organization.schemas import OrganizationCreate
-from polar.organization.service import organization as organization_service
-from polar.postgres import AsyncSession, create_async_engine
-from polar.product.schemas import (
+from solei.benefit.strategies.license_keys.schemas import BenefitLicenseKeysCreate
+from solei.checkout_link.schemas import CheckoutLinkCreateProducts
+from solei.checkout_link.service import checkout_link as checkout_link_service
+from solei.customer.schemas.customer import CustomerCreate
+from solei.customer.service import customer as customer_service
+from solei.discount.schemas import DiscountPercentageOnceForeverDurationCreate
+from solei.discount.service import discount as discount_service
+from solei.enums import AccountType, PaymentProcessor, SubscriptionRecurringInterval
+from solei.event.repository import EventRepository
+from solei.kit.currency import PresentmentCurrency
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.kit.utils import utc_now
+from solei.meter.aggregation import CountAggregation
+from solei.meter.filter import Filter, FilterClause, FilterConjunction, FilterOperator
+from solei.meter.schemas import MeterCreate
+from solei.meter.service import meter as meter_service
+from solei.models.account import Account
+from solei.models.benefit import BenefitType
+from solei.models.customer_seat import CustomerSeat, SeatStatus
+from solei.models.discount import DiscountDuration, DiscountType
+from solei.models.file import File, FileServiceTypes
+from solei.models.member import Member, MemberRole
+from solei.models.organization import OrganizationDetails, OrganizationStatus
+from solei.models.organization_review import OrganizationReview
+from solei.models.product_price import ProductPriceAmountType, ProductPriceSeatUnit
+from solei.models.subscription import Subscription, SubscriptionStatus
+from solei.models.subscription_product_price import SubscriptionProductPrice
+from solei.models.user import IdentityVerificationStatus
+from solei.organization.schemas import OrganizationCreate
+from solei.organization.service import organization as organization_service
+from solei.postgres import AsyncSession, create_async_engine
+from solei.product.schemas import (
     ProductCreate,
     ProductCreateOneTime,
     ProductCreateRecurring,
@@ -56,11 +56,11 @@ from polar.product.schemas import (
     ProductPriceSeatTier,
     ProductPriceSeatTiers,
 )
-from polar.product.service import product as product_service
-from polar.redis import Redis, create_redis
-from polar.user.repository import UserRepository
-from polar.user.service import user as user_service
-from polar.worker import JobQueueManager
+from solei.product.service import product as product_service
+from solei.redis import Redis, create_redis
+from solei.user.repository import UserRepository
+from solei.user.service import user as user_service
+from solei.worker import JobQueueManager
 
 cli = typer.Typer()
 
@@ -446,8 +446,8 @@ async def create_seed_data(session: AsyncSession, redis: Redis) -> None:
         {
             "name": "Admin Org",
             "slug": "admin-org",
-            "email": "admin@polar.sh",
-            "website": "https://polar.sh",
+            "email": "admin@solei.to",
+            "website": "https://solei.to",
             "bio": "The admin organization of Polar",
             "status": OrganizationStatus.ACTIVE,
             "is_admin": True,
@@ -470,7 +470,7 @@ async def create_seed_data(session: AsyncSession, redis: Redis) -> None:
         {
             "name": "SeatBased Members Corp",
             "slug": "seatbased-members-corp",
-            "email": "admin@polar.sh",
+            "email": "admin@solei.to",
             "website": "https://seatbased-members.com",
             "bio": "Organization with seat-based pricing and members model enabled",
             "status": OrganizationStatus.ACTIVE,
@@ -496,7 +496,7 @@ async def create_seed_data(session: AsyncSession, redis: Redis) -> None:
             ],
             "seat_based_customers": [
                 {
-                    "email": "customer-with-members@polar.sh",
+                    "email": "customer-with-members@solei.to",
                     "name": "Customer With Members Inc",
                     "seats_purchased": 5,
                     "seats_allocated": 2,
@@ -506,7 +506,7 @@ async def create_seed_data(session: AsyncSession, redis: Redis) -> None:
         {
             "name": "SeatBased Only Corp",
             "slug": "seatbased-only-corp",
-            "email": "admin@polar.sh",
+            "email": "admin@solei.to",
             "website": "https://seatbased-only.com",
             "bio": "Organization with seat-based pricing but members model disabled",
             "status": OrganizationStatus.ACTIVE,
@@ -532,7 +532,7 @@ async def create_seed_data(session: AsyncSession, redis: Redis) -> None:
             ],
             "seat_based_customers": [
                 {
-                    "email": "customer-no-members@polar.sh",
+                    "email": "customer-no-members@solei.to",
                     "name": "Customer Without Members Inc",
                     "seats_purchased": 5,
                     "seats_allocated": 2,
@@ -828,7 +828,7 @@ async def create_seed_data(session: AsyncSession, redis: Redis) -> None:
                     auth_subject=auth_subject,
                 )
                 e2e_checkout_link.client_secret = (
-                    "polar_cl_e2e_seed_checkout_link_subscription"
+                    "solei_cl_e2e_seed_checkout_link_subscription"
                 )
                 session.add(e2e_checkout_link)
                 await session.flush()
@@ -853,7 +853,7 @@ async def create_seed_data(session: AsyncSession, redis: Redis) -> None:
         )
         for i in range(num_customers):
             # customer_email = f"customer_{org_data['slug']}_{i + 1}@example.com"
-            customer_email = f"customer_{org_data['slug']}_{i + 1}@polar.sh"
+            customer_email = f"customer_{org_data['slug']}_{i + 1}@solei.to"
             customer = await customer_service.create(
                 session=session,
                 customer_create=CustomerCreate(

@@ -2,12 +2,12 @@ import uuid
 
 import pytest
 
-from polar.exceptions import ResourceNotFound
-from polar.kit.pagination import PaginationParams
-from polar.models import Account, Organization, Transaction, User, UserOrganization
-from polar.models.transaction import TransactionType
-from polar.postgres import AsyncSession
-from polar.transaction.service.transaction import transaction as transaction_service
+from solei.exceptions import ResourceNotFound
+from solei.kit.pagination import PaginationParams
+from solei.models import Account, Organization, Transaction, User, UserOrganization
+from solei.models.transaction import TransactionType
+from solei.postgres import AsyncSession
+from solei.transaction.service.transaction import transaction as transaction_service
 
 
 @pytest.mark.asyncio

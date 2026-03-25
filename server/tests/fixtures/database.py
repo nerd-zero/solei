@@ -10,10 +10,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.schema import CreateSequence
 from sqlalchemy_utils import create_database, database_exists, drop_database
 
-from polar.config import settings
-from polar.kit.db.postgres import create_async_engine
-from polar.models import Model
-from polar.models.customer import Customer
+from solei.config import settings
+from solei.kit.db.postgres import create_async_engine
+from solei.models import Model
+from solei.models.customer import Customer
 
 
 def get_database_url(worker_id: str, driver: str = "asyncpg") -> str:

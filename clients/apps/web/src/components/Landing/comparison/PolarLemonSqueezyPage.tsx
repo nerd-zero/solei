@@ -13,20 +13,20 @@ export const PolarVsLemonSqueezyPage = () => {
     { id: 'pricing', title: 'Pricing' },
     { id: 'developer-experience', title: 'Developer Experience' },
     { id: 'scalability', title: 'Scalability & Features' },
-    { id: 'why-polar', title: 'Why Choose Polar?' },
+    { id: 'why-polar', title: 'Why Choose Solei?' },
   ]
 
   return (
-    <ResourceLayout title="Polar vs Lemon Squeezy" toc={tocItems}>
+    <ResourceLayout title="Solei vs Lemon Squeezy" toc={tocItems}>
       <ResourceSection id="overview" title="Overview">
         <p className="text-lg">
           Comparing modern Merchant of Record solutions for indie developers and
           SaaS businesses.
         </p>
         <p className="dark:text-polar-300 text-gray-500">
-          Both Polar and Lemon Squeezy are Merchant of Record platforms that
+          Both Solei and Lemon Squeezy are Merchant of Record platforms that
           handle tax compliance globally. While Lemon Squeezy caters to solo
-          creators and indie hackers, Polar is built for developers who need
+          creators and indie hackers, Solei is built for developers who need
           robust APIs, advanced features, and the ability to scale to
           enterprise-level requirements.
         </p>
@@ -41,7 +41,7 @@ export const PolarVsLemonSqueezyPage = () => {
                   Feature
                 </th>
                 <th className="dark:border-polar-700 border-r border-gray-200 p-4 text-center font-medium">
-                  Polar
+                  Solei
                 </th>
                 <th className="p-4 text-center font-medium">Lemon Squeezy</th>
               </tr>
@@ -133,7 +133,7 @@ export const PolarVsLemonSqueezyPage = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="dark:border-polar-700 flex flex-col gap-4 border border-gray-200 p-6">
             <div className="flex flex-col gap-2">
-              <h3 className="text-lg font-medium">Polar</h3>
+              <h3 className="text-lg font-medium">Solei</h3>
               <div className="text-4xl">4% + 40¢</div>
               <p className="dark:text-polar-300 text-sm text-gray-500">
                 per transaction
@@ -192,7 +192,7 @@ export const PolarVsLemonSqueezyPage = () => {
           </div>
         </div>
         <p className="dark:text-polar-300 text-sm text-gray-500">
-          At $50,000 monthly revenue, Polar saves you $500/month. At $100,000,
+          At $50,000 monthly revenue, Solei saves you $500/month. At $100,000,
           you save $1,000/month compared to Lemon Squeezy.
         </p>
       </ResourceSection>
@@ -205,7 +205,7 @@ export const PolarVsLemonSqueezyPage = () => {
             </h3>
             <p className="dark:text-polar-300 text-gray-500">
               Lemon Squeezy is designed for simplicity, which is great for
-              getting started quickly. However, Polar provides both simplicity
+              getting started quickly. However, Solei provides both simplicity
               AND power with modern developer tooling, comprehensive APIs, and
               the flexibility to build exactly what you need.
             </p>
@@ -214,21 +214,21 @@ export const PolarVsLemonSqueezyPage = () => {
             <li>
               <h4 className="font-medium">6-line integration</h4>
               <p className="dark:text-polar-300 text-gray-500">
-                Polar provides a 6-line integration with framework adapters,
+                Solei provides a 6-line integration with framework adapters,
                 making it easy to get started with minimal code.
               </p>
             </li>
             <li>
               <h4 className="font-medium">Framework adapters</h4>
               <p className="dark:text-polar-300 text-gray-500">
-                Polar provides native support for Next.js, BetterAuth, Laravel,
+                Solei provides native support for Next.js, BetterAuth, Laravel,
                 and more.
               </p>
             </li>
             <li>
               <h4 className="font-medium">Open source</h4>
               <p className="dark:text-polar-300 text-gray-500">
-                Polar is open source, so you can inspect and contribute to the
+                Solei is open source, so you can inspect and contribute to the
                 codebase.
               </p>
             </li>
@@ -241,13 +241,13 @@ export const PolarVsLemonSqueezyPage = () => {
           <h3 className="text-lg">Built to scale with your business</h3>
           <p className="dark:text-polar-300 text-gray-500">
             While Lemon Squeezy works well for small projects and indie
-            creators, Polar is designed to grow with you from your first sale to
+            creators, Solei is designed to grow with you from your first sale to
             enterprise scale, with advanced features and robust infrastructure.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div className="dark:bg-polar-800 flex flex-col gap-3 bg-gray-50 p-6">
-            <h4 className="font-medium">Polar at Scale</h4>
+            <h4 className="font-medium">Solei at Scale</h4>
             <ul className="flex flex-col gap-2">
               <li className="dark:text-polar-300 flex items-start gap-2 text-sm text-gray-600">
                 <CheckOutlined className="text-green-600" fontSize="small" />
@@ -292,14 +292,14 @@ export const PolarVsLemonSqueezyPage = () => {
         </div>
       </ResourceSection>
 
-      <ResourceSection id="why-polar" title="Why Choose Polar?">
+      <ResourceSection id="why-polar" title="Why Choose Solei?">
         <div className="flex flex-col gap-4">
           <h3 className="text-lg">
             Start simple, scale to enterprise without switching
           </h3>
           <p className="dark:text-polar-300 text-gray-500">
             Lemon Squeezy is great for getting started, but many developers
-            quickly outgrow its limitations. Polar gives you the same simple
+            quickly outgrow its limitations. Solei gives you the same simple
             start but with the power and flexibility to scale without ever
             needing to migrate to a different platform.
           </p>

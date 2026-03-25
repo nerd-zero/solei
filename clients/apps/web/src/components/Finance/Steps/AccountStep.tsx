@@ -72,7 +72,7 @@ export default function AccountStep({
         <p className="dark:text-polar-400 mx-auto max-w-sm text-sm text-balance text-gray-600">
           You&apos;re receiving manual payouts.{' '}
           <a
-            href="mailto:support@polar.sh"
+            href="mailto:support@solei.to"
             className="underline hover:no-underline"
           >
             Reach out to support

@@ -17,6 +17,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/dashboard/', '/login/', '/verify-email/'],
     },
-    sitemap: 'https://polar.sh/sitemap.xml',
+    sitemap: 'https://solei.to/sitemap.xml',
   }
 }

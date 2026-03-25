@@ -3,17 +3,17 @@ from unittest.mock import MagicMock
 import pytest
 from pytest_mock import MockerFixture
 
-from polar.email.schemas import OAuth2LeakedClientEmail
-from polar.enums import TokenType
-from polar.models import OAuth2Client
-from polar.oauth2.service.oauth2_client import oauth2_client as oauth2_client_service
-from polar.postgres import AsyncSession
+from solei.email.schemas import OAuth2LeakedClientEmail
+from solei.enums import TokenType
+from solei.models import OAuth2Client
+from solei.oauth2.service.oauth2_client import oauth2_client as oauth2_client_service
+from solei.postgres import AsyncSession
 
 
 @pytest.fixture(autouse=True)
 def enqueue_email_mock(mocker: MockerFixture) -> MagicMock:
     return mocker.patch(
-        "polar.oauth2.service.oauth2_client.enqueue_email_template", autospec=True
+        "solei.oauth2.service.oauth2_client.enqueue_email_template", autospec=True
     )
 
 
@@ -22,8 +22,8 @@ class TestRevokeLeaked:
     @pytest.mark.parametrize(
         ("token", "token_type"),
         [
-            ("polar_cs_123", TokenType.client_secret),
-            ("polar_crt_123", TokenType.client_registration_token),
+            ("solei_cs_123", TokenType.client_secret),
+            ("solei_crt_123", TokenType.client_registration_token),
         ],
     )
     async def test_false_positive(

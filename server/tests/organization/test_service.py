@@ -4,28 +4,28 @@ import pytest
 from pydantic import ValidationError
 from pytest_mock import MockerFixture
 
-from polar.auth.models import AuthSubject
-from polar.config import Environment, settings
-from polar.enums import AccountType, InvoiceNumbering, SubscriptionRecurringInterval
-from polar.exceptions import PolarRequestValidationError
-from polar.models import Customer, Organization, Product, User
-from polar.models.account import Account
-from polar.models.organization import (
+from solei.auth.models import AuthSubject
+from solei.config import Environment, settings
+from solei.enums import AccountType, InvoiceNumbering, SubscriptionRecurringInterval
+from solei.exceptions import SoleiRequestValidationError
+from solei.models import Customer, Organization, Product, User
+from solei.models.account import Account
+from solei.models.organization import (
     OrganizationNotificationSettings,
     OrganizationStatus,
 )
-from polar.models.organization_review import OrganizationReview
-from polar.models.user import IdentityVerificationStatus
-from polar.organization.schemas import (
+from solei.models.organization_review import OrganizationReview
+from solei.models.user import IdentityVerificationStatus
+from solei.organization.schemas import (
     OrganizationCreate,
     OrganizationFeatureSettings,
     OrganizationUpdate,
 )
-from polar.organization.service import AccountAlreadySet
-from polar.organization.service import organization as organization_service
-from polar.organization_review.schemas import ReviewVerdict
-from polar.postgres import AsyncSession
-from polar.user_organization.service import (
+from solei.organization.service import AccountAlreadySet
+from solei.organization.service import organization as organization_service
+from solei.organization_review.schemas import ReviewVerdict
+from solei.postgres import AsyncSession
+from solei.user_organization.service import (
     user_organization as user_organization_service,
 )
 from tests.fixtures.database import SaveFixture
@@ -40,7 +40,7 @@ class TestCreate:
             "",
             "a",
             "ab",
-            "Polar Software Inc 🌀",
+            "Nerd Zero 🌊",
             "slug/with/slashes",
             *settings.ORGANIZATION_SLUG_RESERVED_KEYWORDS,
         ],
@@ -62,7 +62,7 @@ class TestCreate:
         session: AsyncSession,
         organization: Organization,
     ) -> None:
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await organization_service.create(
                 session,
                 OrganizationCreate(name=organization.name, slug=organization.slug),
@@ -78,7 +78,7 @@ class TestCreate:
         auth_subject: AuthSubject[User],
         session: AsyncSession,
     ) -> None:
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
 
         organization = await organization_service.create(
             session,
@@ -313,7 +313,7 @@ class TestCheckReviewThreshold:
         organization.total_balance = None
 
         mocker.patch(
-            "polar.organization.service.transaction_service.get_transactions_sum",
+            "solei.organization.service.transaction_service.get_transactions_sum",
             return_value=7500,
         )
 
@@ -337,7 +337,7 @@ class TestCheckReviewThreshold:
         organization.next_review_threshold = 10000
 
         transaction_sum_mock = mocker.patch(
-            "polar.organization.service.transaction_service.get_transactions_sum",
+            "solei.organization.service.transaction_service.get_transactions_sum",
             return_value=5000,
         )
 
@@ -363,7 +363,7 @@ class TestCheckReviewThreshold:
         organization.next_review_threshold = 0
 
         transaction_sum_mock = mocker.patch(
-            "polar.organization.service.transaction_service.get_transactions_sum",
+            "solei.organization.service.transaction_service.get_transactions_sum",
             return_value=5000,
         )
 
@@ -389,10 +389,10 @@ class TestCheckReviewThreshold:
         organization.next_review_threshold = 1000
 
         transaction_sum_mock = mocker.patch(
-            "polar.organization.service.transaction_service.get_transactions_sum",
+            "solei.organization.service.transaction_service.get_transactions_sum",
             return_value=5000,
         )
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
 
         # When
         result = await organization_service.check_review_threshold(
@@ -419,7 +419,7 @@ class TestCheckReviewThreshold:
         organization.total_balance = None
 
         mocker.patch(
-            "polar.organization.service.transaction_service.get_transactions_sum",
+            "solei.organization.service.transaction_service.get_transactions_sum",
             return_value=0,
         )
 
@@ -444,7 +444,7 @@ class TestConfirmOrganizationReviewed:
         # Given organization under review
         organization.status = OrganizationStatus.INITIAL_REVIEW
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
 
         # When
         result = await organization_service.confirm_organization_reviewed(
@@ -472,7 +472,7 @@ class TestConfirmOrganizationReviewed:
         initially_reviewed_at = datetime(2025, 1, 1, 12, 0, tzinfo=UTC)
         organization.initially_reviewed_at = initially_reviewed_at
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
 
         # When
         result = await organization_service.confirm_organization_reviewed(
@@ -514,7 +514,7 @@ class TestConfirmOrganizationReviewed:
         session.add(review)
         await session.flush()
 
-        mocker.patch("polar.organization.service.enqueue_job")
+        mocker.patch("solei.organization.service.enqueue_job")
 
         # When: operator manually approves the org
         result = await organization_service.confirm_organization_reviewed(
@@ -540,9 +540,9 @@ class TestHandleOngoingReviewVerdict:
         organization.next_review_threshold = 50_000
         organization.initially_reviewed_at = datetime(2025, 1, 1, 12, 0, tzinfo=UTC)
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
         plain_mock = mocker.patch(
-            "polar.organization.service.plain_service.create_organization_review_thread"
+            "solei.organization.service.plain_service.create_organization_review_thread"
         )
 
         # When: verdict is APPROVE
@@ -568,9 +568,9 @@ class TestHandleOngoingReviewVerdict:
         organization.next_review_threshold = 50_000
         organization.initially_reviewed_at = datetime(2025, 1, 1, 12, 0, tzinfo=UTC)
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
         plain_mock = mocker.patch(
-            "polar.organization.service.plain_service.create_organization_review_thread"
+            "solei.organization.service.plain_service.create_organization_review_thread"
         )
 
         # When: verdict is DENY
@@ -595,9 +595,9 @@ class TestHandleOngoingReviewVerdict:
         organization.next_review_threshold = 50_000
         organization.initially_reviewed_at = datetime(2025, 1, 1, 12, 0, tzinfo=UTC)
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
         plain_mock = mocker.patch(
-            "polar.organization.service.plain_service.create_organization_review_thread"
+            "solei.organization.service.plain_service.create_organization_review_thread"
         )
 
         # When: verdict is DENY
@@ -622,9 +622,9 @@ class TestHandleOngoingReviewVerdict:
         organization.next_review_threshold = 100
         organization.initially_reviewed_at = datetime(2025, 1, 1, 12, 0, tzinfo=UTC)
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
         plain_mock = mocker.patch(
-            "polar.organization.service.plain_service.create_organization_review_thread"
+            "solei.organization.service.plain_service.create_organization_review_thread"
         )
 
         # When: verdict is APPROVE
@@ -650,9 +650,9 @@ class TestHandleOngoingReviewVerdict:
         organization.next_review_threshold = 0
         organization.initially_reviewed_at = datetime(2025, 1, 1, 12, 0, tzinfo=UTC)
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
         plain_mock = mocker.patch(
-            "polar.organization.service.plain_service.create_organization_review_thread"
+            "solei.organization.service.plain_service.create_organization_review_thread"
         )
 
         # When: verdict is APPROVE
@@ -677,9 +677,9 @@ class TestHandleOngoingReviewVerdict:
         organization.status = OrganizationStatus.INITIAL_REVIEW
         organization.next_review_threshold = 50_000
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
         plain_mock = mocker.patch(
-            "polar.organization.service.plain_service.create_organization_review_thread"
+            "solei.organization.service.plain_service.create_organization_review_thread"
         )
 
         # When: verdict is APPROVE but status is INITIAL_REVIEW
@@ -704,9 +704,9 @@ class TestHandleOngoingReviewVerdict:
         organization.next_review_threshold = 50_000
         organization.initially_reviewed_at = datetime(2025, 1, 1, 12, 0, tzinfo=UTC)
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
         plain_mock = mocker.patch(
-            "polar.organization.service.plain_service.create_organization_review_thread"
+            "solei.organization.service.plain_service.create_organization_review_thread"
         )
 
         # When: verdict is APPROVE but status is ACTIVE (not ONGOING_REVIEW)
@@ -748,7 +748,7 @@ class TestSetOrganizationUnderReview:
         # Given organization active
         organization.status = OrganizationStatus.ACTIVE
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
 
         # When
         result = await organization_service.set_organization_under_review(
@@ -839,7 +839,7 @@ class TestGetPaymentStatus:
 
         # Mock the API key count
         mocker.patch(
-            "polar.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
+            "solei.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
             return_value=1,  # Has 1 API key
         )
 
@@ -922,7 +922,7 @@ class TestGetPaymentStatus:
 
         # Mock the API key count
         mocker.patch(
-            "polar.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
+            "solei.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
             return_value=1,  # Has 1 API key
         )
 
@@ -975,7 +975,7 @@ class TestGetPaymentStatus:
 
         # Mock the API key count
         mocker.patch(
-            "polar.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
+            "solei.organization_access_token.repository.OrganizationAccessTokenRepository.count_by_organization_id",
             return_value=1,  # Has 1 API key
         )
 
@@ -1001,7 +1001,7 @@ class TestGetPaymentStatus:
         await save_fixture(organization)
 
         # Mock environment to be sandbox
-        mocker.patch("polar.organization.service.settings.ENV", Environment.sandbox)
+        mocker.patch("solei.organization.service.settings.ENV", Environment.sandbox)
 
         payment_status = await organization_service.get_payment_status(
             session, organization
@@ -1158,7 +1158,7 @@ class TestSubmitAppeal:
         await save_fixture(review)
 
         mock_plain_service = mocker.patch(
-            "polar.organization.service.plain_service.create_appeal_review_thread"
+            "solei.organization.service.plain_service.create_appeal_review_thread"
         )
 
         appeal_reason = "We selling templates and not consultancy services"
@@ -1247,7 +1247,7 @@ class TestSubmitAppeal:
         await save_fixture(review)
 
         mock_plain_service = mocker.patch(
-            "polar.organization.service.plain_service.create_appeal_review_thread"
+            "solei.organization.service.plain_service.create_appeal_review_thread"
         )
 
         result = await organization_service.submit_appeal(
@@ -1501,7 +1501,7 @@ class TestCheckCanDelete:
         customer: Customer,
     ) -> None:
         """Organization with paid active subscriptions cannot be immediately deleted."""
-        from polar.models.subscription import SubscriptionStatus
+        from solei.models.subscription import SubscriptionStatus
         from tests.fixtures.random_objects import create_subscription
 
         await create_subscription(
@@ -1524,7 +1524,7 @@ class TestCheckCanDelete:
         customer: Customer,
     ) -> None:
         """Organization with only free active subscriptions can be deleted."""
-        from polar.models.subscription import SubscriptionStatus
+        from solei.models.subscription import SubscriptionStatus
         from tests.fixtures.random_objects import create_product, create_subscription
 
         free_product = await create_product(
@@ -1554,8 +1554,8 @@ class TestCheckCanDelete:
         customer: Customer,
     ) -> None:
         """Organization with subscriptions made free by a forever discount can be deleted."""
-        from polar.models.discount import DiscountDuration, DiscountType
-        from polar.models.subscription import SubscriptionStatus
+        from solei.models.discount import DiscountDuration, DiscountType
+        from solei.models.subscription import SubscriptionStatus
         from tests.fixtures.random_objects import create_discount, create_subscription
 
         discount = await create_discount(
@@ -1587,8 +1587,8 @@ class TestCheckCanDelete:
         customer: Customer,
     ) -> None:
         """Subscription with a 100% off once discount still blocks deletion."""
-        from polar.models.discount import DiscountDuration, DiscountType
-        from polar.models.subscription import SubscriptionStatus
+        from solei.models.discount import DiscountDuration, DiscountType
+        from solei.models.subscription import SubscriptionStatus
         from tests.fixtures.random_objects import create_discount, create_subscription
 
         discount = await create_discount(
@@ -1620,7 +1620,7 @@ class TestCheckCanDelete:
         customer: Customer,
     ) -> None:
         """Organization with canceled subscriptions can be deleted."""
-        from polar.models.subscription import SubscriptionStatus
+        from solei.models.subscription import SubscriptionStatus
         from tests.fixtures.random_objects import create_subscription
 
         await create_subscription(
@@ -1647,7 +1647,7 @@ class TestRequestDeletion:
         organization: Organization,
     ) -> None:
         """Organization with no activity is immediately deleted."""
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
 
         result = await organization_service.request_deletion(
             session, auth_subject, organization
@@ -1673,7 +1673,7 @@ class TestRequestDeletion:
 
         await create_order(save_fixture, customer=customer)
 
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
 
         result = await organization_service.request_deletion(
             session, auth_subject, organization
@@ -1717,10 +1717,10 @@ class TestRequestDeletion:
 
         # Mock Stripe account deletion
         mock_delete_stripe = mocker.patch(
-            "polar.account.service.AccountService.delete_stripe_account"
+            "solei.account.service.AccountService.delete_stripe_account"
         )
         mock_delete_account = mocker.patch(
-            "polar.account.service.AccountService.delete"
+            "solei.account.service.AccountService.delete"
         )
 
         result = await organization_service.request_deletion(
@@ -1761,10 +1761,10 @@ class TestRequestDeletion:
 
         # Mock Stripe account deletion to fail
         mocker.patch(
-            "polar.account.service.AccountService.delete_stripe_account",
+            "solei.account.service.AccountService.delete_stripe_account",
             side_effect=Exception("Stripe deletion failed"),
         )
-        enqueue_job_mock = mocker.patch("polar.organization.service.enqueue_job")
+        enqueue_job_mock = mocker.patch("solei.organization.service.enqueue_job")
 
         result = await organization_service.request_deletion(
             session, auth_subject, organization
@@ -1786,7 +1786,7 @@ class TestRequestDeletion:
         organization: Organization,
     ) -> None:
         """Non-admin cannot delete organization with an account."""
-        from polar.exceptions import NotPermitted
+        from solei.exceptions import NotPermitted
 
         # Create a different user who is the admin
         other_user = User(email="admin@example.com")
@@ -1827,7 +1827,7 @@ class TestRequestDeletion:
         # Ensure no account is set
         assert organization.account_id is None
 
-        mocker.patch("polar.organization.service.enqueue_job")
+        mocker.patch("solei.organization.service.enqueue_job")
 
         result = await organization_service.request_deletion(
             session, auth_subject, organization
@@ -1866,7 +1866,7 @@ class TestSoftDeleteOrganization:
         assert result.website != "https://test.com"
         assert result.bio != "Test bio"
 
-        # Avatar should be set to Polar logo
+        # Avatar should be set to Solei logo
         assert result.avatar_url is not None
         assert "avatars.githubusercontent.com" in result.avatar_url
 
@@ -1932,7 +1932,7 @@ class TestUpdateSeatBasedPricing:
         }
         await save_fixture(organization)
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await organization_service.update(
                 session,
                 organization,
@@ -1955,7 +1955,7 @@ class TestUpdateSeatBasedPricing:
         }
         await save_fixture(organization)
 
-        with pytest.raises(PolarRequestValidationError):
+        with pytest.raises(SoleiRequestValidationError):
             await organization_service.update(
                 session,
                 organization,

@@ -35,7 +35,7 @@ export async function generateMetadata(props: {
   const title = benefit.description
 
   return {
-    title, // " | Polar is added by the template"
+    title, // " | Solei is added by the template"
   }
 }
 

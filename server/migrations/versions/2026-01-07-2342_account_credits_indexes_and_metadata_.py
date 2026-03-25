@@ -12,7 +12,7 @@ from alembic_utils.pg_grant_table import PGGrantTable
 from sqlalchemy import text as sql_text
 from sqlalchemy.dialects import postgresql
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "24bb42b493d7"

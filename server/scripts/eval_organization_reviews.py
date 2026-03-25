@@ -35,20 +35,20 @@ import structlog
 import typer
 from sqlalchemy.ext.asyncio import create_async_engine
 
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.organization_review.eval.dataset import (
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.organization_review.eval.dataset import (
     DEFAULT_DATASET_PATH,
     DEFAULT_TOTAL,
     EvalDataset,
     extract_dataset,
 )
-from polar.organization_review.eval.evaluators import (
+from solei.organization_review.eval.evaluators import (
     NotFalseNegative,
     NotFalsePositive,
     VerdictMatch,
 )
-from polar.organization_review.eval.optimize import run_optimization
-from polar.organization_review.eval.task import create_review_task
+from solei.organization_review.eval.optimize import run_optimization
+from solei.organization_review.eval.task import create_review_task
 
 log = structlog.get_logger(__name__)
 

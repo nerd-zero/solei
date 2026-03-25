@@ -39,25 +39,25 @@ from pydantic_ai import Agent, RunContext
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
-from polar.config import settings
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.kit.schemas import Schema
-from polar.models.organization import Organization
-from polar.models.user_organization import UserOrganization
-from polar.organization.repository import OrganizationRepository
-from polar.organization_review.collectors.account import collect_account_data
-from polar.organization_review.collectors.feedback import collect_feedback_data
-from polar.organization_review.collectors.history import collect_history_data
-from polar.organization_review.collectors.identity import collect_identity_data
-from polar.organization_review.collectors.metrics import collect_metrics_data
-from polar.organization_review.collectors.organization import collect_organization_data
-from polar.organization_review.collectors.products import collect_products_data
-from polar.organization_review.collectors.setup import collect_setup_data
-from polar.organization_review.collectors.website import collect_website_data
-from polar.organization_review.policy import fetch_policy_content
-from polar.organization_review.report import parse_agent_report
-from polar.organization_review.repository import OrganizationReviewRepository
-from polar.postgres import create_async_engine
+from solei.config import settings
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.kit.schemas import Schema
+from solei.models.organization import Organization
+from solei.models.user_organization import UserOrganization
+from solei.organization.repository import OrganizationRepository
+from solei.organization_review.collectors.account import collect_account_data
+from solei.organization_review.collectors.feedback import collect_feedback_data
+from solei.organization_review.collectors.history import collect_history_data
+from solei.organization_review.collectors.identity import collect_identity_data
+from solei.organization_review.collectors.metrics import collect_metrics_data
+from solei.organization_review.collectors.organization import collect_organization_data
+from solei.organization_review.collectors.products import collect_products_data
+from solei.organization_review.collectors.setup import collect_setup_data
+from solei.organization_review.collectors.website import collect_website_data
+from solei.organization_review.policy import fetch_policy_content
+from solei.organization_review.report import parse_agent_report
+from solei.organization_review.repository import OrganizationReviewRepository
+from solei.postgres import create_async_engine
 
 log = structlog.get_logger(__name__)
 
@@ -448,7 +448,7 @@ def _create_agent(model_name: str) -> Agent[AppealAgentDeps, AppealReviewResult]
             return "Error: Call get_organization first."
 
         async with deps.sessionmaker() as session:
-            from polar.organization.repository import (
+            from solei.organization.repository import (
                 OrganizationReviewRepository as OrgReviewRepo,
             )
 

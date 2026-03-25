@@ -3,11 +3,11 @@ from urllib.parse import parse_qs, urlencode, urlparse
 import pytest
 from httpx import AsyncClient, ReadError
 
-from polar.file.repository import FileRepository
-from polar.file.s3 import S3_SERVICES
-from polar.integrations.aws.s3.exceptions import S3FileError
-from polar.models import Organization
-from polar.postgres import AsyncSession
+from solei.file.repository import FileRepository
+from solei.file.s3 import S3_SERVICES
+from solei.integrations.aws.s3.exceptions import S3FileError
+from solei.models import Organization
+from solei.postgres import AsyncSession
 from tests.fixtures.file import TestFile
 
 

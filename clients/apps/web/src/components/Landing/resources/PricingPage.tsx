@@ -22,7 +22,7 @@ export const PricingPage = () => {
         <div className="flex flex-col gap-2">
           <h3>Cheapest MoR on the market</h3>
           <p className="dark:text-polar-300 text-gray-500">
-            Polar is priced 20% cheaper than other MoR alternatives. 4% and 40¢
+            Solei is priced 20% cheaper than other MoR alternatives. 4% and 40¢
             per transaction.
           </p>
         </div>
@@ -31,7 +31,7 @@ export const PricingPage = () => {
           <h3>No Hidden Fees</h3>
           <p className="dark:text-polar-300 text-gray-500">
             While payouts may incur fees charged by the payout providers (such
-            as Stripe), Polar does not add any extra fees or markup.
+            as Stripe), Solei does not add any extra fees or markup.
           </p>
         </div>
       </ResourceSection>
@@ -40,7 +40,7 @@ export const PricingPage = () => {
         <div className="flex flex-col gap-4">
           <h3 className="text-lg">4% + 40¢ per transaction</h3>
           <p className="dark:text-polar-300 text-gray-500">
-            Polar is currently built on Stripe, and we cover their 2.9% + 30¢
+            Solei is currently built on Stripe, and we cover their 2.9% + 30¢
             fee from ours. However, they impose a few additional fees for
             certain transactions that we need to pass on.
           </p>
@@ -110,14 +110,14 @@ export const PricingPage = () => {
       <ResourceSection id="refunds" title="Refunds">
         <div className="flex flex-col gap-4">
           <p>
-            You can issue both full or partial refunds on Polar to your
+            You can issue both full or partial refunds on Solei to your
             customers. However, the initial transaction fees are not refunded to
             you since credit card networks and PSPs charge them regardless of a
             future refund.
           </p>
           <div className="dark:bg-polar-800 bg-gray-50 p-4">
             <p className="dark:text-polar-300 text-sm text-gray-500">
-              Polar reserves the right to issue refunds at our own discretion up
+              Solei reserves the right to issue refunds at our own discretion up
               to 60 days after the purchase as part of our efforts to
               continuously and proactively reduce disputes & chargebacks which
               costs you $15/dispute. We only leverage this right for this
@@ -140,12 +140,12 @@ export const PricingPage = () => {
           </p>
           <p>
             However, we continuously work to proactively reduce the rate of
-            chargebacks across Polar to be at or lower than industry standards.
+            chargebacks across Solei to be at or lower than industry standards.
           </p>
           <p>
             Credit card networks impose monitoring programs, penalties and
             higher chargeback costs for sellers with high chargeback rates
-            (~0.7%+). Since Polar is the Merchant of Record, we therefore always
+            (~0.7%+). Since Solei is the Merchant of Record, we therefore always
             monitor and proactively prevent our rate coming close to these
             thresholds.
           </p>
@@ -163,16 +163,16 @@ export const PricingPage = () => {
         <div className="flex flex-col gap-4">
           <p>
             While payouts may incur fees charged by our payout providers
-            (Stripe), Polar does not add any extra fees or markup. These are
-            strictly Stripe&apos;s fees, and Polar does not profit from them.
+            (Stripe), Solei does not add any extra fees or markup. These are
+            strictly Stripe&apos;s fees, and Solei does not profit from them.
           </p>
           <p>
-            In addition, Polar offers manual withdrawals for developers. Keeping
+            In addition, Solei offers manual withdrawals for developers. Keeping
             you in control of when to issue payouts.
           </p>
           <div className="dark:bg-polar-800 bg-gray-50 p-4">
             <p className="dark:text-polar-300 text-sm text-gray-500">
-              Unless you have a Polar balance that you haven&apos;t withdrawn
+              Unless you have a Solei balance that you haven&apos;t withdrawn
               for several months, at which point we&apos;ll eventually need to
               trigger a payout on your behalf.
             </p>
@@ -203,7 +203,7 @@ export const PricingPage = () => {
             better fit your needs.
           </p>
           <Link
-            href="mailto:support@polar.sh"
+            href="mailto:support@solei.to"
             className="w-fit border-b border-black pb-0.5 dark:border-white"
           >
             Reach out to us

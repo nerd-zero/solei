@@ -53,7 +53,7 @@ export default function Page() {
           textAlign="center"
         >
           <h1 className="text-2xl font-medium text-gray-900 dark:text-white">
-            Welcome to Polar
+            Welcome to Solei
           </h1>
           <p className="dark:text-polar-400 text-gray-500">
             What are you looking to do?

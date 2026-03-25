@@ -95,17 +95,17 @@ const Login = ({
         <LoginCodeForm {...loginProps} />
       </div>
       <div className="dark:text-polar-500 mt-6 text-center text-xs text-balance text-gray-400">
-        By using Polar, you agree to our{' '}
+        By using Solei, you agree to our{' '}
         <a
           className="dark:text-polar-300 text-gray-600"
-          href="https://polar.sh/legal/terms"
+          href="https://solei.to/legal/terms"
         >
           Terms of Service
         </a>{' '}
         &amp;{' '}
         <a
           className="dark:text-polar-300 text-gray-600"
-          href="https://polar.sh/legal/privacy"
+          href="https://solei.to/legal/privacy"
         >
           Privacy Policy
         </a>

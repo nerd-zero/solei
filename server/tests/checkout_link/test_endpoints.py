@@ -2,13 +2,13 @@ import pytest
 import pytest_asyncio
 from httpx import AsyncClient
 
-from polar.auth.scope import Scope
-from polar.checkout.repository import CheckoutRepository
-from polar.checkout.service import CHECKOUT_CLIENT_SECRET_PREFIX
-from polar.enums import SubscriptionRecurringInterval
-from polar.kit.utils import utc_now
-from polar.models import Checkout, CheckoutLink, Product, UserOrganization
-from polar.postgres import AsyncSession
+from solei.auth.scope import Scope
+from solei.checkout.repository import CheckoutRepository
+from solei.checkout.service import CHECKOUT_CLIENT_SECRET_PREFIX
+from solei.enums import SubscriptionRecurringInterval
+from solei.kit.utils import utc_now
+from solei.models import Checkout, CheckoutLink, Product, UserOrganization
+from solei.postgres import AsyncSession
 from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (

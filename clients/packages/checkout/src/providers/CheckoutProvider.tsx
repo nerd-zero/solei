@@ -182,12 +182,12 @@ export const CheckoutProvider = ({
 
       switch (server) {
         case 'sandbox': {
-          return 'https://sandbox-api.polar.sh'
+          return 'https://sandbox-api.solei.to'
         }
 
         case 'production':
         case undefined: {
-          return 'https://api.polar.sh'
+          return 'https://api.solei.to'
         }
 
         default:

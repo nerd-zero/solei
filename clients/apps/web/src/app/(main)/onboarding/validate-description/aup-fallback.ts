@@ -1,6 +1,6 @@
 /**
  * Hardcoded fallback copy of the Acceptable Use Policy.
- * Used when the live fetch from polar.sh fails.
+ * Used when the live fetch from solei.to fails.
  * Keep in sync with the canonical version at:
  *   /legal/acceptable-use-policy/page.mdx
  */
@@ -22,11 +22,11 @@ You may use the Services to sell:
 - Digital products: Templates, eBooks, PDFs, code, icons, fonts, design assets, photos, videos, audio, and similar digital assets;
 - Premium content & access: Discord server access, GitHub repository access, courses, and content requiring a subscription.
 
-Generally, acceptable services are digital goods, software, or services that can be fulfilled by (1) Polar on your behalf (License Keys, File Downloads, GitHub or Discord invites, or private links) or (2) your site/service using our APIs to grant immediate access to digital assets or services for customers with a one-time purchase or subscription.
+Generally, acceptable services are digital goods, software, or services that can be fulfilled by (1) Solei on your behalf (License Keys, File Downloads, GitHub or Discord invites, or private links) or (2) your site/service using our APIs to grant immediate access to digital assets or services for customers with a one-time purchase or subscription.
 
 Prohibited Products
 
-Polar serves software companies (including B2B SaaS, Consumer Software, and Games). If your company's primary offering is human services or the sale of physical goods, the Services are not designed for and should not be used by you.
+Solei serves software companies (including B2B SaaS, Consumer Software, and Games). If your company's primary offering is human services or the sale of physical goods, the Services are not designed for and should not be used by you.
 
 You may not use the Services to sell any Product which:
 
@@ -34,11 +34,11 @@ You may not use the Services to sell any Product which:
 2. violates any law or government regulation;
 3. involves fraudulent, deceptive, unfair, abusive or predatory practices;
 4. is marketed through the use of outbound telemarketing;
-5. threatens reputational damage to Polar or any Card Brand Network;
+5. threatens reputational damage to Solei or any Card Brand Network;
 6. results in or causes a significant risk of chargebacks, fines, damages, or harm and liability; or
 7. engages in, encourages, promotes, or celebrates violence or physical harm to persons or property, or toward any group based on race, religion, disability, gender, sexual orientation, national origin, or any other immutable characteristic.
 
-Polar reserves the right to refuse Services to sell any Product in its sole discretion.
+Solei reserves the right to refuse Services to sell any Product in its sole discretion.
 
 The following business categories and practices are not allowed:
 
@@ -47,7 +47,7 @@ The following business categories and practices are not allowed:
 3. Donations, crowdfunding, community access, advertising, and sponsorship;
 4. Any product or service that infringes upon, or enables the infringement of, the intellectual property rights of another party or that you do not own or do not have a license to;
 5. Any product or service that enables unauthorized access to data belonging to another party;
-6. Any product or service that enables non-Polar Sellers to sell products and services to customers;
+6. Any product or service that enables non-Solei Sellers to sell products and services to customers;
 7. Advertising and unsolicited marketing services, including, but not limited to, lead generation, bulk SMS and automated outreach;
 8. Adult content and services including, but not limited to, OnlyFans-related and similar services, adult AI-generated content and AI relationship services;
 9. Services used by, intended for, or advertised towards minors;

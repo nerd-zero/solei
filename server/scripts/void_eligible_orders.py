@@ -23,17 +23,17 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 from sqlalchemy import Select, func, or_, select
 
-from polar.kit.db.postgres import AsyncSession, create_async_sessionmaker
-from polar.models import (
+from solei.kit.db.postgres import AsyncSession, create_async_sessionmaker
+from solei.models import (
     Customer,
     Order,
     Organization,
 )
-from polar.order.repository import OrderRepository
-from polar.order.service import OrderService
-from polar.postgres import create_async_engine
-from polar.redis import create_redis
-from polar.worker._enqueue import JobQueueManager
+from solei.order.repository import OrderRepository
+from solei.order.service import OrderService
+from solei.postgres import create_async_engine
+from solei.redis import create_redis
+from solei.worker._enqueue import JobQueueManager
 
 cli = typer.Typer()
 

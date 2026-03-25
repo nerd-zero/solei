@@ -1,8 +1,8 @@
 import pytest
 
-from polar.invoice.service import invoice as invoice_service
-from polar.kit.address import Address, CountryAlpha2
-from polar.models import Customer, Product
+from solei.invoice.service import invoice as invoice_service
+from solei.kit.address import Address, CountryAlpha2
+from solei.models import Customer, Product
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_order
 
@@ -23,7 +23,7 @@ async def test_create_order_invoice(
             postal_code="90001",
             country=CountryAlpha2("US"),
         ),
-        invoice_number="POLAR-0001",
+        invoice_number="SOLEI-0001",
     )
 
     invoice_path = await invoice_service.create_order_invoice(order)

@@ -133,7 +133,7 @@ const OrganizationSelectionPage = ({
         client={client}
         introduction={
           <>
-            Welcome to Polar!
+            Welcome to Solei!
             <br />
             Create an organization and connect to{' '}
             <span className="dark:text-polar-200 font-medium text-gray-700">
@@ -251,12 +251,12 @@ const OrganizationSelectionPage = ({
                           className="cursor-pointer leading-relaxed font-medium"
                         >
                           I understand the restrictions above and agree to
-                          Polar&rsquo;s terms
+                          Solei&rsquo;s terms
                         </label>
                         <ul className="dark:text-polar-400 flex flex-col gap-y-1 text-sm text-gray-500">
                           <li>
                             <a
-                              href="https://polar.sh/docs/merchant-of-record/account-reviews"
+                              href="https://solei.to/docs/merchant-of-record/account-reviews"
                               className="text-blue-600 hover:underline dark:text-blue-400"
                               target="_blank"
                               rel="noreferrer"
@@ -268,7 +268,7 @@ const OrganizationSelectionPage = ({
                           </li>
                           <li>
                             <a
-                              href="https://polar.sh/legal/terms"
+                              href="https://solei.to/legal/terms"
                               className="text-blue-600 hover:underline dark:text-blue-400"
                               target="_blank"
                               rel="noreferrer"
@@ -278,7 +278,7 @@ const OrganizationSelectionPage = ({
                           </li>
                           <li>
                             <a
-                              href="https://polar.sh/legal/privacy"
+                              href="https://solei.to/legal/privacy"
                               className="text-blue-600 hover:underline dark:text-blue-400"
                               target="_blank"
                               rel="noreferrer"
@@ -363,7 +363,7 @@ const OrganizationSelectionPage = ({
           <span className="dark:text-polar-200 font-medium text-gray-700">
             {clientName}
           </span>{' '}
-          wants to access one of your Polar organizations. Select one:
+          wants to access one of your Solei organizations. Select one:
         </>
       }
     >

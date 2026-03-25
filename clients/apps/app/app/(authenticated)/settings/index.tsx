@@ -99,17 +99,17 @@ export default function Index() {
           <SettingsItem
             title="Support"
             variant="link"
-            onPress={() => Linking.openURL('https://polar.sh/docs/support')}
+            onPress={() => Linking.openURL('https://solei.to/docs/support')}
           />
           <SettingsItem
             title="Privacy Policy"
             variant="link"
-            onPress={() => Linking.openURL('https://polar.sh/legal/privacy')}
+            onPress={() => Linking.openURL('https://solei.to/legal/privacy')}
           />
           <SettingsItem
             title="Terms of Service"
             variant="link"
-            onPress={() => Linking.openURL('https://polar.sh/legal/terms')}
+            onPress={() => Linking.openURL('https://solei.to/legal/terms')}
           />
           <Box height={1} backgroundColor="border" marginVertical="spacing-8" />
           <SettingsItem
@@ -121,7 +121,7 @@ export default function Index() {
         </Box>
         <Box justifyContent="center" flexDirection="row">
           <Text variant="body" color="subtext" textAlign="center">
-            {`Polar for ${PLATFORM_DISPLAY_NAME[Platform.OS as keyof typeof PLATFORM_DISPLAY_NAME]} ${BUILD_VERSION}`}
+            {`Solei for ${PLATFORM_DISPLAY_NAME[Platform.OS as keyof typeof PLATFORM_DISPLAY_NAME]} ${BUILD_VERSION}`}
           </Text>
         </Box>
       </ScrollView>

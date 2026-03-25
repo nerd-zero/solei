@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import httpx
 import pytest
 
-from polar.organization_review.collectors.website import (
+from solei.organization_review.collectors.website import (
     MAX_CHARS_PER_PAGE,
     MAX_PAGES,
     MAX_REDIRECTS,
@@ -21,11 +21,11 @@ from polar.organization_review.collectors.website import (
     collect_website_data,
     fetch_page,
 )
-from polar.organization_review.schemas import WebsiteData
+from solei.organization_review.schemas import WebsiteData
 
 # Shorthand for patching _resolve_and_validate_ip to allow all IPs
 _PATCH_SSRF = patch(
-    "polar.organization_review.collectors.website._resolve_and_validate_ip",
+    "solei.organization_review.collectors.website._resolve_and_validate_ip",
     new_callable=AsyncMock,
 )
 
@@ -352,7 +352,7 @@ class TestCollectWebsiteData:
     @pytest.mark.asyncio
     async def test_prepends_https_if_missing(self) -> None:
         with patch(
-            "polar.organization_review.collectors.website._run_website_agent",
+            "solei.organization_review.collectors.website._run_website_agent",
             new_callable=AsyncMock,
         ) as mock_run:
             mock_run.return_value = WebsiteData(base_url="https://example.com")
@@ -365,7 +365,7 @@ class TestCollectWebsiteData:
     @pytest.mark.asyncio
     async def test_strips_trailing_slash(self) -> None:
         with patch(
-            "polar.organization_review.collectors.website._run_website_agent",
+            "solei.organization_review.collectors.website._run_website_agent",
             new_callable=AsyncMock,
         ) as mock_run:
             mock_run.return_value = WebsiteData(base_url="https://example.com")
@@ -382,11 +382,11 @@ class TestCollectWebsiteData:
 
         with (
             patch(
-                "polar.organization_review.collectors.website._run_website_agent",
+                "solei.organization_review.collectors.website._run_website_agent",
                 side_effect=slow_agent,
             ),
             patch(
-                "polar.organization_review.collectors.website.OVERALL_TIMEOUT_S", 0.01
+                "solei.organization_review.collectors.website.OVERALL_TIMEOUT_S", 0.01
             ),
         ):
             result = await collect_website_data("https://example.com")
@@ -397,7 +397,7 @@ class TestCollectWebsiteData:
     @pytest.mark.asyncio
     async def test_exception_returns_error_data(self) -> None:
         with patch(
-            "polar.organization_review.collectors.website._run_website_agent",
+            "solei.organization_review.collectors.website._run_website_agent",
             new_callable=AsyncMock,
             side_effect=RuntimeError("boom"),
         ):
@@ -556,7 +556,7 @@ class TestFetchPageSSRF:
         ctx.deps = deps
 
         with patch(
-            "polar.organization_review.collectors.website._resolve_and_validate_ip",
+            "solei.organization_review.collectors.website._resolve_and_validate_ip",
             new_callable=AsyncMock,
             side_effect=SSRFBlockedError("resolves to private IP 10.0.0.1"),
         ):
@@ -591,7 +591,7 @@ class TestFetchPageSSRF:
                 raise SSRFBlockedError(f"Blocked: {hostname} resolves to private IP")
 
         with patch(
-            "polar.organization_review.collectors.website._resolve_and_validate_ip",
+            "solei.organization_review.collectors.website._resolve_and_validate_ip",
             new_callable=AsyncMock,
             side_effect=_validate_side_effect,
         ):
@@ -719,7 +719,7 @@ class TestBrowsePageSSRF:
         ctx.deps = deps
 
         with patch(
-            "polar.organization_review.collectors.website._resolve_and_validate_ip",
+            "solei.organization_review.collectors.website._resolve_and_validate_ip",
             new_callable=AsyncMock,
             side_effect=SSRFBlockedError("resolves to private IP 10.0.0.1"),
         ):
@@ -768,7 +768,7 @@ class TestPlaywrightRouteInterceptor:
         mock_pw.chromium.launch.return_value = mock_browser
 
         with patch(
-            "polar.organization_review.collectors.website.async_playwright"
+            "solei.organization_review.collectors.website.async_playwright"
         ) as mock_apw:
             mock_apw.return_value.start = AsyncMock(return_value=mock_pw)
 
@@ -858,7 +858,7 @@ class TestPlaywrightRouteInterceptor:
         route.request.resource_type = "image"
 
         with patch(
-            "polar.organization_review.collectors.website._resolve_and_validate_ip",
+            "solei.organization_review.collectors.website._resolve_and_validate_ip",
             new_callable=AsyncMock,
             side_effect=SSRFBlockedError("private IP"),
         ):

@@ -1,7 +1,7 @@
 {
   "name": "@polar-sh/client",
-  "description": "Polar Internal API Client",
-  "author": "Polar",
+  "description": "Solei Internal API Client",
+  "author": "Solei",
   "license": "Apache-2.0",
   "type": "module",
   "private": true,

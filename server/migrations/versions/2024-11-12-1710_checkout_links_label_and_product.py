@@ -9,7 +9,7 @@ Create Date: 2024-11-12 17:10:57.321303
 import sqlalchemy as sa
 from alembic import op
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "2996c0ed1512"

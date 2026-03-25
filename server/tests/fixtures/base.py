@@ -6,12 +6,12 @@ import pytest
 import pytest_asyncio
 from fastapi import FastAPI
 
-from polar.app import app as polar_app
-from polar.auth.dependencies import _auth_subject_factory_cache
-from polar.auth.models import AuthSubject, Subject
-from polar.checkout.ip_geolocation import _get_client_dependency
-from polar.postgres import AsyncSession, get_db_read_session, get_db_session
-from polar.redis import Redis, get_redis
+from solei.app import app as polar_app
+from solei.auth.dependencies import _auth_subject_factory_cache
+from solei.auth.models import AuthSubject, Subject
+from solei.checkout.ip_geolocation import _get_client_dependency
+from solei.postgres import AsyncSession, get_db_read_session, get_db_session
+from solei.redis import Redis, get_redis
 
 
 class IsolatedSessionTestClient(httpx.AsyncClient):

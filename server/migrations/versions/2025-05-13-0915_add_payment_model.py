@@ -10,9 +10,9 @@ import sqlalchemy as sa
 from alembic import op
 from sqlalchemy.dialects import postgresql
 
-from polar.kit.extensions.sqlalchemy.types import StrEnumType
+from solei.kit.extensions.sqlalchemy.types import StrEnumType
 
-# Polar Custom Imports
+# Solei Custom Imports
 
 # revision identifiers, used by Alembic.
 revision = "173ca3810487"

@@ -196,7 +196,7 @@ export const FinancePage = () => {
             className="dark:text-polar-500 text-lg text-gray-500 md:w-[480px]"
             variants={itemVariants}
           >
-            Join companies using Polar for transparent, compliant financial
+            Join companies using Solei for transparent, compliant financial
             management.
           </motion.p>
           <motion.div variants={itemVariants}>

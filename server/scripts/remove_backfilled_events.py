@@ -9,10 +9,10 @@ from rich.progress import Progress
 from sqlalchemy import delete, func, select
 from sqlalchemy.engine import CursorResult
 
-from polar.event.system import SystemEvent
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import Event, Meter
-from polar.postgres import create_async_engine
+from solei.event.system import SystemEvent
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import Event, Meter
+from solei.postgres import create_async_engine
 
 cli = typer.Typer()
 

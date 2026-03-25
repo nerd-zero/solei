@@ -4,9 +4,9 @@ from typing import Any
 
 import pytest
 
-from polar.invoice.generator import Invoice, InvoiceGenerator, InvoiceItem
-from polar.kit.address import Address, CountryAlpha2
-from polar.tax.calculation import TaxabilityReason
+from solei.invoice.generator import Invoice, InvoiceGenerator, InvoiceItem
+from solei.kit.address import Address, CountryAlpha2
+from solei.tax.calculation import TaxabilityReason
 
 
 @pytest.fixture
@@ -14,15 +14,15 @@ def invoice() -> Invoice:
     return Invoice(
         number="12345",
         date=datetime.datetime(2025, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
-        seller_name="Polar Software Inc",
+        seller_name="Nerd Zero",
         seller_address=Address(
-            line1="123 Polar St",
+            line1="123 Solei St",
             city="San Francisco",
             state="CA",
             postal_code="94107",
             country=CountryAlpha2("US"),
         ),
-        seller_additional_info="[support@polar.sh](mailto:support@polar.sh)",
+        seller_additional_info="[support@solei.to](mailto:support@solei.to)",
         customer_name="John Doe",
         customer_address=Address(
             line1="456 Customer Ave",
@@ -64,7 +64,7 @@ def invoice() -> Invoice:
             """
 Thank you for your business!
 
-- [Legal terms](https://polar.sh) and conditions apply.
+- [Legal terms](https://solei.to) and conditions apply.
 - Lawyers blah blah blah.
 - This is a test invoice.
         """
@@ -85,7 +85,7 @@ Thank you for your business!
         (
             {
                 "customer_address": Address(country=CountryAlpha2("FR")),
-                "seller_additional_info": "[support@polar.sh](mailto:support@polar.sh)\nExtra line 1\nExtra line 2\nExtra line 3",
+                "seller_additional_info": "[support@solei.to](mailto:support@solei.to)\nExtra line 1\nExtra line 2\nExtra line 3",
             },
             "long_seller_info",
         ),

@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Benefits', // " | Polar is added by the template"
+    title: 'Benefits', // " | Solei is added by the template"
   }
 }
 

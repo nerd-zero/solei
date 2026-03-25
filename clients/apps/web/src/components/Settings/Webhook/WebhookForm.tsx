@@ -222,7 +222,7 @@ export const FieldEvents = () => {
             control={control}
             name="events"
             render={({ field }) => {
-              const href = `https://polar.sh/docs/api-reference/webhooks/${event}`
+              const href = `https://solei.to/docs/api-reference/webhooks/${event}`
 
               return (
                 <FormItem className="flex flex-row items-center space-y-0 space-x-3">

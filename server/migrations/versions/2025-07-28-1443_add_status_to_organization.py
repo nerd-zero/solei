@@ -9,9 +9,9 @@ Create Date: 2025-07-28 14:43:59.406269
 import sqlalchemy as sa
 from alembic import op
 
-# Polar Custom Imports
-from polar.kit.extensions.sqlalchemy.types import StringEnum
-from polar.models.organization import Organization, OrganizationStatus
+# Solei Custom Imports
+from solei.kit.extensions.sqlalchemy.types import StringEnum
+from solei.models.organization import Organization, OrganizationStatus
 
 # revision identifiers, used by Alembic.
 revision = "24bff4469bc0"

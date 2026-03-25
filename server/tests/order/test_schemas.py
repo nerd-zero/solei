@@ -2,13 +2,13 @@
 
 import pytest
 
-from polar.models.customer import Customer
-from polar.models.order import (
+from solei.models.customer import Customer
+from solei.models.order import (
     OrderBillingReason,
     OrderBillingReasonInternal,
 )
-from polar.models.product import Product
-from polar.order.schemas import Order
+from solei.models.product import Product
+from solei.order.schemas import Order
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import create_order
 

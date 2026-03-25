@@ -382,7 +382,7 @@ export const BillingDiagram = () => {
           End-to-end.
         </h2>
         <p className="dark:text-polar-500 text-lg leading-relaxed text-pretty text-gray-500">
-          Polar makes it incredibly easy to monetize your software. Usage
+          Solei makes it incredibly easy to monetize your software. Usage
           billing using event ingestion, SaaS tiers or one-off purchases.
         </p>
         <ul

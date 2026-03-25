@@ -12,12 +12,12 @@ from rich.progress import Progress
 from sqlalchemy import func, select
 from sqlalchemy.util.typing import TypedDict
 
-from polar import tasks  # noqa: F401
-from polar.kit.db.postgres import create_async_sessionmaker
-from polar.models import WebhookDelivery, WebhookEvent
-from polar.postgres import create_async_engine
-from polar.redis import create_redis
-from polar.worker import JobQueueManager
+from solei import tasks  # noqa: F401
+from solei.kit.db.postgres import create_async_sessionmaker
+from solei.models import WebhookDelivery, WebhookEvent
+from solei.postgres import create_async_engine
+from solei.redis import create_redis
+from solei.worker import JobQueueManager
 
 cli = typer.Typer()
 

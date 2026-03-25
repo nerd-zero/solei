@@ -1,5 +1,5 @@
-from polar.enums import AccountType
-from polar.models import Account, User
+from solei.enums import AccountType
+from solei.models import Account, User
 from tests.fixtures.database import SaveFixture
 
 
