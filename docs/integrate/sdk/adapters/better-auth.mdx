@@ -5,7 +5,7 @@ description: "Payments and Checkouts made dead simple with BetterAuth"
 
 ## @polar-sh/better-auth
 
-A [Better Auth](https://github.com/better-auth/better-auth) plugin for integrating [Polar](https://polar.sh) payments and subscriptions into your authentication flow.
+A [Better Auth](https://github.com/better-auth/better-auth) plugin for integrating [Solei](https://solei.to) payments and subscriptions into your authentication flow.
 
 ### Features
 
@@ -14,16 +14,16 @@ A [Better Auth](https://github.com/better-auth/better-auth) plugin for integrati
 - [Reference System to associate purchases with organizations](#3-2-orders)
 - [Checkout Integration](#checkout-plugin)
 - [Event Ingestion & Customer Meters for flexible Usage Based Billing](#usage-plugin)
-- [Handle Polar Webhooks securely with signature verification](#webhooks-plugin)
+- [Handle Solei Webhooks securely with signature verification](#webhooks-plugin)
 - [Customer Portal](#portal-plugin)
 
 ## Examples
 
-- [With Next.js, Better Auth and Cloudflare Workers](https://github.com/polarsource/examples/tree/main/with-nextjs-better-auth-cloudflare-workers)
+- [With Next.js, Better Auth and Cloudflare Workers](https://github.com/nerd-zero/solei-examples/tree/main/with-nextjs-better-auth-cloudflare-workers)
 
 ## Installation
 
-Install the required Better Auth and Polar packages using the following command:
+Install the required Better Auth and Solei packages using the following command:
 
 <Tabs>
   <Tab title="npm">
@@ -48,33 +48,33 @@ Install the required Better Auth and Polar packages using the following command:
   </Tab>
 </Tabs>
 
-## Integrate Polar with BetterAuth
+## Integrate Solei with BetterAuth
 
 <Steps>
-  <Step title="Configure Polar Access Token">
-    Go to your Polar Organization Settings, create an Organization Access Token, and add it to the environment variables of your application.
+  <Step title="Configure Solei Access Token">
+    Go to your Solei Organization Settings, create an Organization Access Token, and add it to the environment variables of your application.
 
     ```bash .env
-    POLAR_ACCESS_TOKEN=...
+    SOLEI_ACCESS_TOKEN=...
     ```
 
   </Step>
   <Step title="Configure BetterAuth Server">
-    The Polar plugin comes with it's own set of plugins to add functionality to your stack:
+    The Solei plugin comes with it's own set of plugins to add functionality to your stack:
 
     - **checkout** - Enable seamless checkout integration
     - **portal** - Make it possible for your customers to manage their orders, subscriptions & benefits
     - **usage** - List customer meters & ingest events for Usage Based Billing
-    - **webhooks** - Listen for relevant Polar webhooks
+    - **webhooks** - Listen for relevant Solei webhooks
 
-    ```typescript icon="square-js" BetterAuth Server with Polar Example
+    ```typescript icon="square-js" BetterAuth Server with Solei Example
     import { betterAuth } from "better-auth";
     import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth"; // [!code ++]
     import { Polar } from "@polar-sh/sdk"; // [!code ++]
 
     const polarClient = new Polar({ // [!code ++]
-        accessToken: process.env.POLAR_ACCESS_TOKEN, // [!code ++]
-        // Use 'sandbox' if you're using the Polar Sandbox environment
+        accessToken: process.env.SOLEI_ACCESS_TOKEN, // [!code ++]
+        // Use 'sandbox' if you're using the Solei Sandbox environment
         // Remember that access tokens, products, etc. are completely separated between environments.
         // Access tokens obtained in Production are for instance not usable in the Sandbox environment.
         server: 'sandbox' // [!code ++]
@@ -90,7 +90,7 @@ Install the required Better Auth and Polar packages using the following command:
                     checkout({ // [!code ++]
                         products: [ // [!code ++]
                             { // [!code ++]
-                                productId: "123-456-789", // ID of Product from Polar Dashboard // [!code ++]
+                                productId: "123-456-789", // ID of Product from Solei Dashboard // [!code ++]
                                 slug: "pro" // Custom slug for easy reference in Checkout URL, e.g. /checkout/pro // [!code ++]
                             } // [!code ++]
                         ], // [!code ++]
@@ -112,7 +112,7 @@ Install the required Better Auth and Polar packages using the following command:
     });
     ```
 
-    #### Polar Plugin Configuration Options
+    #### Solei Plugin Configuration Options
 
     ```typescript
     // ...
@@ -129,28 +129,28 @@ Install the required Better Auth and Polar packages using the following command:
             }, // [!code ++]
           }), // [!code ++]
           use: [ // [!code ++]
-            // This is where you add Polar plugins // [!code ++]
+            // This is where you add Solei plugins // [!code ++]
           ], // [!code ++]
         }),
       ],
     });
     ```
 
-    - `client` (required): Polar SDK client instance
-    - `createCustomerOnSignUp` (optional): Automatically create a Polar customer when a user signs up
+    - `client` (required): Solei SDK client instance
+    - `createCustomerOnSignUp` (optional): Automatically create a Solei customer when a user signs up
     - `getCustomerCreateParams` (optional): Custom function to provide additional customer creation metadata
-    - `use` (optional): Array of Polar plugins to enable specific functionality (checkout, portal, usage, and webhooks)
+    - `use` (optional): Array of Solei plugins to enable specific functionality (checkout, portal, usage, and webhooks)
 
   </Step>
   <Step title="Configure BetterAuth Client">
-    You will be using the BetterAuth Client to interact with the Polar functionalities.
+    You will be using the BetterAuth Client to interact with the Solei functionalities.
 
-    ```typescript icon="square-js" BetterAuth Client with Polar Example
+    ```typescript icon="square-js" BetterAuth Client with Solei Example
     import { createAuthClient } from "better-auth/react";
     import { polarClient } from "@polar-sh/better-auth/client"; // [!code ++]
     import { organizationClient } from "better-auth/client/plugins"; // [!code ++]
 
-    // All Polar plugins, etc. should be attached to BetterAuth server
+    // All Solei plugins, etc. should be attached to BetterAuth server
     export const authClient = createAuthClient({ // [!code ++]
       plugins: [polarClient()], // [!code ++]
     }); // [!code ++]
@@ -161,13 +161,13 @@ Install the required Better Auth and Polar packages using the following command:
 
 ## Automatic Customer creation on signup
 
-Enable the `createCustomerOnSignUp` [Polar plugin configuration option](#polar-plugin-configuration-options) to automatically create a new Polar Customer when a new User is added in the BetterAuth database.
+Enable the `createCustomerOnSignUp` [Solei plugin configuration option](#polar-plugin-configuration-options) to automatically create a new Solei Customer when a new User is added in the BetterAuth database.
 
-All new customers are created with an associated `externalId`, i.e. the ID of your User in the Database. This skips any Polar to User mapping in your database.
+All new customers are created with an associated `externalId`, i.e. the ID of your User in the Database. This skips any Solei to User mapping in your database.
 
 ## Sync Customer deletion
 
-To add user deletion logic with external Polar customer deletion in BetterAuth, extend the user config of your betterAuth setup with the deleteUser option and an afterDelete hook. Here’s how to integrate this alongside your Polar plugin and automatic customer creation:
+To add user deletion logic with external Solei customer deletion in BetterAuth, extend the user config of your betterAuth setup with the deleteUser option and an afterDelete hook. Here’s how to integrate this alongside your Solei plugin and automatic customer creation:
 
 ```typescript icon="square-js" Customer Deletion Example
 const auth = betterAuth({
@@ -190,7 +190,7 @@ const auth = betterAuth({
 
 ## Checkout Plugin
 
-[Source code](https://github.com/polarsource/polar-adapters/blob/main/packages/polar-betterauth/src/plugins/checkout.ts)
+[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/polar-betterauth/src/plugins/checkout.ts)
 
 To support [checkouts](/features/checkout/links) in your app, you would pass the `checkout` plugin in the `use` property.
 
@@ -204,7 +204,7 @@ The checkout plugin accepts the following configuration options:
 
 <Steps>
   <Step title="Use Checkout Plugin">
-    Update the `use` property of the Polar plugin for BetterAuth client to have the `checkout` plugin.
+    Update the `use` property of the Solei plugin for BetterAuth client to have the `checkout` plugin.
 
     ```typescript icon="square-js" Checkout Plugin Example
     import {
@@ -240,13 +240,13 @@ The checkout plugin accepts the following configuration options:
 
     The `checkout` method accepts the following properties:
 
-    - **`products`** (optional): An array of Polar Product IDs.
+    - **`products`** (optional): An array of Solei Product IDs.
     - **`slug`** (optional): A string that can be used as a reference to the `products` defined in the Checkout config
     - **`referenceId`** (optional): An identifier that will be saved in the metadata of the checkout, order & subscription object
 
-    ```typescript icon="square-js" BetterAuth Checkout with Polar Example
+    ```typescript icon="square-js" BetterAuth Checkout with Solei Example
     await authClient.checkout({
-      // Polar Product IDs
+      // Solei Product IDs
       products: ["e651f46d-ac20-4f26-b769-ad088b123df2"], // [!code ++]
       // OR
       // if "products" in passed in the checkout plugin's config, you may pass the slug
@@ -256,11 +256,11 @@ The checkout plugin accepts the following configuration options:
 
     This plugin supports the Organization plugin. If you pass the organization ID to the Checkout referenceId, you will be able to keep track of purchases made from organization members.
 
-    ```typescript icon="square-js" BetterAuth Checkout with Polar Organization Example
+    ```typescript icon="square-js" BetterAuth Checkout with Solei Organization Example
     const organizationId = (await authClient.organization.list())?.data?.[0]?.id,
 
     await authClient.checkout({
-        // Any Polar Product ID can be passed here
+        // Any Solei Product ID can be passed here
         products: ["e651f46d-ac20-4f26-b769-ad088b123df2"],
         // Or, if you setup "products" in the Checkout Config, you can pass the slug
         slug: 'pro',
@@ -274,7 +274,7 @@ The checkout plugin accepts the following configuration options:
 
 ## Usage Plugin
 
-[Source code](https://github.com/polarsource/polar-adapters/blob/main/packages/polar-betterauth/src/plugins/usage.ts)
+[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/polar-betterauth/src/plugins/usage.ts)
 
 A plugin for Usage Based Billing that allows you to [ingest events](#event-ingestion) from your application and list the [authenticated user's Usage Meter](#customer-meters).
 
@@ -303,7 +303,7 @@ const auth = betterAuth({
 
 ### 1. Event Ingestion
 
-Polar's Usage Based Billing builds entirely on event ingestion. Ingest events from your application, create Meters to represent that usage, and add metered prices to Products to charge for it.
+Solei's Usage Based Billing builds entirely on event ingestion. Ingest events from your application, create Meters to represent that usage, and add metered prices to Products to charge for it.
 
 The `ingestion` method of the `usage` plugin accepts the following parameters:
 
@@ -354,15 +354,15 @@ The `meters` method returns the following fields in the response object:
 
 ## Webhooks Plugin
 
-[Source code](https://github.com/polarsource/polar-adapters/blob/main/packages/polar-betterauth/src/plugins/webhooks.ts)
+[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/polar-betterauth/src/plugins/webhooks.ts)
 
-The `webhooks` plugin can be used to capture incoming events from your Polar organization.
+The `webhooks` plugin can be used to capture incoming events from your Solei organization.
 
-To set up the Polar `webhooks` plugin with the BetterAuth client, follow the steps below:
+To set up the Solei `webhooks` plugin with the BetterAuth client, follow the steps below:
 
 <Steps>
-  <Step title="Configure Webhook Endpoints in Polar">
-    Configure a Webhook endpoint in your Polar Organization Settings page by following [this guide](/integrate/webhooks/endpoints). Webhook endpoint is configured at `/api/auth/polar/webhooks`.
+  <Step title="Configure Webhook Endpoints in Solei">
+    Configure a Webhook endpoint in your Solei Organization Settings page by following [this guide](/integrate/webhooks/endpoints). Webhook endpoint is configured at `/api/auth/polar/webhooks`.
   </Step>
   <Step title="Add the Webhook Secret">
     Add the obtained webhook secret to your application environment as an environment variable (to be used as `process.env.POLAR_WEBHOOK_SECRET`):
@@ -402,7 +402,7 @@ To set up the Polar `webhooks` plugin with the BetterAuth client, follow the ste
   </Step>
 </Steps>
 
-The `webhooks` plugin allows you to invoke handlers for all Polar webhook events:
+The `webhooks` plugin allows you to invoke handlers for all Solei webhook events:
 
 - `onPayload` - Catch-all handler for any incoming Webhook event
 - `onCheckoutCreated` - Triggered when a checkout is created
@@ -433,7 +433,7 @@ The `webhooks` plugin allows you to invoke handlers for all Polar webhook events
 
 ## Portal Plugin
 
-[Source code](https://github.com/polarsource/polar-adapters/blob/main/packages/polar-betterauth/src/plugins/portal.ts)
+[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/polar-betterauth/src/plugins/portal.ts)
 
 A plugin which enables customer management of their purchases, orders and subscriptions.
 
@@ -463,7 +463,7 @@ The `portal` plugin gives the BetterAuth Client a set of customer management met
 
 ### 1. Customer Portal Management
 
-The following method will redirect the user to the Polar Customer Portal, where they can see their orders, purchases, subscriptions, benefits, etc.
+The following method will redirect the user to the Solei Customer Portal, where they can see their orders, purchases, subscriptions, benefits, etc.
 
 ```typescript icon="square-js" Open Customer Portal Example
 await authClient.customer.portal();
@@ -490,7 +490,7 @@ The customer state object contains:
 
 Using the customer state object, you can determine whether to provision access for the user to your service.
 
-Learn more about the Polar Customer State [in the Polar Docs](https://polar.sh/docs/integrate/customer-state).
+Learn more about the Solei Customer State [in the Solei Docs](https://solei.to/docs/integrate/customer-state).
 
 ### 3. Benefits, Orders & Subscriptions
 

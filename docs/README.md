@@ -1,4 +1,4 @@
-# Polar docs
+# Solei docs
 
 Using Mintlify.
 

@@ -18,7 +18,7 @@ import { StreamStrategy } from '@polar-sh/ingestion/strategies/Stream';
 const myReadstream = createReadStream(...);
 
 // Setup the Stream Ingestion Strategy
-const streamIngestion = Ingestion({ accessToken: process.env.POLAR_ACCESS_TOKEN })
+const streamIngestion = Ingestion({ accessToken: process.env.SOLEI_ACCESS_TOKEN })
   .strategy(new StreamStrategy(myReadstream))
   .ingest("my-stream");
 
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     // Get the wrapped stream
     // Pass Customer Id to properly annotate the ingestion events with a specific customer
     const stream = streamIngestion.client({
-      customerId: request.headers.get("X-Polar-Customer-Id") ?? ""
+      customerId: request.headers.get("X-Solei-Customer-Id") ?? ""
     });
 
     // Consume stream...

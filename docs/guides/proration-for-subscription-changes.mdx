@@ -1,6 +1,6 @@
 ---
 title: "Proration for Subscription Upgrades and Downgrades"
-description: "Learn how proration works in Polar, including available proration types, billing behavior during upgrades and downgrades, and how to configure proration using APIs and dashboard settings."
+description: "Learn how proration works in Solei, including available proration types, billing behavior during upgrades and downgrades, and how to configure proration using APIs and dashboard settings."
 ---
 
 ## What is Proration?
@@ -37,9 +37,9 @@ A new update always overrides any previous pending update that has not yet been 
 
 <Steps>
     <Step title = "Go to Organization Settings">
-        In the Polar dashboard sidebar, click on **Settings**.
+        In the Solei dashboard sidebar, click on **Settings**.
             You can also go directly to:  
-            `https://polar.sh/dashboard/${org_slug}/settings`  
+            `https://solei.to/dashboard/${org_slug}/settings`  
         Scroll down to **Subscriptions** section.
         <img height="200" src="/assets/guides/proration/settings.png" />
     </Step>
@@ -52,31 +52,31 @@ A new update always overrides any previous pending update that has not yet been 
 
 ## How to change the default proration setting using the OAT API
 
-You can change the default proration behavior using the [Update Organization API](https://polar.sh/docs/api-reference/organizations/update).
+You can change the default proration behavior using the [Update Organization API](https://solei.to/docs/api-reference/organizations/update).
     
 ## How to prorate when updating subscription via API
 
 <Steps>
     <Step title = "Create an organization Token">
-        Create a new organization token by following our [Organization Access Tokens](https://polar.sh/docs/integrate/oat) guide.
+        Create a new organization token by following our [Organization Access Tokens](https://solei.to/docs/integrate/oat) guide.
     </Step>
     <Step title = "Save your Access Token">
         After creating your access token, you will be able to view it. Please copy and save your access token.
         <img height="200" src="/assets/guides/proration/access-token.png" />
     </Step>
     <Step title = "Copy the Subscription ID">
-        - In the Polar dashboard sidebar, navigate to **Sales** > **Subscriptions** for your organization.
+        - In the Solei dashboard sidebar, navigate to **Sales** > **Subscriptions** for your organization.
         You can also go directly to:  
-        `https://polar.sh/dashboard/${org_slug}/sales/subscriptions`
+        `https://solei.to/dashboard/${org_slug}/sales/subscriptions`
 
         <img height="200" src="/assets/guides/proration/subscription-list.png" />
         - Click on the Subscription you want to upgrade/downgrade and copy its **Subscription ID**.
         <img height="200" src="/assets/guides/proration/subscription-details.png" />
     </Step>
     <Step title = "Copy the Product ID">
-        - In the Polar dashboard sidebar, navigate to **Products** > **Catalogue** for your organization.
+        - In the Solei dashboard sidebar, navigate to **Products** > **Catalogue** for your organization.
         You can also go directly to:  
-        `https://polar.sh/dashboard/${org_slug}/products`  
+        `https://solei.to/dashboard/${org_slug}/products`  
         <img height="200" src="/assets/guides/proration/products-catalogue.png" />
         - Retrieve the Product ID for the item you wish to upgrade the subscription to by clicking on the **⋮ (More options) menu** next to chosen products and selecting **Copy Product ID**.       
         <img height="200" src="/assets/guides/proration/product-id.png" />
@@ -98,7 +98,7 @@ You can change the default proration behavior using the [Update Organization API
 
 ```bash cURL
 curl --request PATCH \
-  --url https://api.polar.sh/v1/subscriptions/{<subscription_id>} \
+  --url https://api.solei.to/v1/subscriptions/{<subscription_id>} \
   --header 'Authorization: Bearer <YOUR_BEARER_TOKEN_HERE>' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -130,10 +130,10 @@ with Polar(
 
 
 ## Some examples for proration amount calculation
-You can create a subscription with two plan options, one for \$5 and other for \$20 by following [Create Product Variants](https://polar.sh/docs/guides/create-variants).  
+You can create a subscription with two plan options, one for \$5 and other for \$20 by following [Create Product Variants](https://solei.to/docs/guides/create-variants).  
 
 ### Case 1: Upgrading the subscription
-You can upgrade a subscription by following the steps outlined in [Subscription Upgrades](https://polar.sh/docs/guides/subscription-upgrades), which explains the process from both the merchant’s and the customer’s perspectives.
+You can upgrade a subscription by following the steps outlined in [Subscription Upgrades](https://solei.to/docs/guides/subscription-upgrades), which explains the process from both the merchant’s and the customer’s perspectives.
 
 **Example 1: Proration type = `invoice`**
 <img height="200" src="/assets/guides/proration/upgrade_invoice.png" />
@@ -147,7 +147,7 @@ If the billing interval changes, i.e. daily to monthly or monthly to yearly or v
 </Note>
 
 ### Case 2: Downgrading the subscription 
-You can downgrade a subscription by following the steps outlined in [Subscription Downgrades](https://polar.sh/docs/guides/subscription-downgrades), which explains the process from both the merchant’s and the customer’s perspectives.
+You can downgrade a subscription by following the steps outlined in [Subscription Downgrades](https://solei.to/docs/guides/subscription-downgrades), which explains the process from both the merchant’s and the customer’s perspectives.
 
 **Example 1: Proration type = `invoice`**
 <img height="200" src="/assets/guides/proration/downgrade_invoice.png" />

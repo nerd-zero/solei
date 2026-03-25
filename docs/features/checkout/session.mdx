@@ -48,7 +48,7 @@ Ad-hoc prices are marked with `source: "ad_hoc"` in the API response, while cata
 import { Polar } from "@polar-sh/sdk";
 
 const polar = new Polar({
-  accessToken: process.env["POLAR_ACCESS_TOKEN"] ?? "",
+  accessToken: process.env["SOLEI_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
@@ -108,9 +108,9 @@ For the complete schema of each price type, refer to the [Checkout API reference
 
 ## External Customer ID
 
-Quite often, you'll have your own users management system in your application, where your customer already have an ID. To ease reconciliation between Polar and your system, you can inform us about your customer ID when creating a checkout session through the [`external_customer_id`](/api-reference/checkouts/create-session/) field.
+Quite often, you'll have your own users management system in your application, where your customer already have an ID. To ease reconciliation between Solei and your system, you can inform us about your customer ID when creating a checkout session through the [`external_customer_id`](/api-reference/checkouts/create-session/) field.
 
-After a successful checkout, we'll create a Customer on Polar with the external ID you provided. It'll be provided through the `customer.external_id` property in webhooks you may have configured.
+After a successful checkout, we'll create a Customer on Solei with the external ID you provided. It'll be provided through the `customer.external_id` property in webhooks you may have configured.
 
 ## SDK examples
 
@@ -121,7 +121,7 @@ Using our SDK, creating a checkout session is quite straightforward.
     import { Polar } from "@polar-sh/sdk";
 
     const polar = new Polar({
-      accessToken: process.env["POLAR_ACCESS_TOKEN"] ?? "",
+      accessToken: process.env["SOLEI_ACCESS_TOKEN"] ?? "",
     });
 
     async function run() {

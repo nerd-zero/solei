@@ -8,7 +8,7 @@ When you want to prevent customers from changing their email address during the 
 
 ## Overview
 
-By passing either `customer_id` or `external_customer_id` when creating a checkout session, Polar will:
+By passing either `customer_id` or `external_customer_id` when creating a checkout session, Solei will:
 
 - Pre-fill the customer's information in the checkout form
 - **Disable the email field** so it cannot be edited
@@ -16,11 +16,11 @@ By passing either `customer_id` or `external_customer_id` when creating a checko
 
 ## Using Customer ID
 
-If you've already created a customer in Polar and have their Polar customer ID, you can use it directly.
+If you've already created a customer in Solei and have their Solei customer ID, you can use it directly.
 
 <Steps>
     <Step title = "Get the Customer ID">
-        Retrieve the customer ID from your Polar dashboard or through the [Customers API](/api-reference/customers/list).
+        Retrieve the customer ID from your Solei dashboard or through the [Customers API](/api-reference/customers/list).
         
         The customer ID is a UUID format like: `992fae2a-2a17-4b7a-8d9e-e287cf90131b`
     </Step>
@@ -31,7 +31,7 @@ If you've already created a customer in Polar and have their Polar customer ID, 
 ```ts TypeScript
 import { Polar } from "@polar-sh/sdk";
 
-const polar = new Polar({ accessToken: process.env["POLAR_ACCESS_TOKEN"] });
+const polar = new Polar({ accessToken: process.env["SOLEI_ACCESS_TOKEN"] });
 
 const checkout = await polar.checkouts.create({
     products: ["<product_id>"],
@@ -58,7 +58,7 @@ with Polar(
 
 ```bash cURL
 curl --request POST \
-  --url https://api.polar.sh/v1/checkouts/ \
+  --url https://api.solei.to/v1/checkouts/ \
   --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -75,13 +75,13 @@ curl --request POST \
 
 ## Using External Customer ID
 
-If you have your own user management system, you can use your internal customer ID. This is the recommended approach as it makes reconciliation between your system and Polar easier.
+If you have your own user management system, you can use your internal customer ID. This is the recommended approach as it makes reconciliation between your system and Solei easier.
 
 <Steps>
     <Step title = "Use Your Internal Customer ID">
         When creating a checkout session, pass your application's user ID as the `external_customer_id`.
         
-        Polar will:
+        Solei will:
         - Look for an existing customer with this external ID
         - If found, link to that customer and pre-fill their data
     </Step>
@@ -90,7 +90,7 @@ If you have your own user management system, you can use your internal customer 
 ```ts TypeScript
 import { Polar } from "@polar-sh/sdk";
 
-const polar = new Polar({ accessToken: process.env["POLAR_ACCESS_TOKEN"] });
+const polar = new Polar({ accessToken: process.env["SOLEI_ACCESS_TOKEN"] });
 
 const checkout = await polar.checkouts.create({
     products: ["<product_id>"],
@@ -117,7 +117,7 @@ with Polar(
 
 ```bash cURL
 curl --request POST \
-  --url https://api.polar.sh/v1/checkouts/ \
+  --url https://api.solei.to/v1/checkouts/ \
   --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
   --header 'Content-Type: application/json' \
   --data '{

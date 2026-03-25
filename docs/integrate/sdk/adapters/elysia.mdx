@@ -5,11 +5,11 @@ description: "Payments and Checkouts made dead simple with Elysia"
 
 ## Examples
 
-- [With Elysia](https://github.com/polarsource/examples/tree/main/with-elysia)
+- [With Elysia](https://github.com/nerd-zero/solei-examples/tree/main/with-elysia)
 
 ## Installation
 
-Install the required Polar packages using the following command:
+Install the required Solei packages using the following command:
 
 <Tabs>
   <Tab title="npm">
@@ -47,10 +47,10 @@ const app = new Elysia();
 app.get(
   "/checkout",
   Checkout({
-    accessToken: "xxx", // Or set an environment variable to POLAR_ACCESS_TOKEN
+    accessToken: "xxx", // Or set an environment variable to SOLEI_ACCESS_TOKEN
     successUrl: process.env.SUCCESS_URL,
     returnUrl: "https://myapp.com", // An optional URL which renders a back-button in the Checkout
-    server: "sandbox", // Use sandbox if you're testing Polar - omit the parameter or pass 'production' otherwise
+    server: "sandbox", // Use sandbox if you're testing Solei - omit the parameter or pass 'production' otherwise
     theme: "dark", // Enforces the theme - System-preferred theme will be set if left omitted
   })
 );
@@ -80,10 +80,10 @@ const app = new Elysia();
 app.get(
   "/portal",
   CustomerPortal({
-    accessToken: "xxx", // Or set an environment variable to POLAR_ACCESS_TOKEN
-    getCustomerId: (event) => "", // Function to resolve a Polar Customer ID
+    accessToken: "xxx", // Or set an environment variable to SOLEI_ACCESS_TOKEN
+    getCustomerId: (event) => "", // Function to resolve a Solei Customer ID
     returnUrl: "https://myapp.com", // An optional URL which renders a back-button in the Customer Portal
-    server: "sandbox", // Use sandbox if you're testing Polar - omit the parameter or pass 'production' otherwise
+    server: "sandbox", // Use sandbox if you're testing Solei - omit the parameter or pass 'production' otherwise
   })
 );
 ```

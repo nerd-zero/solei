@@ -17,7 +17,7 @@ pip install polar-sdk
 # Synchronous Example
 from polar_sdk import Polar
 
-s = Polar(
+s = Solei(
     access_token="<YOUR_BEARER_TOKEN_HERE>",
 )
 
@@ -33,14 +33,14 @@ if res is not None:
             break
 ```
 
-[Read more](https://github.com/polarsource/polar-python)
+[Read more](https://github.com/nerd-zero/solei-python)
 
 ### Sandbox Environment
 
 You can configure the SDK so it hits the [sandbox environment](/integrate/sandbox) instead of the production one. You just need to add the `server` argument when instantiating the client:
 
 ```python
-s = Polar(
+s = Solei(
     server="sandbox",
     access_token="<YOUR_BEARER_TOKEN_HERE>",
 )
