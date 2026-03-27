@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   upload:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
