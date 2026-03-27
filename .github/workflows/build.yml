@@ -9,7 +9,6 @@ on:
       - "!clients/apps/app/**"
       - "VERSION"
       - ".github/workflows/build.yml"
-      - ".github/scripts/bump-version.sh"
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -19,40 +18,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Bump CalVer on main only — needs contents: write for the commit+push.
-  # Runs before prepare so the new version is available as an output.
-  bump-version:
-    name: "Bump Version 📦"
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: blacksmith-4vcpu-ubuntu-2404
-    permissions:
-      contents: write
-    outputs:
-      version: ${{ steps.bump.outputs.version }}
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
-      - name: Bump CalVer and commit
-        id: bump
-        run: |
-          chmod +x .github/scripts/bump-version.sh
-          VERSION=$(.github/scripts/bump-version.sh)
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add VERSION
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: bump version to ${VERSION} [skip ci]"
-            git push
-          fi
-          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-
   prepare:
     name: "Prepare 🔧"
-    needs: [bump-version]
-    if: always() && !cancelled()
     runs-on: blacksmith-4vcpu-ubuntu-2404
     permissions:
       contents: read
@@ -72,7 +39,6 @@ jobs:
             server:
               - 'server/**'
               - '.github/workflows/build.yml'
-              - '.github/scripts/bump-version.sh'
             web:
               - 'clients/**'
               - '!clients/apps/app/**'
@@ -82,13 +48,13 @@ jobs:
         id: version
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            # PRs: tag as pr-{number}-{sha:7}, no version bump
+            # PRs: tag as pr-{number}-{sha:7}
             PR_NUM="${{ github.event.pull_request.number }}"
             SHA="${{ github.event.pull_request.head.sha }}"
             echo "version=pr-${PR_NUM}-${SHA:0:7}" >> "$GITHUB_OUTPUT"
           else
-            # Main: version was already bumped by the bump-version job
-            echo "version=${{ needs.bump-version.outputs.version }}" >> "$GITHUB_OUTPUT"
+            # Main: read version from VERSION file (bumped manually in PRs)
+            echo "version=$(cat VERSION | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
           fi
 
   build-server:
@@ -187,7 +153,7 @@ jobs:
 
   deploy:
     name: "Deploy 🚀"
-    needs: [bump-version, prepare, build-server, build-web]
+    needs: [prepare, build-server, build-web]
     if: |
       always() &&
       !failure() &&
