@@ -39,10 +39,14 @@ RUN apk add --no-cache curl jq
 
 RUN --mount=type=secret,id=IPINFO_ACCESS_TOKEN \
   mkdir /data && \
-  TOKEN=$(cat /run/secrets/IPINFO_ACCESS_TOKEN) && \
-  EXPECTED_SHA256=$(curl -fsSL "https://ipinfo.io/data/free/country_asn.mmdb/checksums?token=${TOKEN}" | jq -r '.checksums.sha256') && \
-  curl -fsSL "https://ipinfo.io/data/free/country_asn.mmdb?token=${TOKEN}" -o /data/country_asn.mmdb && \
-  echo "${EXPECTED_SHA256}  /data/country_asn.mmdb" | sha256sum -c -
+  TOKEN=$(cat /run/secrets/IPINFO_ACCESS_TOKEN 2>/dev/null || true) && \
+  if [ -n "$TOKEN" ]; then \
+    EXPECTED_SHA256=$(curl -fsSL "https://ipinfo.io/data/free/country_asn.mmdb/checksums?token=${TOKEN}" | jq -r '.checksums.sha256') && \
+    curl -fsSL "https://ipinfo.io/data/free/country_asn.mmdb?token=${TOKEN}" -o /data/country_asn.mmdb && \
+    echo "${EXPECTED_SHA256}  /data/country_asn.mmdb" | sha256sum -c -; \
+  else \
+    echo "IPINFO_ACCESS_TOKEN not set — skipping IP geolocation database download"; \
+  fi
 
 # Stage 4: Final production image
 FROM --platform=$BUILDPLATFORM python:3.14-slim AS production
