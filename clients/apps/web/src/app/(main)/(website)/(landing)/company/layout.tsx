@@ -3,27 +3,17 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Company',
   description:
-    'Small team, big ambitions. Learn about Solei, our open roles, and the investors who back us.',
+    'We are building the billing layer for Africa.',
   openGraph: {
     title: 'Company',
     description:
-      'Small team, big ambitions. Learn about Solei, our open roles, and the investors who back us.',
-    images: [
-      {
-        url: 'https://solei.to/api/og?title=Company&description=Small+team%2C+big+ambitions.',
-        width: 1200,
-        height: 630,
-      },
-    ],
+      'We are building the billing layer for Africa.',
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: 'Company',
     description:
-      'Small team, big ambitions. Learn about Solei, our open roles, and the investors who back us.',
-    images: [
-      'https://solei.to/api/og?title=Company&description=Small+team%2C+big+ambitions.',
-    ],
+      'We are building the billing layer for Africa.',
   },
 }
 
