@@ -13,7 +13,7 @@ env:
 
 jobs:
   link-pr-to-issue:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Extract ticket number from branch name
         id: extract-ticket
