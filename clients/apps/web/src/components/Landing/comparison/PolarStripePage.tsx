@@ -20,14 +20,19 @@ export const PolarVsStripePage = () => {
     <ResourceLayout title="Solei vs Stripe" toc={tocItems}>
       <ResourceSection id="overview" title="Overview">
         <p className="text-lg">
-          Choosing the right payment infrastructure for your software business.
+          Choosing the right payment infrastructure for software businesses
+          building in Africa.
         </p>
         <p className="dark:text-polar-300 text-gray-500">
           While Stripe is a powerful payment processor, Solei is a complete
-          billing infrastructure platform built specifically for developers who
-          want to monetize software. The key difference: Solei acts as a
-          Merchant of Record, handling all tax compliance globally, while Stripe
-          is a payment processor that leaves tax compliance to you.
+          billing infrastructure platform built specifically for African
+          businesses and developers who want to monetize software. Solei is
+          designed to integrate with African payment systems, helping teams
+          accept local and cross-border payments, reconcile transactions, and
+          handle billing with less operational overhead. The key difference:
+          Solei acts as a Merchant of Record, handling tax compliance globally,
+          while Stripe is a payment processor that leaves tax compliance to
+          you.
         </p>
       </ResourceSection>
 
@@ -201,11 +206,12 @@ export const PolarVsStripePage = () => {
       <ResourceSection id="developer-experience" title="Developer Experience">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg">Designed for developers</h3>
+            <h3 className="text-lg">Designed for developers in Africa</h3>
             <p className="dark:text-polar-300 text-gray-500">
               Both Stripe and Solei offer excellent developer experiences, but
-              Solei is purpose-built for software monetization with modern
-              frameworks and ergonomic SDKs.
+              Solei is purpose-built for software monetization in Africa with
+              modern frameworks, ergonomic SDKs, and integrations that work with
+              African payment systems and local business realities.
             </p>
           </div>
           <ul className="dark:border-polar-700 dark:divide-polar-700 divide-y divide-gray-200 border-y border-gray-200 [&>li]:py-3">
@@ -293,13 +299,14 @@ export const PolarVsStripePage = () => {
       <ResourceSection id="why-polar" title="Why Choose Solei?">
         <div className="flex flex-col gap-4">
           <h3 className="text-lg">
-            Solei is purpose-built for software businesses
+            Solei is purpose-built for African software businesses
           </h3>
           <p className="dark:text-polar-300 text-gray-500">
             While Stripe is a powerful general-purpose payment processor, Solei
-            is specifically designed for developers monetizing software. If you
-            want to sell globally without worrying about tax compliance, Solei
-            is the better choice.
+            is specifically designed for developers monetizing software across
+            Africa. If you want to integrate with African payment systems and
+            sell globally without worrying about tax compliance, Solei is the
+            better choice.
           </p>
         </div>
         <ul className="dark:border-polar-700 dark:divide-polar-700 divide-y divide-gray-200 border-y border-gray-200 [&>li]:py-3">
