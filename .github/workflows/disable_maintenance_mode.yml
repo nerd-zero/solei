@@ -9,7 +9,7 @@ permissions:
 jobs:
   disable_maintenance:
     name: Disable Maintenance Mode
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     environment: maintenance
     steps:
       - name: Checkout repository
