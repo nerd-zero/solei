@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 
 const BLOG_SLUG = 'launching-solei-billing-layer-for-africa' as const
 const BLOG_COVER = '/assets/landing/blog/solei-launch-cover.svg' as const
+const BLOG_TITLE = 'Launching Solei, the billing layer for Africa' as const
+const BLOG_DESCRIPTION =
+  'One of the many tools built by Nerd Zero, a small team of developers daring to build fintech tools for Africa.' as const
 
 export const dynamic = 'force-static'
 export const dynamicParams = false
@@ -22,20 +25,17 @@ export async function generateMetadata({
   }
 
   return {
-    title: 'Launching Solei: the billing layer for Africa',
-    description:
-      'One of the many tools built by Nerd Zero, a small team of developers daring to build fintech tools for Africa.',
+    title: BLOG_TITLE,
+    description: BLOG_DESCRIPTION,
     openGraph: {
-      title: 'Launching Solei: the billing layer for Africa',
-      description:
-        'One of the many tools built by Nerd Zero, a small team of developers daring to build fintech tools for Africa.',
+      title: BLOG_TITLE,
+      description: BLOG_DESCRIPTION,
       images: [BLOG_COVER],
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Launching Solei: the billing layer for Africa',
-      description:
-        'One of the many tools built by Nerd Zero, a small team of developers daring to build fintech tools for Africa.',
+      title: BLOG_TITLE,
+      description: BLOG_DESCRIPTION,
       images: [BLOG_COVER],
     },
   }
