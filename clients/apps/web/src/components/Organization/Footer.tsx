@@ -1,7 +1,6 @@
 import ArrowOutwardOutlined from '@mui/icons-material/ArrowOutwardOutlined'
 import Link from 'next/link'
 import { PropsWithChildren } from 'react'
-import { PolarLogotype } from '../Layout/Public/PolarLogotype'
 import { CookiePreferencesButton } from '../Privacy/CookiePreferencesButton'
 
 const Footer = () => {
@@ -10,12 +9,8 @@ const Footer = () => {
       <div className="flex w-full flex-col items-center px-6 py-16 md:max-w-3xl md:px-0 lg:py-32 xl:max-w-6xl">
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 md:justify-between md:gap-16 lg:grid-cols-6">
           <div className="flex h-full flex-1 flex-col justify-between gap-y-6 md:col-span-2">
-            <span className="text-black md:ml-0">
-              <PolarLogotype
-                className="ml-2 md:ml-0"
-                logoVariant="logotype"
-                size={120}
-              />
+            <span className="text-3xl font-semibold tracking-tight text-black dark:text-white md:text-4xl">
+              Solei
             </span>
             <div className="flex flex-col gap-y-6">
               <Link
@@ -26,7 +21,7 @@ const Footer = () => {
                 <ArrowOutwardOutlined fontSize="inherit" />
               </Link>
               <span className="dark:text-polar-500 w-full text-gray-500">
-                &copy; Solei Software, Inc. {new Date().getFullYear()}
+                &copy; Solei. {new Date().getFullYear()}
               </span>
             </div>
           </div>

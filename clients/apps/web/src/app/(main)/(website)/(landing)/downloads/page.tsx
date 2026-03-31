@@ -38,7 +38,7 @@ const downloads = [
   {
     title: 'Solei for iOS',
     description: 'Your business in the palm of your hand. Built for iPhone.',
-    href: 'https://apps.apple.com/se/app/polar-monetize-your-software/id6746640471',
+    // href: 'https://apps.apple.com/se/app/polar-monetize-your-software/id6746640471',
     target: '_blank',
     icon: <Apple size={20} />,
   },
@@ -51,20 +51,20 @@ const downloads = [
 ]
 
 const plugins = [
-  {
-    title: 'Solei for Raycast',
-    href: 'https://www.raycast.com/emilwidlund/polar',
-    description:
-      'Access to your latest orders & customers right at your fingertips.',
-    icon: <Raycast size={20} />,
-  },
-  {
-    title: 'Solei for Framer',
-    href: 'https://www.framer.com/marketplace/plugins/polar',
-    description:
-      'Empower your Framer projects with flexible Checkout components.',
-    icon: <Framer size={20} />,
-  },
+  // {
+  //   title: 'Solei for Raycast',
+  //   href: 'https://www.raycast.com/emilwidlund/polar',
+  //   description:
+  //     'Access to your latest orders & customers right at your fingertips.',
+  //   icon: <Raycast size={20} />,
+  // },
+  // {
+  //   title: 'Solei for Framer',
+  //   // href: 'https://www.framer.com/marketplace/plugins/polar',
+  //   description:
+  //     'Empower your Framer projects with flexible Checkout components.',
+  //   icon: <Framer size={20} />,
+  // },
 ]
 
 export default function Downloads() {
