@@ -57,7 +57,7 @@ run: infra-up ## Start infra + API + worker + frontend (full dev stack)
 	@echo "Starting full dev stack..."
 	@$(MAKE) -j3 api worker frontend
 
-stop: ## Stop all infrastructure services
+down: ## Stop all infrastructure services
 	$(COMPOSE) -f $(COMPOSE_FILE) down
 
 # ─────────────────────────────────────────────

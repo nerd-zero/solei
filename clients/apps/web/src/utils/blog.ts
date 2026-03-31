@@ -1,7 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-const IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.avif']
+const IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.svg']
+const FRONTMATTER_IMAGE_PREFIXES = ['/', './', '../']
 
 export interface ContentPost {
   slug: string
@@ -67,14 +68,19 @@ function readPostsFromDir(
       const postDir = path.join(dir, slug)
       const content = fs.readFileSync(path.join(postDir, 'page.mdx'), 'utf-8')
       const fm = parseFrontmatter(content)
-      const imageFile = findCoverImage(postDir)
+      const imageFile = fm.image?.trim() || findCoverImage(postDir)
+
       return {
         slug,
         title: fm.title ?? slug,
         description: fm.description ?? '',
         date: fm.created_at ?? '',
         image: imageFile
-          ? `/api/cover?type=${type}&slug=${encodeURIComponent(slug)}&file=${encodeURIComponent(imageFile)}`
+          ? FRONTMATTER_IMAGE_PREFIXES.some((prefix) =>
+              imageFile.startsWith(prefix),
+            )
+            ? imageFile
+            : `/api/cover?type=${type}&slug=${encodeURIComponent(slug)}&file=${encodeURIComponent(imageFile)}`
           : null,
         type,
         href: `${hrefPrefix}/${slug}`,
