@@ -17,8 +17,8 @@ import Link from 'next/link'
 import { Hero } from '../Hero/Hero'
 import { Section } from '../Section'
 
-const llmCode = `import { Ingestion } from "@polar-sh/ingestion";
-import { LLMStrategy } from "@polar-sh/ingestion/strategies/LLM";
+const llmCode = `import { Ingestion } from "@solei-to/ingestion";
+import { LLMStrategy } from "@solei-to/ingestion/strategies/LLM";
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 

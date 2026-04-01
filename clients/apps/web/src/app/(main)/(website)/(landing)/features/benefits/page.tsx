@@ -8,11 +8,11 @@ export const metadata: Metadata = {
   keywords:
     'product benefits, license keys, digital downloads, github access, discord integration, benefit fulfillment',
   openGraph: {
-    siteName: 'Solei',
+    siteName: 'solei.to',
     type: 'website',
     images: [
       {
-        url: 'https://solei.to/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/company',
         width: 1200,
         height: 630,
       },
@@ -22,10 +22,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [
       {
-        url: 'https://solei.to/assets/brand/polar_og.jpg',
+        url: 'https://solei.to/company',
         width: 1200,
         height: 630,
-        alt: 'Solei',
+        alt: 'solei.to',
       },
     ],
   },

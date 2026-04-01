@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 md:justify-between md:gap-16 lg:grid-cols-6">
           <div className="flex h-full flex-1 flex-col justify-between gap-y-6 md:col-span-2">
             <span className="text-3xl font-semibold tracking-tight text-black dark:text-white md:text-4xl">
-              Solei
+              solei.to
             </span>
             <div className="flex flex-col gap-y-6">
               <Link
@@ -21,8 +21,9 @@ const Footer = () => {
                 <ArrowOutwardOutlined fontSize="inherit" />
               </Link>
               <span className="dark:text-polar-500 w-full text-gray-500">
-                &copy; Solei. {new Date().getFullYear()}
+                &copy; Solei - Nerd Zero. {new Date().getFullYear()}
               </span>
+                <code className="">Powered by <a href="https://n0.rocks" className='text-blue'>n0</a></code>
             </div>
           </div>
 
@@ -52,16 +53,16 @@ const Footer = () => {
             <h3 className="dark:text-polar-500 text-gray-500">Company</h3>
             <div className="flex flex-col gap-y-3">
               <FooterLink href="/company">About Solei</FooterLink>
-              <FooterLink href="https://github.com/polarsource">
+              <FooterLink href="https://github.com/nerd-zero/solei">
                 GitHub
               </FooterLink>
-              <FooterLink href="https://x.com/polar_sh">X / Twitter</FooterLink>
+              {/*<FooterLink href="https://x.com/polar_sh">X / Twitter</FooterLink>
               <FooterLink href="https://discord.gg/Pnhfz3UThd">
                 Discord
               </FooterLink>
               <FooterLink href="https://solei.to/assets/brand/polar_brand.zip">
                 Brand Assets
-              </FooterLink>
+              </FooterLink>*/}
               <FooterLink href="https://solei.to/legal/terms">
                 Terms of Service
               </FooterLink>

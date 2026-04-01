@@ -6,7 +6,7 @@ export const Upsell = () => {
       <h1 className="font-display text-4xl leading-tight! xl:text-7xl">
         Modern billing.
         <br />
-        Built for the AI era.
+        Built for the Africa.
       </h1>
       <GetStartedButton />
     </div>

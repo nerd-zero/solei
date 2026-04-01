@@ -105,7 +105,7 @@ export const BenefitsPage = () => {
               </div>
               <div className="flex flex-col gap-y-2">
                 <span className="dark:bg-polar-800 dark:border-polar-700 rounded-lg border border-gray-200 bg-gray-100 p-3 font-mono text-xs">
-                  POLAR-ABC123-XYZ789-DEF456
+                  SOLEI-ABC123-XYZ789-DEF456
                 </span>
                 <span className="dark:text-polar-500 text-xs text-gray-500">
                   Granted on Jan 1, 2025

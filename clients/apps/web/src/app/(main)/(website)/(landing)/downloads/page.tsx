@@ -5,6 +5,14 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { twMerge } from 'tailwind-merge'
 
+type DownloadCard = {
+  title: string
+  description: string
+  href?: string
+  target?: '_blank'
+  icon: React.ReactNode
+}
+
 export const metadata: Metadata = {
   title: 'Downloads',
   description: 'Use Solei in a variety of different environments',
@@ -34,7 +42,7 @@ export const metadata: Metadata = {
   },
 }
 
-const downloads = [
+const downloads: DownloadCard[] = [
   {
     title: 'Solei for iOS',
     description: 'Your business in the palm of your hand. Built for iPhone.',
@@ -50,7 +58,7 @@ const downloads = [
   },
 ]
 
-const plugins = [
+const plugins: DownloadCard[] = [
   // {
   //   title: 'Solei for Raycast',
   //   href: 'https://www.raycast.com/emilwidlund/polar',
@@ -174,7 +182,7 @@ export default function Downloads() {
             <Link
               key={link.title + link.description}
               className="dark:hover:bg-polar-900 dark:border-polar-700 flex w-full cursor-pointer flex-col gap-6 border border-gray-300 p-6 transition-colors duration-200 hover:bg-gray-100"
-              href={link.href}
+              href={link.href ?? '#'}
               target="_blank"
             >
               <Box
