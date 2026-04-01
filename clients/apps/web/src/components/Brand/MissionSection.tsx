@@ -33,7 +33,7 @@ export function MissionSection() {
             className="aspect-square"
           >
             <div className="flex flex-col items-center gap-8 md:gap-12">
-              <PolarLogotype logoVariant="icon" size={64} />
+              <PolarLogotype className="h-16 w-16" />
               <Headline
                 as="h3"
                 className="text-center text-pretty"
@@ -48,7 +48,7 @@ export function MissionSection() {
             className="aspect-square"
           >
             <div className="flex flex-col items-center gap-8 md:gap-12">
-              <PolarLogotype logoVariant="icon" size={64} />
+              <PolarLogotype className="h-16 w-16" />
               <Headline
                 as="h3"
                 className="text-center text-pretty"

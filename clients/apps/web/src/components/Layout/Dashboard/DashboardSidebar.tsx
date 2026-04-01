@@ -89,7 +89,7 @@ export const DashboardSidebar = ({
         )}
       >
         <PolarLogotype
-          size={32}
+          className="h-8 w-8"
           href={organization ? `/dashboard/${organization.slug}` : '/dashboard'}
         />
         <motion.div
