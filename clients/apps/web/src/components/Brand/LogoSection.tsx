@@ -207,18 +207,10 @@ export function LogoSection() {
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
             <div className="dark:bg-polar-900 flex aspect-square items-center justify-center bg-neutral-100">
-              <PolarLogotype
-                logoVariant="logotype"
-                logoClassName="dark:text-white"
-                size={360}
-              />
+              <PolarLogotype className="dark:text-white h-[360px] w-[360px]" />
             </div>
             <div className="dark:bg-polar-900 flex aspect-square items-center justify-center bg-neutral-100">
-              <PolarLogotype
-                logoVariant="icon"
-                logoClassName="dark:text-white"
-                size={220}
-              />
+              <PolarLogotype className="dark:text-white h-[220px] w-[220px]" />
             </div>
             <div
               className="dark:bg-polar-900 flex aspect-square cursor-auto items-center justify-center bg-neutral-100"
@@ -275,46 +267,26 @@ export function LogoSection() {
             <div className="grid grid-cols-2 gap-6">
               <DontCard label="Don't stretch or distort">
                 <div style={{ transform: 'scaleY(1.6)' }}>
-                  <PolarLogotype
-                    logoVariant="logotype"
-                    logoClassName="dark:text-white"
-                    size={150}
-                  />
+                  <PolarLogotype className="dark:text-white h-[150px] w-[150px]" />
                 </div>
               </DontCard>
 
               <DontCard label="Don't rotate">
                 <div style={{ transform: 'rotate(45deg)' }}>
-                  <PolarLogotype
-                    logoVariant="logotype"
-                    logoClassName="dark:text-white"
-                    size={150}
-                  />
+                  <PolarLogotype className="dark:text-white h-[150px] w-[150px]" />
                 </div>
               </DontCard>
 
               <DontCard label="Don't use low-contrast colour">
-                <PolarLogotype
-                  logoVariant="logotype"
-                  logoClassName="text-neutral-200 dark:text-neutral-800"
-                  size={150}
-                />
+                <PolarLogotype className="text-neutral-200 dark:text-neutral-800 h-[150px] w-[150px]" />
               </DontCard>
 
               <DontCard label="Don't recolour outside brand palette">
-                <PolarLogotype
-                  logoVariant="logotype"
-                  logoClassName="text-emerald-500 dark:text-emerald-500"
-                  size={150}
-                />
+                <PolarLogotype className="text-emerald-500 dark:text-emerald-500 h-[150px] w-[150px]" />
               </DontCard>
 
               <DontCard label="Don't use below 100px wide">
-                <PolarLogotype
-                  logoVariant="logotype"
-                  logoClassName="dark:text-white"
-                  size={80}
-                />
+                <PolarLogotype className="dark:text-white h-20 w-20" />
               </DontCard>
             </div>
           </div>
@@ -324,7 +296,7 @@ export function LogoSection() {
             className="dark:bg-polar-900 flex items-center justify-center bg-neutral-100"
             style={{ aspectRatio: '3 / 2' }}
           >
-            <PolarLogotype logoVariant="logotype" size={300} />
+            <PolarLogotype className="h-[300px] w-[300px]" />
           </div>
         </div>
 
@@ -370,38 +342,22 @@ export function LogoSection() {
             <div className="grid grid-cols-2 gap-6">
               <DontCard label="Don't stretch or distort">
                 <div style={{ transform: 'scaleX(1.6)' }}>
-                  <PolarLogotype
-                    logoVariant="icon"
-                    logoClassName="dark:text-white"
-                    size={130}
-                  />
+                  <PolarLogotype className="dark:text-white h-[130px] w-[130px]" />
                 </div>
               </DontCard>
 
               <DontCard label="Don't rotate">
                 <div style={{ transform: 'rotate(45deg)' }}>
-                  <PolarLogotype
-                    logoVariant="icon"
-                    logoClassName="dark:text-white"
-                    size={130}
-                  />
+                  <PolarLogotype className="dark:text-white h-[130px] w-[130px]" />
                 </div>
               </DontCard>
 
               <DontCard label="Don't use low-contrast colour">
-                <PolarLogotype
-                  logoVariant="icon"
-                  logoClassName="text-neutral-200 dark:text-neutral-800"
-                  size={130}
-                />
+                <PolarLogotype className="text-neutral-200 dark:text-neutral-800 h-[130px] w-[130px]" />
               </DontCard>
 
               <DontCard label="Don't recolour outside brand palette">
-                <PolarLogotype
-                  logoVariant="icon"
-                  logoClassName="text-emerald-500 dark:text-emerald-500"
-                  size={130}
-                />
+                <PolarLogotype className="text-emerald-500 dark:text-emerald-500 h-[130px] w-[130px]" />
               </DontCard>
             </div>
           </div>
@@ -411,7 +367,7 @@ export function LogoSection() {
             className="dark:bg-polar-900 flex items-center justify-center bg-neutral-100"
             style={{ aspectRatio: '2 / 3' }}
           >
-            <PolarLogotype logoVariant="icon" size={200} />
+            <PolarLogotype className="h-[200px] w-[200px]" />
           </div>
         </div>
       </div>
