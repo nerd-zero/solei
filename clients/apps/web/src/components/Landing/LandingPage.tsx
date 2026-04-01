@@ -32,7 +32,7 @@ const PageContent = () => {
       <Section className="flex flex-col gap-y-32 pt-0 md:pt-0">
         <Hero
           title="Turn Usage Into Revenue"
-          description="A billing platform built for AI companies"
+          description="A billing layer for Africa"
           size="large"
         >
           <GetStartedButton size="lg" text="Get Started" />
@@ -48,14 +48,14 @@ const PageContent = () => {
         </Hero>
       </Section>
       <Section className="flex flex-col gap-y-32" border>
-        <Logotypes />
+        {/*<Logotypes />*/}
         <Features />
       </Section>
       <Section className="flex flex-col gap-y-32">
         <BillingDiagram />
         <Usage />
       </Section>
-      {isMobile ? null : (
+      {/*{isMobile ? null : (
         <Section className="flex max-w-[1620px]! flex-col gap-y-32">
           <div className="dark:border-polar-700 relative aspect-video w-full flex-col items-center overflow-hidden rounded-xl border border-gray-200 md:rounded-3xl">
             <Stream
@@ -66,16 +66,16 @@ const PageContent = () => {
             />
           </div>
         </Section>
-      )}
+      )}*/}
       <Section className="flex flex-col gap-y-32" border>
         <Adapters />
       </Section>
       <Section className="flex flex-col gap-y-32" border>
         <Products />
       </Section>
-      <Section className="flex flex-col gap-y-24">
+      {/*<Section className="flex flex-col gap-y-24">
         <Testimonials />
-      </Section>
+      </Section>*/}
       <Section className="flex flex-col gap-y-24">
         <Pricing />
         <Upsell />

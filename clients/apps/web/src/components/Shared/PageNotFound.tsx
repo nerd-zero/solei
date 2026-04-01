@@ -48,7 +48,7 @@ const PageNotFound = () => {
           </a>
         </li>
       </ul>
-      <LogoType className="h-5 text-black dark:text-white" />
+      {/*<LogoType className="h-5 text-black dark:text-white" />*/}
     </div>
   )
 }

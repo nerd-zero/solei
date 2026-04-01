@@ -45,7 +45,7 @@ export const PolarLogotype = ({
         'text-2xl font-semibold tracking-tight text-black dark:text-white',
       )}
     >
-      Solei
+      solei.to
     </span>
   )
 

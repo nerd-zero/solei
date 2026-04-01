@@ -1,7 +1,7 @@
 import { Terminal } from '../Terminal'
 
-const CODE = `import { Ingestion } from "@polar-sh/ingestion";
-import { LLMStrategy } from "@polar-sh/ingestion/strategies/LLM";
+const CODE = `import { Ingestion } from "@solei-to/ingestion";
+import { LLMStrategy } from "@solei-to/ingestion/strategies/LLM";
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 
