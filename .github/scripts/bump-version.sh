@@ -23,7 +23,7 @@ fi
 YEAR=$(date +%Y)
 MONTH=$(date +%m)
 
-LINE=$(grep -E "^${COMPONENT}=" "$VERSION_FILE" || true)
+LINE=$(awk -F= -v comp="$COMPONENT" '$1 == comp { print $0; exit }' "$VERSION_FILE")
 if [[ -z "$LINE" ]]; then
   echo "Component not found in $VERSION_FILE: $COMPONENT" >&2
   exit 1
@@ -41,10 +41,15 @@ fi
 NEW_VERSION="${YEAR}.${MONTH}.${NEW_PATCH}"
 
 TMP_FILE="$(mktemp)"
-awk -v comp="$COMPONENT" -v ver="$NEW_VERSION" '
-  $0 ~ "^"comp"=" { print comp"="ver; next }
+cleanup() {
+  rm -f "$TMP_FILE"
+}
+trap cleanup EXIT ERR
+awk -F= -v comp="$COMPONENT" -v ver="$NEW_VERSION" '
+  $1 == comp { print comp"="ver; next }
   { print }
 ' "$VERSION_FILE" > "$TMP_FILE"
 mv "$TMP_FILE" "$VERSION_FILE"
+trap - EXIT ERR
 
 echo "$NEW_VERSION"

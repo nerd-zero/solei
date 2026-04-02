@@ -48,7 +48,7 @@ jobs:
           else
             echo "api_changed=false" >> "$GITHUB_OUTPUT"
           fi
-          if echo "$CHANGED" | grep -q '^clients/'; then
+          if echo "$CHANGED" | grep -q '^clients/' && ! echo "$CHANGED" | grep -q '^clients/apps/app/'; then
             echo "web_changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "web_changed=false" >> "$GITHUB_OUTPUT"

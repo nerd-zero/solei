@@ -17,8 +17,8 @@ jobs:
     outputs:
       api_version: ${{ steps.version.outputs.api_version }}
       web_version: ${{ steps.version.outputs.web_version }}
-      server-changed: ${{ steps.filter.outputs.server }}
-      web-changed: ${{ steps.filter.outputs.web }}
+      server-changed: ${{ steps.changes.outputs.server_changed }}
+      web-changed: ${{ steps.changes.outputs.web_changed }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -35,6 +35,37 @@ jobs:
               - 'clients/**'
               - '!clients/apps/app/**'
               - '.github/workflows/build.yml'
+
+      - name: Derive changed components
+        id: changes
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "server_changed=true" >> "$GITHUB_OUTPUT"
+            echo "web_changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          BASE="${{ github.event.before }}"
+          HEAD="${{ github.sha }}"
+
+          if [[ -z "$BASE" || "$BASE" == "0000000000000000000000000000000000000000" ]]; then
+            BASE="$(git rev-list --max-parents=0 "$HEAD")"
+          fi
+
+          VERSION_DIFF=$(git diff --unified=0 "$BASE" "$HEAD" -- VERSION || true)
+
+          server_changed="${{ steps.filter.outputs.server }}"
+          web_changed="${{ steps.filter.outputs.web }}"
+
+          if echo "$VERSION_DIFF" | grep -q '^[-+].*api='; then
+            server_changed=true
+          fi
+          if echo "$VERSION_DIFF" | grep -q '^[-+].*web='; then
+            web_changed=true
+          fi
+
+          echo "server_changed=$server_changed" >> "$GITHUB_OUTPUT"
+          echo "web_changed=$web_changed" >> "$GITHUB_OUTPUT"
 
       - name: Compute version tag
         id: version
