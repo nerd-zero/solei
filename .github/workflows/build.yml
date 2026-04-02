@@ -4,9 +4,6 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "server/**"
-      - "clients/**"
-      - "!clients/apps/app/**"
       - "VERSION"
       - ".github/workflows/build.yml"
   workflow_dispatch:
@@ -18,9 +15,10 @@ jobs:
     permissions:
       contents: read
     outputs:
-      version: ${{ steps.version.outputs.version }}
-      server-changed: ${{ steps.filter.outputs.server }}
-      web-changed: ${{ steps.filter.outputs.web }}
+      api_version: ${{ steps.version.outputs.api_version }}
+      web_version: ${{ steps.version.outputs.web_version }}
+      server-changed: ${{ steps.changes.outputs.server_changed }}
+      web-changed: ${{ steps.changes.outputs.web_changed }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -38,11 +36,45 @@ jobs:
               - '!clients/apps/app/**'
               - '.github/workflows/build.yml'
 
+      - name: Derive changed components
+        id: changes
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "server_changed=true" >> "$GITHUB_OUTPUT"
+            echo "web_changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          BASE="${{ github.event.before }}"
+          HEAD="${{ github.sha }}"
+
+          if [[ -z "$BASE" || "$BASE" == "0000000000000000000000000000000000000000" ]]; then
+            BASE="$(git rev-list --max-parents=0 "$HEAD")"
+          fi
+
+          VERSION_DIFF=$(git diff --unified=0 "$BASE" "$HEAD" -- VERSION || true)
+
+          server_changed="${{ steps.filter.outputs.server }}"
+          web_changed="${{ steps.filter.outputs.web }}"
+
+          if echo "$VERSION_DIFF" | grep -q '^[-+].*api='; then
+            server_changed=true
+          fi
+          if echo "$VERSION_DIFF" | grep -q '^[-+].*web='; then
+            web_changed=true
+          fi
+
+          echo "server_changed=$server_changed" >> "$GITHUB_OUTPUT"
+          echo "web_changed=$web_changed" >> "$GITHUB_OUTPUT"
+
       - name: Compute version tag
         id: version
         run: |
-          # Main: read version from VERSION file + alpha suffix
-          echo "version=$(cat VERSION | tr -d '[:space:]')-alpha" >> "$GITHUB_OUTPUT"
+          # Main: read versions from VERSION file + alpha suffix
+          API_VERSION=$(grep '^api=' VERSION | cut -d= -f2 | tr -d '[:space:]')
+          WEB_VERSION=$(grep '^web=' VERSION | cut -d= -f2 | tr -d '[:space:]')
+          echo "api_version=${API_VERSION}-alpha" >> "$GITHUB_OUTPUT"
+          echo "web_version=${WEB_VERSION}-alpha" >> "$GITHUB_OUTPUT"
 
   build-server:
     name: "Server: Build Image 🐳"
@@ -72,9 +104,9 @@ jobs:
           context: ./server
           target: production
           platforms: linux/amd64
-          tags: ghcr.io/nerd-zero/solei:${{ needs.prepare.outputs.version }}
+          tags: ghcr.io/nerd-zero/solei:${{ needs.prepare.outputs.api_version }}
           build-args: |
-            RELEASE_VERSION=${{ needs.prepare.outputs.version }}
+            RELEASE_VERSION=${{ needs.prepare.outputs.api_version }}
           secrets: |
             IPINFO_ACCESS_TOKEN=${{ secrets.IPINFO_ACCESS_TOKEN }}
 
@@ -106,9 +138,9 @@ jobs:
           context: ./clients
           file: ./clients/apps/web/Dockerfile
           platforms: linux/amd64
-          tags: ghcr.io/nerd-zero/solei-web:${{ needs.prepare.outputs.version }}
+          tags: ghcr.io/nerd-zero/solei-web:${{ needs.prepare.outputs.web_version }}
           build-args: |
-            RELEASE_VERSION=${{ needs.prepare.outputs.version }}
+            RELEASE_VERSION=${{ needs.prepare.outputs.web_version }}
           secrets: |
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
@@ -125,5 +157,5 @@ jobs:
       - name: Deploy to self-hosted servers
         run: |
           echo "TODO: wire up deployment to self-hosted servers"
-          echo "Server image: ghcr.io/nerd-zero/solei:${{ needs.prepare.outputs.version }}"
-          echo "Web image:    ghcr.io/nerd-zero/solei-web:${{ needs.prepare.outputs.version }}"
+          echo "Server image: ghcr.io/nerd-zero/solei:${{ needs.prepare.outputs.api_version }}"
+          echo "Web image:    ghcr.io/nerd-zero/solei-web:${{ needs.prepare.outputs.web_version }}"

@@ -6,13 +6,30 @@ set -euo pipefail
 # - New month/year: resets patch to 001
 # Must be run from the repo root.
 # Outputs the new version to stdout.
+#
+# Usage:
+#   ./bump-version.sh <component>
+# Example:
+#   ./bump-version.sh api
 
 VERSION_FILE="VERSION"
+COMPONENT="${1:-}"
+
+if [[ -z "$COMPONENT" ]]; then
+  echo "Usage: $0 <component>" >&2
+  exit 1
+fi
 
 YEAR=$(date +%Y)
 MONTH=$(date +%m)
 
-CURRENT=$(tr -d '[:space:]' < "$VERSION_FILE")
+LINE=$(awk -F= -v comp="$COMPONENT" '$1 == comp { print $0; exit }' "$VERSION_FILE")
+if [[ -z "$LINE" ]]; then
+  echo "Component not found in $VERSION_FILE: $COMPONENT" >&2
+  exit 1
+fi
+
+CURRENT="${LINE#*=}"
 IFS='.' read -r CUR_YEAR CUR_MONTH CUR_PATCH <<< "$CURRENT"
 
 if [[ "$CUR_YEAR" == "$YEAR" && "$CUR_MONTH" == "$MONTH" ]]; then
@@ -22,5 +39,17 @@ else
 fi
 
 NEW_VERSION="${YEAR}.${MONTH}.${NEW_PATCH}"
-printf '%s\n' "$NEW_VERSION" > "$VERSION_FILE"
+
+TMP_FILE="$(mktemp)"
+cleanup() {
+  rm -f "$TMP_FILE"
+}
+trap cleanup EXIT ERR
+awk -F= -v comp="$COMPONENT" -v ver="$NEW_VERSION" '
+  $1 == comp { print comp"="ver; next }
+  { print }
+' "$VERSION_FILE" > "$TMP_FILE"
+mv "$TMP_FILE" "$VERSION_FILE"
+trap - EXIT ERR
+
 echo "$NEW_VERSION"
