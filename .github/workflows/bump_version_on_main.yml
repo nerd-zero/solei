@@ -19,6 +19,7 @@ permissions:
 jobs:
   bump-version:
     runs-on: ubuntu-24.04
+    if: github.actor != 'n0-actions[bot]'
 
     steps:
       - name: Generate GitHub App token
@@ -87,5 +88,5 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           git add VERSION
-          git commit -m "chore(release): bump versions [skip ci]"
+          git commit -m "chore(release): bump versions"
           git push origin main
