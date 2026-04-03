@@ -21,16 +21,24 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout code
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: main
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Configure git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "solei-bot[bot]"
+          git config user.email "solei-bot[bot]@users.noreply.github.com"
 
       - name: Detect changed components
         id: changes
@@ -73,24 +81,11 @@ jobs:
           echo "api_version=${api_version}" >> "$GITHUB_OUTPUT"
           echo "web_version=${web_version}" >> "$GITHUB_OUTPUT"
 
-      - name: Commit and push
+      - name: Commit and push version bump
         if: steps.changes.outputs.api_changed == 'true' || steps.changes.outputs.web_changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          if git diff --quiet; then
-            echo "No version changes to commit."
-            exit 0
-          fi
-
           git add VERSION
-
-          MSG="chore(release): bump versions"
-          if [[ -n "${{ steps.bump.outputs.api_version }}" && -n "${{ steps.bump.outputs.web_version }}" ]]; then
-            MSG="chore(release): bump api to ${{ steps.bump.outputs.api_version }}, web to ${{ steps.bump.outputs.web_version }}"
-          elif [[ -n "${{ steps.bump.outputs.api_version }}" ]]; then
-            MSG="chore(release): bump api to ${{ steps.bump.outputs.api_version }}"
-          elif [[ -n "${{ steps.bump.outputs.web_version }}" ]]; then
-            MSG="chore(release): bump web to ${{ steps.bump.outputs.web_version }}"
-          fi
-
-          git commit -m "$MSG"
-          git push origin HEAD:main
+          git commit -m "chore(release): bump versions [skip ci]"
+          git push origin main
