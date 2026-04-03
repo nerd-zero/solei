@@ -1,5 +1,3 @@
-import ArrowOutwardOutlined from '@mui/icons-material/ArrowOutwardOutlined'
-import Link from 'next/link'
 import { investors } from './investors'
 
 // ── Page ──────────────────────────────────────────────────────────────────────

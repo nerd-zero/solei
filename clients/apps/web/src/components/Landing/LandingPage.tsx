@@ -1,16 +1,12 @@
 'use client'
 
 import { Hero } from '@/components/Landing/Hero/Hero'
-import { Testimonials } from '@/components/Landing/Testimonials'
-import useIsMobile from '@/utils/mobile'
-import { Stream } from '@cloudflare/stream-react'
 import Button from '@polar-sh/ui/components/atoms/Button'
 import Link from 'next/link'
 import GetStartedButton from '../Auth/GetStartedButton'
 import { Adapters } from './Adapters'
 import { BillingDiagram } from './BillingDiagram'
 import Features from './Features'
-import { Logotypes } from './Logotypes'
 import { Pricing } from './Pricing'
 import { Products } from './Products'
 import { Section } from './Section'
@@ -26,7 +22,6 @@ export default function Page() {
 }
 
 const PageContent = () => {
-  const { isMobile } = useIsMobile()
   return (
     <>
       <Section className="flex flex-col gap-y-32 pt-0 md:pt-0">

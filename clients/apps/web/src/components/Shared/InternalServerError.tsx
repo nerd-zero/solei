@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import LogoType from '../Brand/logos/LogoType'
 
 export default function InternalServerError({ digest }: { digest?: string }) {
   return (
