@@ -31,8 +31,7 @@ export const PolarVsStripePage = () => {
           accept local and cross-border payments, reconcile transactions, and
           handle billing with less operational overhead. The key difference:
           Solei acts as a Merchant of Record, handling tax compliance globally,
-          while Stripe is a payment processor that leaves tax compliance to
-          you.
+          while Stripe is a payment processor that leaves tax compliance to you.
         </p>
       </ResourceSection>
 

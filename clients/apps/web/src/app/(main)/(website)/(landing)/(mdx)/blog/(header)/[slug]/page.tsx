@@ -52,9 +52,8 @@ export default async function BlogPost({
     throw new Error('Not found')
   }
 
-  const { default: Post } = await import(
-    '../_posts/launching-solei-billing-layer-for-africa/page.mdx'
-  )
+  const { default: Post } =
+    await import('../_posts/launching-solei-billing-layer-for-africa/page.mdx')
 
   return <Post />
 }

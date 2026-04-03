@@ -56,7 +56,11 @@ export const PolarLogotype = ({
           className={href ? 'cursor-pointer' : ''}
           onContextMenu={handleTriggerClick}
         >
-          {href ? <Link href={href}>{LogoComponent}</Link> : <div>{LogoComponent}</div>}
+          {href ? (
+            <Link href={href}>{LogoComponent}</Link>
+          ) : (
+            <div>{LogoComponent}</div>
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent ref={PolarLogotypeRef} align="start">
           <DropdownMenuItem

@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="flex w-full flex-col items-center px-6 py-16 md:max-w-3xl md:px-0 lg:py-32 xl:max-w-6xl">
         <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 md:justify-between md:gap-16 lg:grid-cols-6">
           <div className="flex h-full flex-1 flex-col justify-between gap-y-6 md:col-span-2">
-            <span className="text-3xl font-semibold tracking-tight text-black dark:text-white md:text-4xl">
+            <span className="text-3xl font-semibold tracking-tight text-black md:text-4xl dark:text-white">
               solei.to
             </span>
             <div className="flex flex-col gap-y-6">
@@ -23,7 +23,12 @@ const Footer = () => {
               <span className="dark:text-polar-500 w-full text-gray-500">
                 &copy; Solei - Nerd Zero. {new Date().getFullYear()}
               </span>
-                <code className="">Powered by <a href="https://n0.rocks" className='text-blue'>n0</a></code>
+              <code className="">
+                Powered by{' '}
+                <a href="https://n0.rocks" className="text-blue">
+                  n0
+                </a>
+              </code>
             </div>
           </div>
 
