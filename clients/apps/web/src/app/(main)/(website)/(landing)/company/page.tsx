@@ -9,10 +9,10 @@ export default function CompanyPage() {
     <div className="dark:bg-polar-950 min-h-screen bg-white text-gray-900 dark:text-white">
       {/* Hero */}
       <section className="flex flex-col items-center gap-8 px-4 pt-12 pb-24 text-center">
-        <h1 className="font-display leading-tighter max-w-2xl text-balance text-5xl font-medium md:text-7xl">
+        <h1 className="font-display leading-tighter max-w-2xl text-5xl font-medium text-balance md:text-7xl">
           We&apos;re building the billing layer for Africa. Are you in?
         </h1>
-        <p className="max-w-xl text-balance text-lg">
+        <p className="max-w-xl text-lg text-balance">
           Forget legacy systems. We&apos;re using modern software to help
           businesses charge, collect, and reconcile payments across borders
           without the headache.
@@ -67,7 +67,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Join */}
-      <section className="border-t border-gray-100 dark:border-polar-800">
+      <section className="dark:border-polar-800 border-t border-gray-100">
         <div className="mx-auto flex max-w-xl flex-col gap-6 py-16 md:px-6">
           <h2 className="font-display text-3xl font-medium">
             Want to help shape the future?
