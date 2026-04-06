@@ -28,7 +28,7 @@ export function UserProvider({ children }: PropsWithChildren) {
     queryKey: ['userinfo'],
     queryFn: async (): Promise<User> => {
       const response = await fetch(
-        `${process.env.EXPO_PUBLIC_POLAR_SERVER_URL}/v1/oauth2/userinfo`,
+        `${process.env.EXPO_PUBLIC_SOLEI_SERVER_URL}/v1/oauth2/userinfo`,
         {
           method: 'GET',
           headers: {

@@ -19,7 +19,7 @@ async def check_diff(notification: NotificationPayloadBase) -> None:
     body = render_email_template(notification.to_email())
     expected = f"{subject}\n<hr>\n{body}"
 
-    # Run with `POLAR_TEST_RECORD=1 pytest` to produce new golden files :-)
+    # Run with `SOLEI_TEST_RECORD=1 pytest` to produce new golden files :-)
     record = os.environ.get("SOLEI_TEST_RECORD", False) == "1"
 
     name = inspect.stack()[1].function

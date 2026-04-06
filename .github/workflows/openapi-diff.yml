@@ -19,7 +19,7 @@ jobs:
       pull-requests: write
 
     env:
-      POLAR_EMAIL_RENDERER_BINARY_PATH: "/tmp/email-renderer"
+      SOLEI_EMAIL_RENDERER_BINARY_PATH: "/tmp/email-renderer"
 
     steps:
       - name: Checkout PR (head)

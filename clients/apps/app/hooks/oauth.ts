@@ -24,9 +24,9 @@ export const useOAuthConfig = () => {
     CLIENT_ID: 'polar_ci_hbFdMZZRghgdm2F4LMceQSrcQNunmjlh6ukGJ1dG0Vg',
     discovery: {
       authorizationEndpoint: `http://127.0.0.1:3000/oauth2/authorize`,
-      tokenEndpoint: `${process.env.EXPO_PUBLIC_POLAR_SERVER_URL}/v1/oauth2/token`,
-      registrationEndpoint: `${process.env.EXPO_PUBLIC_POLAR_SERVER_URL}/v1/oauth2/register`,
-      revocationEndpoint: `${process.env.EXPO_PUBLIC_POLAR_SERVER_URL}/v1/oauth2/revoke`,
+      tokenEndpoint: `${process.env.EXPO_PUBLIC_SOLEI_SERVER_URL}/v1/oauth2/token`,
+      registrationEndpoint: `${process.env.EXPO_PUBLIC_SOLEI_SERVER_URL}/v1/oauth2/register`,
+      revocationEndpoint: `${process.env.EXPO_PUBLIC_SOLEI_SERVER_URL}/v1/oauth2/revoke`,
     },
   }
 

@@ -11,8 +11,8 @@ resource "render_env_group" "google" {
   environment_id = var.render_environment_id
   name           = "google-${var.environment}"
   env_vars = {
-    POLAR_GOOGLE_CLIENT_ID     = { value = var.google_secrets.client_id }
-    POLAR_GOOGLE_CLIENT_SECRET = { value = var.google_secrets.client_secret }
+    SOLEI_GOOGLE_CLIENT_ID     = { value = var.google_secrets.client_id }
+    SOLEI_GOOGLE_CLIENT_SECRET = { value = var.google_secrets.client_secret }
   }
 }
 
@@ -20,7 +20,7 @@ resource "render_env_group" "openai" {
   environment_id = var.render_environment_id
   name           = "openai-${var.environment}"
   env_vars = {
-    POLAR_OPENAI_API_KEY = { value = var.openai_secrets.api_key }
+    SOLEI_OPENAI_API_KEY = { value = var.openai_secrets.api_key }
   }
 }
 
@@ -29,39 +29,39 @@ resource "render_env_group" "backend" {
   name           = "backend-${var.environment}"
   env_vars = merge(
     {
-      POLAR_USER_SESSION_COOKIE_DOMAIN = { value = var.backend_config.user_session_cookie_domain }
-      POLAR_BASE_URL                   = { value = var.backend_config.base_url }
-      POLAR_DEBUG                      = { value = var.backend_config.debug }
-      POLAR_EMAIL_SENDER               = { value = var.backend_config.email_sender }
-      POLAR_EMAIL_FROM_NAME            = { value = var.backend_config.email_from_name }
-      POLAR_EMAIL_FROM_DOMAIN          = { value = var.backend_config.email_from_domain }
-      POLAR_ENV                        = { value = local.environment }
-      POLAR_FRONTEND_BASE_URL          = { value = var.backend_config.frontend_base_url }
-      POLAR_CHECKOUT_BASE_URL          = { value = var.backend_config.checkout_base_url }
-      POLAR_JWKS                       = { value = var.backend_config.jwks_path }
-      POLAR_LOG_LEVEL                  = { value = var.backend_config.log_level }
-      POLAR_TESTING                    = { value = var.backend_config.testing }
-      POLAR_AUTH_COOKIE_DOMAIN         = { value = var.backend_config.auth_cookie_domain }
-      POLAR_INVOICES_ADDITIONAL_INFO   = { value = var.backend_config.invoices_additional_info }
-      POLAR_STRIPE_PUBLISHABLE_KEY     = { value = var.backend_secrets.stripe_publishable_key }
-      POLAR_CURRENT_JWK_KID            = { value = var.backend_secrets.current_jwk_kid }
-      POLAR_DISCORD_BOT_TOKEN          = { value = var.backend_secrets.discord_bot_token }
-      POLAR_DISCORD_CLIENT_ID          = { value = var.backend_secrets.discord_client_id }
-      POLAR_DISCORD_CLIENT_SECRET      = { value = var.backend_secrets.discord_client_secret }
-      POLAR_DISCORD_PROXY_URL          = { value = var.backend_secrets.discord_proxy_url }
-      POLAR_RESEND_API_KEY             = { value = var.backend_secrets.resend_api_key }
-      POLAR_LOGO_DEV_PUBLISHABLE_KEY   = { value = var.backend_secrets.logo_dev_publishable_key }
-      POLAR_SECRET                     = { value = var.backend_secrets.secret }
-      POLAR_SENTRY_DSN                 = { value = var.backend_secrets.sentry_dsn }
-      POLAR_TAX_PROCESSORS             = { value = var.backend_config.tax_processors }
-      POLAR_TAX_RECORD_PROCESSOR       = { value = var.backend_config.tax_record_processor }
-      POLAR_NUMERAL_API_KEY            = { value = var.backend_secrets.numeral_api_key }
+      SOLEI_USER_SESSION_COOKIE_DOMAIN = { value = var.backend_config.user_session_cookie_domain }
+      SOLEI_BASE_URL                   = { value = var.backend_config.base_url }
+      SOLEI_DEBUG                      = { value = var.backend_config.debug }
+      SOLEI_EMAIL_SENDER               = { value = var.backend_config.email_sender }
+      SOLEI_EMAIL_FROM_NAME            = { value = var.backend_config.email_from_name }
+      SOLEI_EMAIL_FROM_DOMAIN          = { value = var.backend_config.email_from_domain }
+      SOLEI_ENV                        = { value = local.environment }
+      SOLEI_FRONTEND_BASE_URL          = { value = var.backend_config.frontend_base_url }
+      SOLEI_CHECKOUT_BASE_URL          = { value = var.backend_config.checkout_base_url }
+      SOLEI_JWKS                       = { value = var.backend_config.jwks_path }
+      SOLEI_LOG_LEVEL                  = { value = var.backend_config.log_level }
+      SOLEI_TESTING                    = { value = var.backend_config.testing }
+      SOLEI_AUTH_COOKIE_DOMAIN         = { value = var.backend_config.auth_cookie_domain }
+      SOLEI_INVOICES_ADDITIONAL_INFO   = { value = var.backend_config.invoices_additional_info }
+      SOLEI_STRIPE_PUBLISHABLE_KEY     = { value = var.backend_secrets.stripe_publishable_key }
+      SOLEI_CURRENT_JWK_KID            = { value = var.backend_secrets.current_jwk_kid }
+      SOLEI_DISCORD_BOT_TOKEN          = { value = var.backend_secrets.discord_bot_token }
+      SOLEI_DISCORD_CLIENT_ID          = { value = var.backend_secrets.discord_client_id }
+      SOLEI_DISCORD_CLIENT_SECRET      = { value = var.backend_secrets.discord_client_secret }
+      SOLEI_DISCORD_PROXY_URL          = { value = var.backend_secrets.discord_proxy_url }
+      SOLEI_RESEND_API_KEY             = { value = var.backend_secrets.resend_api_key }
+      SOLEI_LOGO_DEV_PUBLISHABLE_KEY   = { value = var.backend_secrets.logo_dev_publishable_key }
+      SOLEI_SECRET                     = { value = var.backend_secrets.secret }
+      SOLEI_SENTRY_DSN                 = { value = var.backend_secrets.sentry_dsn }
+      SOLEI_TAX_PROCESSORS             = { value = var.backend_config.tax_processors }
+      SOLEI_TAX_RECORD_PROCESSOR       = { value = var.backend_config.tax_record_processor }
+      SOLEI_NUMERAL_API_KEY            = { value = var.backend_secrets.numeral_api_key }
     },
     var.backend_config.user_session_cookie_key != "" ? {
-      POLAR_USER_SESSION_COOKIE_KEY = { value = var.backend_config.user_session_cookie_key }
+      SOLEI_USER_SESSION_COOKIE_KEY = { value = var.backend_config.user_session_cookie_key }
     } : {},
     var.backend_config.auth_cookie_key != "" ? {
-      POLAR_AUTH_COOKIE_KEY = { value = var.backend_config.auth_cookie_key }
+      SOLEI_AUTH_COOKIE_KEY = { value = var.backend_config.auth_cookie_key }
     } : {},
   )
 
@@ -77,17 +77,17 @@ resource "render_env_group" "backend_production" {
   environment_id = var.render_environment_id
   name           = "backend-production-only"
   env_vars = {
-    POLAR_BACKOFFICE_HOST                = { value = var.backend_config.backoffice_host }
-    POLAR_CHECKOUT_LINK_HOST             = { value = var.backend_config.checkout_link_host }
-    POLAR_DISCORD_WEBHOOK_URL            = { value = var.backend_secrets.discord_webhook_url }
-    POLAR_LOOPS_API_KEY                  = { value = var.backend_secrets.loops_api_key }
-    POLAR_POSTHOG_PROJECT_API_KEY        = { value = var.backend_secrets.posthog_project_api_key }
-    POLAR_PLAIN_REQUEST_SIGNING_SECRET   = { value = var.backend_secrets.plain_request_signing_secret }
-    POLAR_PLAIN_TOKEN                    = { value = var.backend_secrets.plain_token }
-    POLAR_PLAIN_CHAT_SECRET              = { value = var.backend_secrets.plain_chat_secret }
-    POLAR_APP_REVIEW_EMAIL               = { value = var.backend_secrets.app_review_email }
-    POLAR_APP_REVIEW_OTP_CODE            = { value = var.backend_secrets.app_review_otp_code }
-    POLAR_CHARGEBACK_STOP_WEBHOOK_SECRET = { value = var.backend_secrets.chargeback_stop_webhook_secret }
+    SOLEI_BACKOFFICE_HOST                = { value = var.backend_config.backoffice_host }
+    SOLEI_CHECKOUT_LINK_HOST             = { value = var.backend_config.checkout_link_host }
+    SOLEI_DISCORD_WEBHOOK_URL            = { value = var.backend_secrets.discord_webhook_url }
+    SOLEI_LOOPS_API_KEY                  = { value = var.backend_secrets.loops_api_key }
+    SOLEI_POSTHOG_PROJECT_API_KEY        = { value = var.backend_secrets.posthog_project_api_key }
+    SOLEI_PLAIN_REQUEST_SIGNING_SECRET   = { value = var.backend_secrets.plain_request_signing_secret }
+    SOLEI_PLAIN_TOKEN                    = { value = var.backend_secrets.plain_token }
+    SOLEI_PLAIN_CHAT_SECRET              = { value = var.backend_secrets.plain_chat_secret }
+    SOLEI_APP_REVIEW_EMAIL               = { value = var.backend_secrets.app_review_email }
+    SOLEI_APP_REVIEW_OTP_CODE            = { value = var.backend_secrets.app_review_otp_code }
+    SOLEI_CHARGEBACK_STOP_WEBHOOK_SECRET = { value = var.backend_secrets.chargeback_stop_webhook_secret }
   }
 }
 
@@ -95,18 +95,18 @@ resource "render_env_group" "aws_s3" {
   environment_id = var.render_environment_id
   name           = "aws-s3-${var.environment}"
   env_vars = {
-    POLAR_AWS_REGION                       = { value = var.aws_s3_config.region }
-    POLAR_AWS_SIGNATURE_VERSION            = { value = var.aws_s3_config.signature_version }
-    POLAR_S3_FILES_BUCKET_NAME             = { value = "polar-${var.environment}-files" }
-    POLAR_S3_FILES_PRESIGN_TTL             = { value = var.aws_s3_config.files_presign_ttl }
-    POLAR_S3_FILES_PUBLIC_BUCKET_NAME      = { value = var.aws_s3_config.files_public_bucket_name }
-    POLAR_S3_CUSTOMER_INVOICES_BUCKET_NAME = { value = var.aws_s3_config.customer_invoices_bucket_name }
-    POLAR_S3_PAYOUT_INVOICES_BUCKET_NAME   = { value = var.aws_s3_config.payout_invoices_bucket_name }
-    POLAR_S3_LOGS_BUCKET_NAME              = { value = var.aws_s3_config.logs_bucket_name }
-    POLAR_AWS_ACCESS_KEY_ID                = { value = var.aws_s3_secrets.access_key_id }
-    POLAR_AWS_SECRET_ACCESS_KEY            = { value = var.aws_s3_secrets.secret_access_key }
-    POLAR_S3_FILES_DOWNLOAD_SALT           = { value = var.aws_s3_secrets.files_download_salt }
-    POLAR_S3_FILES_DOWNLOAD_SECRET         = { value = var.aws_s3_secrets.files_download_secret }
+    SOLEI_AWS_REGION                       = { value = var.aws_s3_config.region }
+    SOLEI_AWS_SIGNATURE_VERSION            = { value = var.aws_s3_config.signature_version }
+    SOLEI_S3_FILES_BUCKET_NAME             = { value = "polar-${var.environment}-files" }
+    SOLEI_S3_FILES_PRESIGN_TTL             = { value = var.aws_s3_config.files_presign_ttl }
+    SOLEI_S3_FILES_PUBLIC_BUCKET_NAME      = { value = var.aws_s3_config.files_public_bucket_name }
+    SOLEI_S3_CUSTOMER_INVOICES_BUCKET_NAME = { value = var.aws_s3_config.customer_invoices_bucket_name }
+    SOLEI_S3_PAYOUT_INVOICES_BUCKET_NAME   = { value = var.aws_s3_config.payout_invoices_bucket_name }
+    SOLEI_S3_LOGS_BUCKET_NAME              = { value = var.aws_s3_config.logs_bucket_name }
+    SOLEI_AWS_ACCESS_KEY_ID                = { value = var.aws_s3_secrets.access_key_id }
+    SOLEI_AWS_SECRET_ACCESS_KEY            = { value = var.aws_s3_secrets.secret_access_key }
+    SOLEI_S3_FILES_DOWNLOAD_SALT           = { value = var.aws_s3_secrets.files_download_salt }
+    SOLEI_S3_FILES_DOWNLOAD_SECRET         = { value = var.aws_s3_secrets.files_download_secret }
   }
 }
 
@@ -114,13 +114,13 @@ resource "render_env_group" "github" {
   environment_id = var.render_environment_id
   name           = "github-${var.environment}"
   env_vars = {
-    POLAR_GITHUB_CLIENT_ID                           = { value = var.github_secrets.client_id }
-    POLAR_GITHUB_CLIENT_SECRET                       = { value = var.github_secrets.client_secret }
-    POLAR_GITHUB_REPOSITORY_BENEFITS_APP_IDENTIFIER  = { value = var.github_secrets.repository_benefits_app_identifier }
-    POLAR_GITHUB_REPOSITORY_BENEFITS_APP_NAMESPACE   = { value = var.github_secrets.repository_benefits_app_namespace }
-    POLAR_GITHUB_REPOSITORY_BENEFITS_APP_PRIVATE_KEY = { value = var.github_secrets.repository_benefits_app_private_key }
-    POLAR_GITHUB_REPOSITORY_BENEFITS_CLIENT_ID       = { value = var.github_secrets.repository_benefits_client_id }
-    POLAR_GITHUB_REPOSITORY_BENEFITS_CLIENT_SECRET   = { value = var.github_secrets.repository_benefits_client_secret }
+    SOLEI_GITHUB_CLIENT_ID                           = { value = var.github_secrets.client_id }
+    SOLEI_GITHUB_CLIENT_SECRET                       = { value = var.github_secrets.client_secret }
+    SOLEI_GITHUB_REPOSITORY_BENEFITS_APP_IDENTIFIER  = { value = var.github_secrets.repository_benefits_app_identifier }
+    SOLEI_GITHUB_REPOSITORY_BENEFITS_APP_NAMESPACE   = { value = var.github_secrets.repository_benefits_app_namespace }
+    SOLEI_GITHUB_REPOSITORY_BENEFITS_APP_PRIVATE_KEY = { value = var.github_secrets.repository_benefits_app_private_key }
+    SOLEI_GITHUB_REPOSITORY_BENEFITS_CLIENT_ID       = { value = var.github_secrets.repository_benefits_client_id }
+    SOLEI_GITHUB_REPOSITORY_BENEFITS_CLIENT_SECRET   = { value = var.github_secrets.repository_benefits_client_secret }
   }
 }
 
@@ -128,9 +128,9 @@ resource "render_env_group" "stripe" {
   environment_id = var.render_environment_id
   name           = "stripe-${var.environment}"
   env_vars = {
-    POLAR_STRIPE_CONNECT_WEBHOOK_SECRET = { value = var.stripe_secrets.connect_webhook_secret }
-    POLAR_STRIPE_SECRET_KEY             = { value = var.stripe_secrets.secret_key }
-    POLAR_STRIPE_WEBHOOK_SECRET         = { value = var.stripe_secrets.webhook_secret }
+    SOLEI_STRIPE_CONNECT_WEBHOOK_SECRET = { value = var.stripe_secrets.connect_webhook_secret }
+    SOLEI_STRIPE_SECRET_KEY             = { value = var.stripe_secrets.secret_key }
+    SOLEI_STRIPE_WEBHOOK_SECRET         = { value = var.stripe_secrets.webhook_secret }
   }
 }
 
@@ -139,8 +139,8 @@ resource "render_env_group" "logfire" {
   environment_id = var.render_environment_id
   name           = "logfire-${var.environment}"
   env_vars = {
-    POLAR_LOGFIRE_PROJECT_NAME = { value = var.logfire_config.project_name }
-    POLAR_LOGFIRE_TOKEN        = { value = var.logfire_config.token }
+    SOLEI_LOGFIRE_PROJECT_NAME = { value = var.logfire_config.project_name }
+    SOLEI_LOGFIRE_TOKEN        = { value = var.logfire_config.token }
   }
 }
 
@@ -149,10 +149,10 @@ resource "render_env_group" "apple" {
   environment_id = var.render_environment_id
   name           = "apple-${var.environment}"
   env_vars = {
-    POLAR_APPLE_CLIENT_ID = { value = var.apple_secrets.client_id }
-    POLAR_APPLE_TEAM_ID   = { value = var.apple_secrets.team_id }
-    POLAR_APPLE_KEY_ID    = { value = var.apple_secrets.key_id }
-    POLAR_APPLE_KEY_VALUE = { value = var.apple_secrets.key_value }
+    SOLEI_APPLE_CLIENT_ID = { value = var.apple_secrets.client_id }
+    SOLEI_APPLE_TEAM_ID   = { value = var.apple_secrets.team_id }
+    SOLEI_APPLE_KEY_ID    = { value = var.apple_secrets.key_id }
+    SOLEI_APPLE_KEY_VALUE = { value = var.apple_secrets.key_value }
   }
 }
 
@@ -162,15 +162,15 @@ resource "render_env_group" "prometheus" {
   name           = "prometheus-${var.environment}"
   env_vars = merge(
     {
-      POLAR_GRAFANA_CLOUD_PROMETHEUS_WRITE_URL      = { value = "${var.prometheus_config.url}/api/prom/push" }
-      POLAR_GRAFANA_CLOUD_PROMETHEUS_WRITE_USERNAME = { value = var.prometheus_config.username }
-      POLAR_GRAFANA_CLOUD_PROMETHEUS_WRITE_PASSWORD = { value = var.prometheus_config.password }
-      POLAR_GRAFANA_CLOUD_PROMETHEUS_WRITE_INTERVAL = { value = var.prometheus_config.interval }
+      SOLEI_GRAFANA_CLOUD_PROMETHEUS_WRITE_URL      = { value = "${var.prometheus_config.url}/api/prom/push" }
+      SOLEI_GRAFANA_CLOUD_PROMETHEUS_WRITE_USERNAME = { value = var.prometheus_config.username }
+      SOLEI_GRAFANA_CLOUD_PROMETHEUS_WRITE_PASSWORD = { value = var.prometheus_config.password }
+      SOLEI_GRAFANA_CLOUD_PROMETHEUS_WRITE_INTERVAL = { value = var.prometheus_config.interval }
     },
     var.prometheus_config.query_key != null ? {
-      POLAR_GRAFANA_CLOUD_PROMETHEUS_QUERY_URL  = { value = "${var.prometheus_config.url}/api/prom" }
-      POLAR_GRAFANA_CLOUD_PROMETHEUS_QUERY_USER = { value = var.prometheus_config.username }
-      POLAR_GRAFANA_CLOUD_PROMETHEUS_QUERY_KEY  = { value = var.prometheus_config.query_key }
+      SOLEI_GRAFANA_CLOUD_PROMETHEUS_QUERY_URL  = { value = "${var.prometheus_config.url}/api/prom" }
+      SOLEI_GRAFANA_CLOUD_PROMETHEUS_QUERY_USER = { value = var.prometheus_config.username }
+      SOLEI_GRAFANA_CLOUD_PROMETHEUS_QUERY_KEY  = { value = var.prometheus_config.query_key }
     } : {}
   )
 }
@@ -180,8 +180,8 @@ resource "render_env_group" "slo_report" {
   environment_id = var.render_environment_id
   name           = "slo-report-${var.environment}"
   env_vars = {
-    POLAR_SLACK_BOT_TOKEN = { value = var.slo_report_config.slack_bot_token }
-    POLAR_SLACK_CHANNEL   = { value = var.slo_report_config.slack_channel }
+    SOLEI_SLACK_BOT_TOKEN = { value = var.slo_report_config.slack_bot_token }
+    SOLEI_SLACK_CHANNEL   = { value = var.slo_report_config.slack_channel }
   }
 }
 
@@ -190,13 +190,13 @@ resource "render_env_group" "tinybird" {
   environment_id = var.render_environment_id
   name           = "tinybird-${var.environment}"
   env_vars = {
-    POLAR_TINYBIRD_API_URL             = { value = var.tinybird_config.api_url }
-    POLAR_TINYBIRD_CLICKHOUSE_URL      = { value = var.tinybird_config.clickhouse_url }
-    POLAR_TINYBIRD_API_TOKEN           = { value = var.tinybird_config.api_token }
-    POLAR_TINYBIRD_READ_TOKEN          = { value = var.tinybird_config.read_token }
-    POLAR_TINYBIRD_CLICKHOUSE_USERNAME = { value = var.tinybird_config.clickhouse_username }
-    POLAR_TINYBIRD_CLICKHOUSE_TOKEN    = { value = var.tinybird_config.clickhouse_token }
-    POLAR_TINYBIRD_WORKSPACE           = { value = var.tinybird_config.workspace }
+    SOLEI_TINYBIRD_API_URL             = { value = var.tinybird_config.api_url }
+    SOLEI_TINYBIRD_CLICKHOUSE_URL      = { value = var.tinybird_config.clickhouse_url }
+    SOLEI_TINYBIRD_API_TOKEN           = { value = var.tinybird_config.api_token }
+    SOLEI_TINYBIRD_READ_TOKEN          = { value = var.tinybird_config.read_token }
+    SOLEI_TINYBIRD_CLICKHOUSE_USERNAME = { value = var.tinybird_config.clickhouse_username }
+    SOLEI_TINYBIRD_CLICKHOUSE_TOKEN    = { value = var.tinybird_config.clickhouse_token }
+    SOLEI_TINYBIRD_WORKSPACE           = { value = var.tinybird_config.workspace }
   }
 }
 
@@ -205,9 +205,9 @@ resource "render_env_group" "memory_profile" {
   environment_id = var.render_environment_id
   name           = "memory-profile-${var.environment}"
   env_vars = {
-    POLAR_MEMORY_PROFILE_ENABLED        = { value = "true" }
-    POLAR_MEMORY_PROFILE_S3_BUCKET_NAME = { value = var.memory_profile_config.s3_bucket_name }
-    POLAR_MEMORY_PROFILE_INTERVAL       = { value = var.memory_profile_config.interval }
+    SOLEI_MEMORY_PROFILE_ENABLED        = { value = "true" }
+    SOLEI_MEMORY_PROFILE_S3_BUCKET_NAME = { value = var.memory_profile_config.s3_bucket_name }
+    SOLEI_MEMORY_PROFILE_INTERVAL       = { value = var.memory_profile_config.interval }
   }
 }
 
@@ -252,22 +252,22 @@ resource "render_web_service" "api" {
     SERVICE_NAME                 = { value = "api${local.env_suffix}" }
     WEB_CONCURRENCY              = { value = var.api_service_config.web_concurrency }
     FORWARDED_ALLOW_IPS          = { value = var.api_service_config.forwarded_allow_ips }
-    POLAR_ALLOWED_HOSTS          = { value = var.api_service_config.allowed_hosts }
-    POLAR_CORS_ORIGINS           = { value = var.api_service_config.cors_origins }
-    POLAR_DATABASE_POOL_SIZE     = { value = var.api_service_config.database_pool_size }
-    POLAR_POSTGRES_DATABASE      = { value = var.api_service_config.postgres_database }
-    POLAR_POSTGRES_HOST          = { value = var.postgres_config.host }
-    POLAR_POSTGRES_PORT          = { value = var.postgres_config.port }
-    POLAR_POSTGRES_USER          = { value = var.postgres_config.user }
-    POLAR_POSTGRES_PWD           = { value = var.postgres_config.password }
-    POLAR_POSTGRES_READ_DATABASE = { value = var.api_service_config.postgres_read_database }
-    POLAR_POSTGRES_READ_HOST     = { value = var.postgres_config.read_host }
-    POLAR_POSTGRES_READ_PORT     = { value = var.postgres_config.read_port }
-    POLAR_POSTGRES_READ_USER     = { value = var.postgres_config.read_user }
-    POLAR_POSTGRES_READ_PWD      = { value = var.postgres_config.read_password }
-    POLAR_REDIS_HOST             = { value = var.redis_config.host }
-    POLAR_REDIS_PORT             = { value = var.redis_config.port }
-    POLAR_REDIS_DB               = { value = var.api_service_config.redis_db }
+    SOLEI_ALLOWED_HOSTS          = { value = var.api_service_config.allowed_hosts }
+    SOLEI_CORS_ORIGINS           = { value = var.api_service_config.cors_origins }
+    SOLEI_DATABASE_POOL_SIZE     = { value = var.api_service_config.database_pool_size }
+    SOLEI_POSTGRES_DATABASE      = { value = var.api_service_config.postgres_database }
+    SOLEI_POSTGRES_HOST          = { value = var.postgres_config.host }
+    SOLEI_POSTGRES_PORT          = { value = var.postgres_config.port }
+    SOLEI_POSTGRES_USER          = { value = var.postgres_config.user }
+    SOLEI_POSTGRES_PWD           = { value = var.postgres_config.password }
+    SOLEI_POSTGRES_READ_DATABASE = { value = var.api_service_config.postgres_read_database }
+    SOLEI_POSTGRES_READ_HOST     = { value = var.postgres_config.read_host }
+    SOLEI_POSTGRES_READ_PORT     = { value = var.postgres_config.read_port }
+    SOLEI_POSTGRES_READ_USER     = { value = var.postgres_config.read_user }
+    SOLEI_POSTGRES_READ_PWD      = { value = var.postgres_config.read_password }
+    SOLEI_REDIS_HOST             = { value = var.redis_config.host }
+    SOLEI_REDIS_PORT             = { value = var.redis_config.port }
+    SOLEI_REDIS_DB               = { value = var.api_service_config.redis_db }
   }
 }
 
@@ -295,20 +295,20 @@ resource "render_web_service" "worker" {
   env_vars = {
     SERVICE_NAME                 = { value = each.key }
     dramatiq_prom_port           = { value = each.value.dramatiq_prom_port }
-    POLAR_DATABASE_POOL_SIZE     = { value = each.value.database_pool_size }
-    POLAR_POSTGRES_DATABASE      = { value = var.api_service_config.postgres_database }
-    POLAR_POSTGRES_HOST          = { value = var.postgres_config.host }
-    POLAR_POSTGRES_PORT          = { value = var.postgres_config.port }
-    POLAR_POSTGRES_USER          = { value = var.postgres_config.user }
-    POLAR_POSTGRES_PWD           = { value = var.postgres_config.password }
-    POLAR_POSTGRES_READ_DATABASE = { value = var.api_service_config.postgres_read_database }
-    POLAR_POSTGRES_READ_HOST     = { value = var.postgres_config.read_host }
-    POLAR_POSTGRES_READ_PORT     = { value = var.postgres_config.read_port }
-    POLAR_POSTGRES_READ_USER     = { value = var.postgres_config.read_user }
-    POLAR_POSTGRES_READ_PWD      = { value = var.postgres_config.read_password }
-    POLAR_REDIS_HOST             = { value = var.redis_config.host }
-    POLAR_REDIS_PORT             = { value = var.redis_config.port }
-    POLAR_REDIS_DB               = { value = var.api_service_config.redis_db }
+    SOLEI_DATABASE_POOL_SIZE     = { value = each.value.database_pool_size }
+    SOLEI_POSTGRES_DATABASE      = { value = var.api_service_config.postgres_database }
+    SOLEI_POSTGRES_HOST          = { value = var.postgres_config.host }
+    SOLEI_POSTGRES_PORT          = { value = var.postgres_config.port }
+    SOLEI_POSTGRES_USER          = { value = var.postgres_config.user }
+    SOLEI_POSTGRES_PWD           = { value = var.postgres_config.password }
+    SOLEI_POSTGRES_READ_DATABASE = { value = var.api_service_config.postgres_read_database }
+    SOLEI_POSTGRES_READ_HOST     = { value = var.postgres_config.read_host }
+    SOLEI_POSTGRES_READ_PORT     = { value = var.postgres_config.read_port }
+    SOLEI_POSTGRES_READ_USER     = { value = var.postgres_config.read_user }
+    SOLEI_POSTGRES_READ_PWD      = { value = var.postgres_config.read_password }
+    SOLEI_REDIS_HOST             = { value = var.redis_config.host }
+    SOLEI_REDIS_PORT             = { value = var.redis_config.port }
+    SOLEI_REDIS_DB               = { value = var.api_service_config.redis_db }
   }
 }
 
@@ -333,26 +333,26 @@ resource "render_cron_job" "cron" {
   }
 
   # Cron jobs don't support Render secret_files, so we pass JWKS as an env var
-  # and write it to a temp file in the start command. POLAR_JWKS is set here
+  # and write it to a temp file in the start command. SOLEI_JWKS is set here
   # to override the env group value (/etc/secrets/jwks.json) which doesn't exist.
   env_vars = {
     SERVICE_NAME                 = { value = each.key }
-    POLAR_DATABASE_POOL_SIZE     = { value = each.value.database_pool_size }
-    POLAR_JWKS                   = { value = "/tmp/jwks.json" }
-    POLAR_JWKS_CONTENT           = { value = var.backend_secrets.jwks }
-    POLAR_POSTGRES_DATABASE      = { value = var.api_service_config.postgres_database }
-    POLAR_POSTGRES_HOST          = { value = var.postgres_config.host }
-    POLAR_POSTGRES_PORT          = { value = var.postgres_config.port }
-    POLAR_POSTGRES_USER          = { value = var.postgres_config.user }
-    POLAR_POSTGRES_PWD           = { value = var.postgres_config.password }
-    POLAR_POSTGRES_READ_DATABASE = { value = var.api_service_config.postgres_read_database }
-    POLAR_POSTGRES_READ_HOST     = { value = var.postgres_config.read_host }
-    POLAR_POSTGRES_READ_PORT     = { value = var.postgres_config.read_port }
-    POLAR_POSTGRES_READ_USER     = { value = var.postgres_config.read_user }
-    POLAR_POSTGRES_READ_PWD      = { value = var.postgres_config.read_password }
-    POLAR_REDIS_HOST             = { value = var.redis_config.host }
-    POLAR_REDIS_PORT             = { value = var.redis_config.port }
-    POLAR_REDIS_DB               = { value = var.api_service_config.redis_db }
+    SOLEI_DATABASE_POOL_SIZE     = { value = each.value.database_pool_size }
+    SOLEI_JWKS                   = { value = "/tmp/jwks.json" }
+    SOLEI_JWKS_CONTENT           = { value = var.backend_secrets.jwks }
+    SOLEI_POSTGRES_DATABASE      = { value = var.api_service_config.postgres_database }
+    SOLEI_POSTGRES_HOST          = { value = var.postgres_config.host }
+    SOLEI_POSTGRES_PORT          = { value = var.postgres_config.port }
+    SOLEI_POSTGRES_USER          = { value = var.postgres_config.user }
+    SOLEI_POSTGRES_PWD           = { value = var.postgres_config.password }
+    SOLEI_POSTGRES_READ_DATABASE = { value = var.api_service_config.postgres_read_database }
+    SOLEI_POSTGRES_READ_HOST     = { value = var.postgres_config.read_host }
+    SOLEI_POSTGRES_READ_PORT     = { value = var.postgres_config.read_port }
+    SOLEI_POSTGRES_READ_USER     = { value = var.postgres_config.read_user }
+    SOLEI_POSTGRES_READ_PWD      = { value = var.postgres_config.read_password }
+    SOLEI_REDIS_HOST             = { value = var.redis_config.host }
+    SOLEI_REDIS_PORT             = { value = var.redis_config.port }
+    SOLEI_REDIS_DB               = { value = var.api_service_config.redis_db }
   }
 }
 

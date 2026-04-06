@@ -88,19 +88,19 @@ mkdir -p /etc/caddy/previews /etc/preview-secrets
 if [[ ! -f /etc/caddy/env ]]; then
     PREVIEW_ACCESS_TOKEN=$(openssl rand -hex 32)
     cat > /etc/caddy/env <<ENVFILE
-POLAR_PREVIEW_ACCESS_TOKEN=${PREVIEW_ACCESS_TOKEN}
+SOLEI_PREVIEW_ACCESS_TOKEN=${PREVIEW_ACCESS_TOKEN}
 VERCEL_BYPASS_SECRET=${VERCEL_BYPASS_SECRET}
 ENVFILE
     cat > /etc/preview-secrets/stripe.env <<ENVFILE
-POLAR_STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-POLAR_STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+SOLEI_STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+SOLEI_STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
 ENVFILE
     chmod 600 /etc/preview-secrets/stripe.env
     chmod 600 /etc/caddy/env
     echo ""
     echo "Generated preview access token: ${PREVIEW_ACCESS_TOKEN}"
-    echo "Add to GitHub secrets: POLAR_PREVIEW_ACCESS_TOKEN"
-    echo "Add to Vercel env vars: POLAR_PREVIEW_ACCESS_TOKEN"
+    echo "Add to GitHub secrets: SOLEI_PREVIEW_ACCESS_TOKEN"
+    echo "Add to Vercel env vars: SOLEI_PREVIEW_ACCESS_TOKEN"
     echo ""
 else
     if ! grep -q VERCEL_BYPASS_SECRET /etc/caddy/env; then
@@ -110,8 +110,8 @@ fi
 
 if [[ ! -f /etc/preview-secrets/stripe.env ]]; then
     cat > /etc/preview-secrets/stripe.env <<ENVFILE
-POLAR_STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-POLAR_STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+SOLEI_STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+SOLEI_STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
 ENVFILE
     chmod 600 /etc/preview-secrets/stripe.env
 fi
@@ -122,7 +122,7 @@ cat > /etc/caddy/Caddyfile <<'CADDYFILE'
 }
 :8080 {
 	route {
-		@no_token not header X-Preview-Token {$POLAR_PREVIEW_ACCESS_TOKEN}
+		@no_token not header X-Preview-Token {$SOLEI_PREVIEW_ACCESS_TOKEN}
 		respond @no_token "Forbidden" 403
 		import /etc/caddy/previews/*.caddy
 	}
@@ -249,15 +249,15 @@ echo ""
 echo "Tailscale hostname: ${TS_HOSTNAME}"
 echo ""
 echo "Add to GitHub secrets:"
-echo "  POLAR_PREVIEW_HOST = $(tailscale ip -4)"
-echo "  POLAR_PREVIEW_SSH_KEY = (contents below)"
+echo "  SOLEI_PREVIEW_HOST = $(tailscale ip -4)"
+echo "  SOLEI_PREVIEW_SSH_KEY = (contents below)"
 echo ""
-echo "--- Private key (add as POLAR_PREVIEW_SSH_KEY) ---"
+echo "--- Private key (add as SOLEI_PREVIEW_SSH_KEY) ---"
 cat "$KEY_FILE"
 echo ""
 echo "--- Public key (already in authorized_keys) ---"
 cat "${KEY_FILE}.pub"
 echo ""
 echo "Add to GitHub variables:"
-echo "  POLAR_PREVIEW_USER = ${DEPLOY_USER}"
+echo "  SOLEI_PREVIEW_USER = ${DEPLOY_USER}"
 echo ""

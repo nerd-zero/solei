@@ -244,7 +244,7 @@ class TestPreviewCLI:
             return connection
 
         monkeypatch.setenv(
-            "POLAR_PREVIEW_POSTGRES_ADMIN_DSN",
+            "SOLEI_PREVIEW_POSTGRES_ADMIN_DSN",
             "postgresql://admin:secret@db.internal:5432/postgres",
         )
         monkeypatch.setattr(
@@ -284,11 +284,11 @@ class TestPreviewCLI:
         assert payload == {
             "database_name": "preview_pr_123",
             "env": {
-                "POLAR_POSTGRES_DATABASE": "preview_pr_123",
-                "POLAR_POSTGRES_HOST": "db.internal",
-                "POLAR_POSTGRES_PORT": "5432",
-                "POLAR_POSTGRES_PWD": "db-pass",
-                "POLAR_POSTGRES_USER": "preview_pr_123_app",
+                "SOLEI_POSTGRES_DATABASE": "preview_pr_123",
+                "SOLEI_POSTGRES_HOST": "db.internal",
+                "SOLEI_POSTGRES_PORT": "5432",
+                "SOLEI_POSTGRES_PWD": "db-pass",
+                "SOLEI_POSTGRES_USER": "preview_pr_123_app",
             },
             "host": "db.internal",
             "password": "db-pass",
@@ -301,7 +301,7 @@ class TestPreviewCLI:
             "preview_postgres_database=preview_pr_123",
             "preview_postgres_user=preview_pr_123_app",
             "preview_postgres_password=db-pass",
-            'preview_postgres_env_json={"POLAR_POSTGRES_DATABASE":"preview_pr_123","POLAR_POSTGRES_HOST":"db.internal","POLAR_POSTGRES_PORT":"5432","POLAR_POSTGRES_PWD":"db-pass","POLAR_POSTGRES_USER":"preview_pr_123_app"}',
+            'preview_postgres_env_json={"SOLEI_POSTGRES_DATABASE":"preview_pr_123","SOLEI_POSTGRES_HOST":"db.internal","SOLEI_POSTGRES_PORT":"5432","SOLEI_POSTGRES_PWD":"db-pass","SOLEI_POSTGRES_USER":"preview_pr_123_app"}',
         ]
 
     def test_postgres_provision_reuses_existing_database_and_user(
@@ -322,7 +322,7 @@ class TestPreviewCLI:
             return connection
 
         monkeypatch.setenv(
-            "POLAR_PREVIEW_POSTGRES_ADMIN_DSN",
+            "SOLEI_PREVIEW_POSTGRES_ADMIN_DSN",
             "postgresql://admin:secret@db.internal:5432/postgres",
         )
         monkeypatch.setattr(
@@ -361,11 +361,11 @@ class TestPreviewCLI:
         assert payload == {
             "database_name": "preview_pr_123",
             "env": {
-                "POLAR_POSTGRES_DATABASE": "preview_pr_123",
-                "POLAR_POSTGRES_HOST": "db.internal",
-                "POLAR_POSTGRES_PORT": "5432",
-                "POLAR_POSTGRES_PWD": "rotated-pass",
-                "POLAR_POSTGRES_USER": "preview_pr_123_app",
+                "SOLEI_POSTGRES_DATABASE": "preview_pr_123",
+                "SOLEI_POSTGRES_HOST": "db.internal",
+                "SOLEI_POSTGRES_PORT": "5432",
+                "SOLEI_POSTGRES_PWD": "rotated-pass",
+                "SOLEI_POSTGRES_USER": "preview_pr_123_app",
             },
             "host": "db.internal",
             "password": "rotated-pass",
@@ -378,7 +378,7 @@ class TestPreviewCLI:
             "preview_postgres_database=preview_pr_123",
             "preview_postgres_user=preview_pr_123_app",
             "preview_postgres_password=rotated-pass",
-            'preview_postgres_env_json={"POLAR_POSTGRES_DATABASE":"preview_pr_123","POLAR_POSTGRES_HOST":"db.internal","POLAR_POSTGRES_PORT":"5432","POLAR_POSTGRES_PWD":"rotated-pass","POLAR_POSTGRES_USER":"preview_pr_123_app"}',
+            'preview_postgres_env_json={"SOLEI_POSTGRES_DATABASE":"preview_pr_123","SOLEI_POSTGRES_HOST":"db.internal","SOLEI_POSTGRES_PORT":"5432","SOLEI_POSTGRES_PWD":"rotated-pass","SOLEI_POSTGRES_USER":"preview_pr_123_app"}',
         ]
 
     def test_postgres_teardown_drops_database_and_user(
@@ -399,7 +399,7 @@ class TestPreviewCLI:
             return connection
 
         monkeypatch.setenv(
-            "POLAR_PREVIEW_POSTGRES_ADMIN_DSN",
+            "SOLEI_PREVIEW_POSTGRES_ADMIN_DSN",
             "postgresql://admin:secret@db.internal:5432/postgres",
         )
         monkeypatch.setattr(
@@ -515,10 +515,10 @@ class TestPreviewCLI:
             )
             return info_responses.pop(0)
 
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_API_URL", "https://api.tinybird.co")
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_ADMIN_TOKEN", "tb-admin-token")
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_WORKSPACE", "polar")
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_LAST_PARTITION", "true")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_API_URL", "https://api.tinybird.co")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_ADMIN_TOKEN", "tb-admin-token")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_WORKSPACE", "polar")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_LAST_PARTITION", "true")
         monkeypatch.setattr(
             preview_script,
             "run_tinybird_cli_command",
@@ -611,9 +611,9 @@ class TestPreviewCLI:
                 },
             }
 
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_API_URL", "https://api.tinybird.co")
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_ADMIN_TOKEN", "tb-admin-token")
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_WORKSPACE", "polar")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_API_URL", "https://api.tinybird.co")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_ADMIN_TOKEN", "tb-admin-token")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_WORKSPACE", "polar")
         monkeypatch.setattr(
             preview_script,
             "run_tinybird_cli_command",
@@ -658,9 +658,9 @@ class TestPreviewCLI:
     ) -> None:
         github_output = tmp_path / "github-output.txt"
 
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_API_URL", "https://api.tinybird.co")
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_ADMIN_TOKEN", "tb-admin-token")
-        monkeypatch.setenv("POLAR_PREVIEW_TINYBIRD_WORKSPACE", "polar")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_API_URL", "https://api.tinybird.co")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_ADMIN_TOKEN", "tb-admin-token")
+        monkeypatch.setenv("SOLEI_PREVIEW_TINYBIRD_WORKSPACE", "polar")
         monkeypatch.setattr(
             preview_script,
             "get_tinybird_info",
@@ -739,7 +739,7 @@ class TestPreviewCLI:
 
         assert result.exit_code == 1
         assert isinstance(result.exception, RuntimeError)
-        assert str(result.exception) == "POLAR_PREVIEW_TINYBIRD_API_URL is required"
+        assert str(result.exception) == "SOLEI_PREVIEW_TINYBIRD_API_URL is required"
         assert postgres_provision_called is False
         assert github_output.exists() is False
 
@@ -895,11 +895,11 @@ class TestPreviewCLI:
                 port=5432,
                 password="db-pass",
                 env={
-                    "POLAR_POSTGRES_DATABASE": "preview_pr_123",
-                    "POLAR_POSTGRES_HOST": "db.internal",
-                    "POLAR_POSTGRES_PORT": "5432",
-                    "POLAR_POSTGRES_PWD": "db-pass",
-                    "POLAR_POSTGRES_USER": "preview_pr_123_app",
+                    "SOLEI_POSTGRES_DATABASE": "preview_pr_123",
+                    "SOLEI_POSTGRES_HOST": "db.internal",
+                    "SOLEI_POSTGRES_PORT": "5432",
+                    "SOLEI_POSTGRES_PWD": "db-pass",
+                    "SOLEI_POSTGRES_USER": "preview_pr_123_app",
                 },
             )
 
@@ -973,7 +973,7 @@ class TestPreviewCLI:
             "preview_postgres_database=preview_pr_123",
             "preview_postgres_user=preview_pr_123_app",
             "preview_postgres_password=db-pass",
-            'preview_postgres_env_json={"POLAR_POSTGRES_DATABASE":"preview_pr_123","POLAR_POSTGRES_HOST":"db.internal","POLAR_POSTGRES_PORT":"5432","POLAR_POSTGRES_PWD":"db-pass","POLAR_POSTGRES_USER":"preview_pr_123_app"}',
+            'preview_postgres_env_json={"SOLEI_POSTGRES_DATABASE":"preview_pr_123","SOLEI_POSTGRES_HOST":"db.internal","SOLEI_POSTGRES_PORT":"5432","SOLEI_POSTGRES_PWD":"db-pass","SOLEI_POSTGRES_USER":"preview_pr_123_app"}',
             "preview_tinybird_branch=preview_pr_123",
             "preview_tinybird_token=tb-preview-token",
             'preview_tinybird_env_json={"TINYBIRD_API_TOKEN":"tb-preview-token","TINYBIRD_API_URL":"https://api.tinybird.co","TINYBIRD_BRANCH":"preview_pr_123","TINYBIRD_READ_TOKEN":"tb-preview-token","TINYBIRD_WORKSPACE":"polar"}',

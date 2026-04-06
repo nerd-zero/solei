@@ -12,9 +12,9 @@ set -euo pipefail
 PREVIEW_BASE="/srv/previews"
 PREVIEW_TOOLS_DIR="/srv/preview-tools"
 CADDY_PREVIEWS_DIR="/etc/caddy/previews"
-REPO_URL="${POLAR_PREVIEW_REPO_URL:-https://github.com/polarsource/polar.git}"
-VERCEL_PROJECT="${POLAR_PREVIEW_VERCEL_PROJECT:-polar-sandbox}"
-VERCEL_SCOPE="${POLAR_PREVIEW_VERCEL_SCOPE:-polar-sh}"
+REPO_URL="${SOLEI_PREVIEW_REPO_URL:-https://github.com/polarsource/polar.git}"
+VERCEL_PROJECT="${SOLEI_PREVIEW_VERCEL_PROJECT:-polar-sandbox}"
+VERCEL_SCOPE="${SOLEI_PREVIEW_VERCEL_SCOPE:-polar-sh}"
 
 # Get the Tailscale hostname for URLs
 TS_HOSTNAME="$(tailscale status --json | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d["Self"]["DNSName"].rstrip("."))')"
@@ -117,23 +117,23 @@ deploy() {
     log "Writing backend .env"
     local PREVIEW_URL="https://${TS_HOSTNAME}/${PREVIEW_PATH_PREFIX}"
     cat > "${PREVIEW_DIR}/server/.env" <<DOTENV
-POLAR_ENV=development
-POLAR_BASE_URL=${PREVIEW_URL}
-POLAR_FRONTEND_BASE_URL=${PREVIEW_URL}
-POLAR_ALLOWED_HOSTS=["${TS_HOSTNAME}","${TS_HOSTNAME}:8443"]
-POLAR_CORS_ORIGINS=["${PREVIEW_URL}","${VERCEL_PREVIEW_URL}"]
-POLAR_CHECKOUT_BASE_URL=${PREVIEW_URL}/v1/checkout-links/{client_secret}/redirect
-POLAR_USER_SESSION_COOKIE_DOMAIN=${TS_HOSTNAME}
-POLAR_USER_SESSION_COOKIE_KEY=polar_sandbox_session
+SOLEI_ENV=development
+SOLEI_BASE_URL=${PREVIEW_URL}
+SOLEI_FRONTEND_BASE_URL=${PREVIEW_URL}
+SOLEI_ALLOWED_HOSTS=["${TS_HOSTNAME}","${TS_HOSTNAME}:8443"]
+SOLEI_CORS_ORIGINS=["${PREVIEW_URL}","${VERCEL_PREVIEW_URL}"]
+SOLEI_CHECKOUT_BASE_URL=${PREVIEW_URL}/v1/checkout-links/{client_secret}/redirect
+SOLEI_USER_SESSION_COOKIE_DOMAIN=${TS_HOSTNAME}
+SOLEI_USER_SESSION_COOKIE_KEY=polar_sandbox_session
 
-POLAR_PREVIEW_API_PORT=${API_PORT}
-POLAR_REDIS_HOST=127.0.0.1
-POLAR_REDIS_PORT=${REDIS_PORT}
+SOLEI_PREVIEW_API_PORT=${API_PORT}
+SOLEI_REDIS_HOST=127.0.0.1
+SOLEI_REDIS_PORT=${REDIS_PORT}
 
-POLAR_CURRENT_JWK_KID=polar_preview
-POLAR_TINYBIRD_EVENTS_WRITE=true
-POLAR_TINYBIRD_EVENTS_READ=true
-POLAR_ROOT_PATH=/${PREVIEW_PATH_PREFIX}
+SOLEI_CURRENT_JWK_KID=polar_preview
+SOLEI_TINYBIRD_EVENTS_WRITE=true
+SOLEI_TINYBIRD_EVENTS_READ=true
+SOLEI_ROOT_PATH=/${PREVIEW_PATH_PREFIX}
 DOTENV
 
     if [[ -n "$ENV_JSON" ]]; then
@@ -174,7 +174,7 @@ for k, v in json.loads(sys.stdin.read()).items():
 
     # --- Frontend (disabled — using Vercel preview deployments instead) ---
     # cat > "${PREVIEW_DIR}/clients/apps/web/.env.local" <<DOTENV
-    # POLAR_PREVIEW_BUILD=1
+    # SOLEI_PREVIEW_BUILD=1
     # NEXT_PUBLIC_API_URL=${PREVIEW_URL}
     # NEXT_PUBLIC_FRONTEND_BASE_URL=${PREVIEW_URL}
     # NEXT_PUBLIC_BACKOFFICE_URL=${PREVIEW_URL}/backoffice
@@ -183,9 +183,9 @@ for k, v in json.loads(sys.stdin.read()).items():
     # DOTENV
     #
     # cat > "${PREVIEW_DIR}/clients/.env.preview" <<DOTENV
-    # POLAR_PREVIEW_BUILD=1
+    # SOLEI_PREVIEW_BUILD=1
     # NEXT_PUBLIC_API_URL=${PREVIEW_URL}
-    # POLAR_API_URL=http://127.0.0.1:${API_PORT}
+    # SOLEI_API_URL=http://127.0.0.1:${API_PORT}
     # NEXT_PUBLIC_FRONTEND_BASE_URL=${PREVIEW_URL}
     # NEXT_PUBLIC_BACKOFFICE_URL=${PREVIEW_URL}/backoffice
     # PORT=${FRONTEND_LOCAL_PORT}
