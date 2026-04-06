@@ -145,6 +145,12 @@ jobs:
             ghcr.io/nerd-zero/solei-web:latest
           build-args: |
             RELEASE_VERSION=${{ needs.prepare.outputs.web_version }}
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL || 'https://dev-api.solei.to' }}
+            NEXT_PUBLIC_FRONTEND_BASE_URL=${{ vars.NEXT_PUBLIC_FRONTEND_BASE_URL || 'http://dev.solei.to' }}
+            NEXT_PUBLIC_BACKOFFICE_URL=${{ vars.NEXT_PUBLIC_BACKOFFICE_URL || 'http://dev-api.solei.to/backoffice' }}
+            NEXT_PUBLIC_STRIPE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_KEY || '__UNSET__' }}
+            NEXT_PUBLIC_GITHUB_APP_NAMESPACE=${{ vars.NEXT_PUBLIC_GITHUB_APP_NAMESPACE || '__UNSET__' }}
+            NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION=${{ vars.NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION || '__UNSET__' }}
           secrets: |
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
