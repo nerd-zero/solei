@@ -104,7 +104,9 @@ jobs:
           context: ./server
           target: production
           platforms: linux/amd64
-          tags: ghcr.io/nerd-zero/solei:${{ needs.prepare.outputs.api_version }}
+          tags: |
+            ghcr.io/nerd-zero/solei:${{ needs.prepare.outputs.api_version }}
+            ghcr.io/nerd-zero/solei:latest
           build-args: |
             RELEASE_VERSION=${{ needs.prepare.outputs.api_version }}
           secrets: |
@@ -138,7 +140,9 @@ jobs:
           context: ./clients
           file: ./clients/apps/web/Dockerfile
           platforms: linux/amd64
-          tags: ghcr.io/nerd-zero/solei-web:${{ needs.prepare.outputs.web_version }}
+          tags: |
+            ghcr.io/nerd-zero/solei-web:${{ needs.prepare.outputs.web_version }}
+            ghcr.io/nerd-zero/solei-web:latest
           build-args: |
             RELEASE_VERSION=${{ needs.prepare.outputs.web_version }}
           secrets: |

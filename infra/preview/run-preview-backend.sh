@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-API_PORT="${POLAR_PREVIEW_API_PORT:-10000}"
-REDIS_PORT="${POLAR_REDIS_PORT:-6379}"
+API_PORT="${SOLEI_PREVIEW_API_PORT:-10000}"
+REDIS_PORT="${SOLEI_REDIS_PORT:-6379}"
 
 redis_pid=""
 worker_pid=""
@@ -29,7 +29,7 @@ uv run dramatiq \
     polar.worker.run &
 worker_pid=$!
 
-ROOT_PATH="${POLAR_ROOT_PATH:-}"
+ROOT_PATH="${SOLEI_ROOT_PATH:-}"
 uv run uvicorn polar.app:app \
     --host 127.0.0.1 \
     --port "$API_PORT" \

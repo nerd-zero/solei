@@ -21,7 +21,7 @@ export const useDeleteUser = (): UseMutationResult<
   return useMutation({
     mutationFn: async () => {
       const response = await fetch(
-        `${process.env.EXPO_PUBLIC_POLAR_SERVER_URL}/v1/users/me`,
+        `${process.env.EXPO_PUBLIC_SOLEI_SERVER_URL}/v1/users/me`,
         {
           method: 'DELETE',
           headers: {
