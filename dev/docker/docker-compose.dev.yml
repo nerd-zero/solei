@@ -201,10 +201,10 @@ services:
       NEXT_PUBLIC_API_URL: http://localhost:${API_PORT:-8000}
       NEXT_PUBLIC_FRONTEND_BASE_URL: http://localhost:${WEB_PORT:-3000}
       NEXT_PUBLIC_BACKOFFICE_URL: http://localhost:${API_PORT:-8000}/backoffice
-      # These default to __UNSET__; override in server/.env for full integration
-      NEXT_PUBLIC_STRIPE_KEY: ${NEXT_PUBLIC_STRIPE_KEY:-__UNSET__}
-      NEXT_PUBLIC_GITHUB_APP_NAMESPACE: ${NEXT_PUBLIC_GITHUB_APP_NAMESPACE:-__UNSET__}
-      NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION: ${NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION:-__UNSET__}
+      # Note: NEXT_PUBLIC_STRIPE_KEY, NEXT_PUBLIC_GITHUB_APP_NAMESPACE, and
+      # NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION must be set in server/.env —
+      # they are loaded via env_file and must not be set here (setting them
+      # here would shadow env_file values with host-shell interpolation).
       # SOLEI_API_URL is for server-side requests (container-to-container)
       SOLEI_API_URL: http://api:8000
       S3_PUBLIC_IMAGES_BUCKET_PROTOCOL: http
