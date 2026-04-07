@@ -9,6 +9,19 @@ RUN corepack enable
 
 WORKDIR /app/clients
 
+# Default env vars — overridden by docker-compose at runtime
+ENV NEXT_PUBLIC_API_URL="http://localhost:8000"
+ENV NEXT_PUBLIC_FRONTEND_BASE_URL="http://localhost:3000"
+ENV NEXT_PUBLIC_BACKOFFICE_URL="http://localhost:8000/backoffice"
+ENV NEXT_PUBLIC_STRIPE_KEY=""
+ENV NEXT_PUBLIC_GITHUB_APP_NAMESPACE=""
+ENV NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION=""
+ENV S3_PUBLIC_IMAGES_BUCKET_PROTOCOL="http"
+ENV S3_PUBLIC_IMAGES_BUCKET_HOSTNAME="127.0.0.1"
+ENV S3_PUBLIC_IMAGES_BUCKET_PORT="9000"
+ENV S3_PUBLIC_IMAGES_BUCKET_PATHNAME="**"
+ENV S3_UPLOAD_ORIGINS="http://127.0.0.1:9000"
+
 # Note: Source code is mounted at runtime, not copied
 # This Dockerfile only sets up the environment
 
