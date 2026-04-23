@@ -105,6 +105,7 @@ class TokenType(StrEnum):
 class EmailSender(StrEnum):
     logger = "logger"
     resend = "resend"
+    postmark = "postmark"
 
 
 class RateLimitGroup(StrEnum):

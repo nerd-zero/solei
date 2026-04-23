@@ -182,6 +182,7 @@ class Settings(BaseSettings):
     EMAIL_SENDER: EmailSender = EmailSender.logger
     RESEND_API_KEY: str = ""
     RESEND_API_BASE_URL: str = "https://api.resend.com"
+    POSTMARK_SERVER_TOKEN: str = ""
     EMAIL_FROM_NAME: str = "Solei"
     EMAIL_FROM_DOMAIN: str = "notifications.solei.to"
     EMAIL_FROM_LOCAL: str = "mail"

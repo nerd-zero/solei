@@ -1,3 +1,5 @@
+import asyncio
+import base64
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, Any, TypedDict
@@ -5,6 +7,8 @@ from typing import TYPE_CHECKING, Any, TypedDict
 import httpx
 import structlog
 from email_validator import validate_email
+from postmarker.core import PostmarkClient
+from requests.exceptions import RequestException
 
 from solei.config import settings
 from solei.enums import EmailSender as EmailSenderType
@@ -153,6 +157,88 @@ class ResendEmailSender(EmailSender):
         return email["id"]
 
 
+class PostmarkEmailSender(EmailSender):
+    def __init__(self) -> None:
+        if not settings.POSTMARK_SERVER_TOKEN:
+            raise ValueError(
+                "POSTMARK_SERVER_TOKEN must be set when EMAIL_SENDER=postmark"
+            )
+        self.client = PostmarkClient(server_token=settings.POSTMARK_SERVER_TOKEN)
+
+    async def send(
+        self,
+        *,
+        to_email_addr: str,
+        subject: str,
+        html_content: str,
+        from_name: str = DEFAULT_FROM_NAME,
+        from_email_addr: str = DEFAULT_FROM_EMAIL_ADDRESS,
+        email_headers: dict[str, str] | None = None,
+        reply_to_name: str | None = DEFAULT_REPLY_TO_NAME,
+        reply_to_email_addr: str | None = DEFAULT_REPLY_TO_EMAIL_ADDRESS,
+        attachments: Iterable[Attachment] | None = None,
+    ) -> str | None:
+        to_email_addr_ascii = to_ascii_email(to_email_addr)
+        from_field = f"{from_name} <{to_ascii_email(from_email_addr)}>"
+        reply_to_field = (
+            f"{reply_to_name} <{to_ascii_email(reply_to_email_addr)}>"
+            if reply_to_name and reply_to_email_addr
+            else None
+        )
+
+        kwargs: dict[str, Any] = {
+            "From": from_field,
+            "To": to_email_addr_ascii,
+            "Subject": subject,
+            "HtmlBody": html_content,
+        }
+        if reply_to_field:
+            kwargs["ReplyTo"] = reply_to_field
+        if email_headers:
+            kwargs["Headers"] = [
+                {"Name": k, "Value": v} for k, v in email_headers.items()
+            ]
+        if attachments:
+            async with httpx.AsyncClient() as client:
+                fetched = []
+                for a in attachments:
+                    r = await client.get(a["remote_url"])
+                    r.raise_for_status()
+                    content_type = (
+                        r.headers.get("content-type", "application/octet-stream")
+                        .split(";")[0]
+                        .strip()
+                    )
+                    fetched.append(
+                        {
+                            "Name": a["filename"],
+                            "Content": base64.b64encode(r.content).decode(),
+                            "ContentType": content_type,
+                        }
+                    )
+            kwargs["Attachments"] = fetched
+
+        try:
+            response = await asyncio.to_thread(self.client.emails.send, **kwargs)
+        except RequestException as e:
+            log.warning(
+                "postmark.send_error",
+                to_email_addr=to_email_addr_ascii,
+                subject=subject,
+                error=e,
+            )
+            raise SendEmailError(str(e)) from e
+
+        message_id = response.get("MessageID")
+        log.info(
+            "postmark.send",
+            to_email_addr=to_email_addr_ascii,
+            subject=subject,
+            message_id=message_id,
+        )
+        return message_id
+
+
 class EmailFromReply(TypedDict):
     from_name: str
     from_email_addr: str
@@ -216,6 +302,8 @@ def enqueue_email_template(
 email_sender: EmailSender
 if settings.EMAIL_SENDER == EmailSenderType.resend:
     email_sender = ResendEmailSender()
+elif settings.EMAIL_SENDER == EmailSenderType.postmark:
+    email_sender = PostmarkEmailSender()
 else:
     # Logging in development
     email_sender = LoggingEmailSender()
