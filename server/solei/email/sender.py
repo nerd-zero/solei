@@ -1,4 +1,5 @@
 import asyncio
+import base64
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, Any, TypedDict
@@ -7,6 +8,7 @@ import httpx
 import structlog
 from email_validator import validate_email
 from postmarker.core import PostmarkClient
+from requests.exceptions import RequestException
 
 from solei.config import settings
 from solei.enums import EmailSender as EmailSenderType
@@ -157,6 +159,10 @@ class ResendEmailSender(EmailSender):
 
 class PostmarkEmailSender(EmailSender):
     def __init__(self) -> None:
+        if not settings.POSTMARK_SERVER_TOKEN:
+            raise ValueError(
+                "POSTMARK_SERVER_TOKEN must be set when EMAIL_SENDER=postmark"
+            )
         self.client = PostmarkClient(server_token=settings.POSTMARK_SERVER_TOKEN)
 
     async def send(
@@ -193,14 +199,28 @@ class PostmarkEmailSender(EmailSender):
                 {"Name": k, "Value": v} for k, v in email_headers.items()
             ]
         if attachments:
-            kwargs["Attachments"] = [
-                {"Name": a["filename"], "Content": a["remote_url"], "ContentType": "application/octet-stream"}
-                for a in attachments
-            ]
+            async with httpx.AsyncClient() as client:
+                fetched = []
+                for a in attachments:
+                    r = await client.get(a["remote_url"])
+                    r.raise_for_status()
+                    content_type = (
+                        r.headers.get("content-type", "application/octet-stream")
+                        .split(";")[0]
+                        .strip()
+                    )
+                    fetched.append(
+                        {
+                            "Name": a["filename"],
+                            "Content": base64.b64encode(r.content).decode(),
+                            "ContentType": content_type,
+                        }
+                    )
+            kwargs["Attachments"] = fetched
 
         try:
             response = await asyncio.to_thread(self.client.emails.send, **kwargs)
-        except Exception as e:
+        except RequestException as e:
             log.warning(
                 "postmark.send_error",
                 to_email_addr=to_email_addr_ascii,
