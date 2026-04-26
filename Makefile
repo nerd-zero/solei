@@ -122,7 +122,7 @@ format-backend: ## Format server Python code (ruff format)
 format-frontend: ## Format client code (oxfmt)
 	cd clients && pnpm format
 
-lint: lint-backend lint-frontend ## Auto-fix linting for both server (ruff) and clients (ESLint + Prettier)
+lint: lint-backend lint-frontend ## Lint both server (ruff auto-fix) and clients (ESLint + oxfmt check)
 
 lint-backend: ## Auto-fix backend linting (ruff)
 	cd server && uv run task lint
