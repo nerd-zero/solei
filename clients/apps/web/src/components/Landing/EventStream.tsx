@@ -41,8 +41,10 @@ export const EventStream = () => {
   const [total, setTotal] = useState(38_471)
 
   useEffect(() => {
-    setEvents(Array.from({ length: 8 }, nextEvent))
-    setBars(initBars())
+    const init = setTimeout(() => {
+      setEvents(Array.from({ length: 8 }, nextEvent))
+      setBars(initBars())
+    }, 0)
 
     const interval = setInterval(() => {
       setEvents((prev) => [nextEvent(), ...prev.slice(0, 7)])
@@ -50,7 +52,10 @@ export const EventStream = () => {
       totalRef.current += rand(4, 18)
       setTotal(totalRef.current)
     }, 750)
-    return () => clearInterval(interval)
+    return () => {
+      clearTimeout(init)
+      clearInterval(interval)
+    }
   }, [])
 
   return (
