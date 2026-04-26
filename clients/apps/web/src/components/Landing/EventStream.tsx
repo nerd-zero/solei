@@ -35,21 +35,27 @@ function initBars() {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export const EventStream = () => {
-  const [events, setEvents] = useState<ReturnType<typeof nextEvent>[]>(() =>
-    Array.from({ length: 8 }, nextEvent),
-  )
-  const [, setBars] = useState<number[]>(() => initBars())
+  const [events, setEvents] = useState<ReturnType<typeof nextEvent>[]>([])
+  const [, setBars] = useState<number[]>([])
   const totalRef = useRef(38_471)
   const [total, setTotal] = useState(38_471)
 
   useEffect(() => {
+    const init = setTimeout(() => {
+      setEvents(Array.from({ length: 8 }, nextEvent))
+      setBars(initBars())
+    }, 0)
+
     const interval = setInterval(() => {
       setEvents((prev) => [nextEvent(), ...prev.slice(0, 7)])
       setBars((prev) => [...prev.slice(1), Math.random() * 0.65 + 0.12])
       totalRef.current += rand(4, 18)
       setTotal(totalRef.current)
     }, 750)
-    return () => clearInterval(interval)
+    return () => {
+      clearTimeout(init)
+      clearInterval(interval)
+    }
   }, [])
 
   return (

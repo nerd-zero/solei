@@ -11,7 +11,8 @@ COMPOSE_FILE := server/docker-compose.yml
         frontend \
         install install-backend install-frontend emails-build backoffice-build \
         test test-fast test-frontend \
-        lint lint-types lint-frontend \
+        lint lint-backend lint-types lint-frontend \
+        format format-backend format-frontend \
         db-migrate db-migrate-create db-reset \
         seeds \
         generate \
@@ -113,7 +114,17 @@ test-frontend: ## Run frontend tests
 # Linting & type checking
 # ─────────────────────────────────────────────
 
-lint: ## Auto-fix backend linting (ruff)
+format: format-backend format-frontend ## Format both server (ruff) and clients (oxfmt)
+
+format-backend: ## Format server Python code (ruff format)
+	cd server && uv run ruff format .
+
+format-frontend: ## Format client code (oxfmt)
+	cd clients && pnpm format
+
+lint: lint-backend lint-frontend ## Lint both server (ruff auto-fix) and clients (ESLint + oxfmt check)
+
+lint-backend: ## Auto-fix backend linting (ruff)
 	cd server && uv run task lint
 
 lint-types: ## Type check backend (mypy)
