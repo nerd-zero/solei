@@ -1,4 +1,4 @@
-import { Img, Section } from '@react-email/components'
+import { Img, Section } from "@react-email/components";
 
 interface HeaderProps {}
 
@@ -8,10 +8,10 @@ const Header = () => (
       <Img
         alt="Solei Logo"
         height="48"
-        src="https://polar-public-assets.s3.us-east-2.amazonaws.com/emails/polar-logo-black-badge.png"
+        src="https://public.solei.to/emails/solei-logo-black-badge.png"
       />
     </div>
   </Section>
-)
+);
 
-export default Header
+export default Header;
