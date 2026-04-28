@@ -28,7 +28,23 @@ const Footer = ({ email }: { email: string | null }) => (
         </Text>
       )}
       <Text className="font-semibold text-gray-900">
-        Powered by <a href="https://n0.rocks">n0</a>
+        Powered by{" "}
+        <a
+          href="https://n0.rocks"
+          style={{
+            textDecoration: "none !important",
+            color: "inherit !important",
+          }}
+        >
+          <span
+            style={{
+              textDecoration: "none !important",
+              color: "inherit !important",
+            }}
+          >
+            n0
+          </span>
+        </a>
       </Text>
     </Section>
   </>
