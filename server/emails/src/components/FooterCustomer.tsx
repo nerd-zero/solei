@@ -1,31 +1,31 @@
-import { Hr, Section, Text } from '@react-email/components'
-import { schemas } from '../types'
+import { Hr, Section, Text } from "@react-email/components";
+import { schemas } from "../types";
 
 const FooterCustomer = ({
   organization,
   email,
 }: {
-  organization: schemas['Organization']
-  email: string
+  organization: schemas["Organization"];
+  email: string;
 }) => (
   <>
     <Hr className="mt-8" />
     <Section className="text-center">
       <Text className="text-xs text-gray-400">
-        This email was sent to{' '}
+        This email was sent to{" "}
         <span className="text-gray-500">
           <a
             href={`mailto:${email}`}
             className="font-medium text-gray-500"
             style={{
-              textDecoration: 'none !important',
-              color: 'inherit !important',
+              textDecoration: "none !important",
+              color: "inherit !important",
             }}
           >
             <span
               style={{
-                textDecoration: 'none !important',
-                color: 'inherit !important',
+                textDecoration: "none !important",
+                color: "inherit !important",
               }}
             >
               {email}
@@ -35,13 +35,12 @@ const FooterCustomer = ({
         .
       </Text>
       <Text className="text-xs text-gray-400">
-        Merchant of Record services provided to{' '}
-        <span className="font-medium text-gray-500">{organization.name}</span>{' '}
-        by{' '}
-        <span className="font-medium text-gray-500">Nerd Zero</span>
+        Merchant of Record services provided to{" "}
+        <span className="font-medium text-gray-500">{organization.name}</span>{" "}
+        by <span className="font-medium text-gray-500">Solei:-Nerd Zero</span>
       </Text>
     </Section>
   </>
-)
+);
 
-export default FooterCustomer
+export default FooterCustomer;
