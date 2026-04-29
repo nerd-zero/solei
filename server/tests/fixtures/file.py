@@ -220,10 +220,10 @@ class TestFile:
         metadata = s3_object["Metadata"]
 
         assert s3_object["ETag"] == completed.checksum_etag
-        assert metadata["polar-id"] == str(completed.id)
-        assert metadata["polar-organization-id"] == str(completed.organization_id)
-        assert metadata["polar-name"] == completed.name
-        assert metadata["polar-size"] == str(self.size)
+        assert metadata["solei-id"] == str(completed.id)
+        assert metadata["solei-organization-id"] == str(completed.organization_id)
+        assert metadata["solei-name"] == completed.name
+        assert metadata["solei-size"] == str(self.size)
         assert s3_object["ContentLength"] == self.size
         assert s3_object["ContentType"] == self.mime_type
 
