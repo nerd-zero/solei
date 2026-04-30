@@ -13,6 +13,7 @@ from solei.eventstream import tasks as eventstream
 from solei.external_event import tasks as external_event
 from solei.integrations.chargeback_stop import tasks as chargeback_stop
 from solei.integrations.loops import tasks as loops
+from solei.integrations.paystack import tasks as paystack
 from solei.integrations.smilepay import tasks as smilepay
 from solei.integrations.stripe import tasks as stripe
 from solei.meter import tasks as meter
@@ -53,6 +54,7 @@ __all__ = [
     "organization_access_token",
     "organization_review",
     "payout",
+    "paystack",
     "personal_access_token",
     "processor_transaction",
     "slo_report",

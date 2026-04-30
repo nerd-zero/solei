@@ -16,6 +16,7 @@ from solei.user.service import user as user_service
 
 from .auth import UserWrite
 from .schemas import (
+    PaystackIdentitySubmit,
     UserDeletionResponse,
     UserIdentityVerification,
     UserRead,
@@ -60,6 +61,21 @@ async def create_identity_verification(
 ) -> UserIdentityVerification:
     return await user_service.create_identity_verification(
         session, user=auth_subject.subject
+    )
+
+
+@router.post(
+    "/me/identity-verification/paystack",
+    status_code=202,
+    name="users.submit_paystack_identity_verification",
+)
+async def submit_paystack_identity_verification(
+    payload: PaystackIdentitySubmit,
+    auth_subject: WebUserWrite,
+    session: AsyncSession = Depends(get_db_session),
+) -> None:
+    await user_service.submit_paystack_verification(
+        session, user=auth_subject.subject, payload=payload
     )
 
 

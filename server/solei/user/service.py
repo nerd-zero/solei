@@ -5,7 +5,10 @@ import stripe as stripe_lib
 import structlog
 from sqlalchemy import func, update
 
+from solei.config import settings
 from solei.exceptions import SoleiError
+from solei.integrations.paystack.service import PaystackError
+from solei.integrations.paystack.service import paystack as paystack_service
 from solei.integrations.stripe.service import stripe as stripe_service
 from solei.kit.anonymization import anonymize_email_for_deletion
 from solei.models import NotificationRecipient, User
@@ -17,6 +20,7 @@ from solei.worker import enqueue_job
 from .repository import UserRepository
 from .schemas import (
     BlockingOrganization,
+    PaystackIdentitySubmit,
     UserDeletionBlockedReason,
     UserDeletionResponse,
     UserIdentityVerification,
@@ -54,6 +58,11 @@ class IdentityVerificationDoesNotExist(UserError):
         super().__init__(message)
 
 
+class PaystackSubmissionError(UserError):
+    def __init__(self, message: str) -> None:
+        super().__init__(message, 422)
+
+
 class InvalidAccount(UserError):
     def __init__(self, account_id: UUID) -> None:
         self.account_id = account_id
@@ -61,6 +70,28 @@ class InvalidAccount(UserError):
             f"The account {account_id} does not exist or you don't have access to it."
         )
         super().__init__(message)
+
+
+# Countries routed through Paystack identity verification
+PAYSTACK_COUNTRIES = frozenset({"ZA", "GH", "NG"})
+
+# Official Paystack test credentials for Nigeria (bank_account type only works with live keys)
+_PAYSTACK_NG_TEST_PAYLOAD: dict[str, Any] = {
+    "country": "NG",
+    "type": "bank_account",
+    "account_number": "0111111111",
+    "bvn": "22222222221",
+    "bank_code": "007",
+    "first_name": "Uchenna",
+    "last_name": "Okoro",
+}
+
+# Default required ID type per country for Paystack
+_PAYSTACK_ID_TYPE: dict[str, str] = {
+    "ZA": "sa_id",
+    "GH": "tin",
+    "NG": "bank_account",
+}
 
 
 class UserService:
@@ -120,8 +151,19 @@ class UserService:
         if user.identity_verification_status == IdentityVerificationStatus.pending:
             raise IdentityVerificationProcessing(user.id)
 
+        country = (user.country or "").upper()
+        if country in PAYSTACK_COUNTRIES:
+            return await self._create_paystack_verification(session, user, country)
+        return await self._create_stripe_verification(session, user)
+
+    async def _create_stripe_verification(
+        self, session: AsyncSession, user: User
+    ) -> UserIdentityVerification:
         verification_session: stripe_lib.identity.VerificationSession | None = None
-        if user.identity_verification_id is not None:
+        if (
+            user.identity_verification_id is not None
+            and user.identity_verification_provider != "paystack"
+        ):
             verification_session = await stripe_service.get_verification_session(
                 user.identity_verification_id
             )
@@ -136,12 +178,91 @@ class UserService:
 
         repository = UserRepository.from_session(session)
         await repository.update(
-            user, update_dict={"identity_verification_id": verification_session.id}
+            user,
+            update_dict={
+                "identity_verification_id": verification_session.id,
+                "identity_verification_provider": "stripe",
+            },
         )
 
         assert verification_session.client_secret is not None
         return UserIdentityVerification(
-            id=verification_session.id, client_secret=verification_session.client_secret
+            provider="stripe",
+            id=verification_session.id,
+            client_secret=verification_session.client_secret,
+        )
+
+    async def _create_paystack_verification(
+        self, session: AsyncSession, user: User, country: str
+    ) -> UserIdentityVerification:
+        # Reuse existing customer code if already created via Paystack
+        customer_code = (
+            user.identity_verification_id
+            if user.identity_verification_provider == "paystack"
+            else None
+        )
+
+        if customer_code is None:
+            customer = await paystack_service.create_customer(user)
+            customer_code = customer["customer_code"]
+            repository = UserRepository.from_session(session)
+            await repository.update(
+                user,
+                update_dict={
+                    "identity_verification_id": customer_code,
+                    "identity_verification_provider": "paystack",
+                },
+            )
+
+        required_id_type = _PAYSTACK_ID_TYPE.get(country)
+        return UserIdentityVerification(
+            provider="paystack",
+            customer_code=customer_code,
+            required_id_type=required_id_type,
+        )
+
+    async def submit_paystack_verification(
+        self, session: AsyncSession, user: User, payload: PaystackIdentitySubmit
+    ) -> None:
+        if user.identity_verification_provider != "paystack":
+            raise IdentityVerificationDoesNotExist("no_paystack_session")
+
+        if user.identity_verification_id is None:
+            raise IdentityVerificationDoesNotExist("no_paystack_customer")
+
+        country = (user.country or "").upper()
+
+        # Paystack only validates with live keys; use official NG test credentials in dev/test
+        if country == "NG" and (settings.is_development() or settings.is_testing()):
+            identification_payload: dict[str, Any] = _PAYSTACK_NG_TEST_PAYLOAD
+        else:
+            identification_payload = {
+                "country": country,
+                "type": payload.id_type,
+                "value": payload.id_number,
+                "first_name": payload.first_name,
+                "last_name": payload.last_name,
+            }
+            if payload.bvn is not None:
+                identification_payload["bvn"] = payload.bvn
+            if payload.bank_code is not None:
+                identification_payload["bank_code"] = payload.bank_code
+            if payload.account_number is not None:
+                identification_payload["account_number"] = payload.account_number
+
+        try:
+            await paystack_service.validate_identity(
+                user.identity_verification_id, identification_payload
+            )
+        except PaystackError as e:
+            raise PaystackSubmissionError(str(e)) from e
+
+        repository = UserRepository.from_session(session)
+        await repository.update(
+            user,
+            update_dict={
+                "identity_verification_status": IdentityVerificationStatus.pending
+            },
         )
 
     async def identity_verification_verified(
@@ -204,9 +325,43 @@ class UserService:
             },
         )
 
+    async def identity_verification_verified_by_id(
+        self, session: AsyncSession, identity_verification_id: str
+    ) -> User:
+        repository = UserRepository.from_session(session)
+        user = await repository.get_by_identity_verification_id(
+            identity_verification_id
+        )
+        if user is None:
+            raise IdentityVerificationDoesNotExist(identity_verification_id)
+        return await repository.update(
+            user,
+            update_dict={
+                "identity_verification_status": IdentityVerificationStatus.verified
+            },
+        )
+
+    async def identity_verification_failed_by_id(
+        self, session: AsyncSession, identity_verification_id: str
+    ) -> User:
+        repository = UserRepository.from_session(session)
+        user = await repository.get_by_identity_verification_id(
+            identity_verification_id
+        )
+        if user is None:
+            raise IdentityVerificationDoesNotExist(identity_verification_id)
+        return await repository.update(
+            user,
+            update_dict={
+                "identity_verification_status": IdentityVerificationStatus.failed
+            },
+        )
+
     async def get_identity_verified_country(self, user: User) -> str | None:
         if user.identity_verification_id is None:
             return None
+        if user.identity_verification_provider == "paystack":
+            return user.country
         try:
             vs = await stripe_service.get_verification_session(
                 user.identity_verification_id,
@@ -238,12 +393,15 @@ class UserService:
     ) -> User:
         """Delete identity verification for a user.
 
-        Resets the user's identity verification status to unverified and
-        redacts the verification session in Stripe.
+        For Stripe: resets status and redacts the verification session.
+        For Paystack: resets status only (no redaction API available).
         """
         repository = UserRepository.from_session(session)
 
-        if user.identity_verification_id is not None:
+        if (
+            user.identity_verification_id is not None
+            and user.identity_verification_provider != "paystack"
+        ):
             try:
                 await stripe_service.redact_verification_session(
                     user.identity_verification_id
@@ -260,6 +418,7 @@ class UserService:
             update_dict={
                 "identity_verification_status": IdentityVerificationStatus.unverified,
                 "identity_verification_id": None,
+                "identity_verification_provider": None,
             },
         )
 

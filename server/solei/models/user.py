@@ -153,6 +153,9 @@ class User(RecordModel):
     identity_verification_id: Mapped[str | None] = mapped_column(
         String, nullable=True, default=None, unique=True
     )
+    identity_verification_provider: Mapped[str | None] = mapped_column(
+        String(20), nullable=True, default=None
+    )
 
     @property
     def identity_verified(self) -> bool:

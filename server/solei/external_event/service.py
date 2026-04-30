@@ -6,7 +6,7 @@ from typing import Any, cast
 from solei.exceptions import SoleiError
 from solei.kit.utils import utc_now
 from solei.models import ExternalEvent
-from solei.models.external_event import ExternalEventSource, StripeEvent
+from solei.models.external_event import ExternalEventSource, PaystackEvent, StripeEvent
 from solei.postgres import AsyncSession
 from solei.worker import enqueue_job
 
@@ -83,6 +83,15 @@ class ExternalEventService:
     ) -> AsyncIterator[StripeEvent]:
         async with self.handle(session, ExternalEventSource.stripe, event_id) as event:
             yield cast(StripeEvent, event)
+
+    @contextlib.asynccontextmanager
+    async def handle_paystack(
+        self, session: AsyncSession, event_id: uuid.UUID
+    ) -> AsyncIterator[PaystackEvent]:
+        async with self.handle(
+            session, ExternalEventSource.paystack, event_id
+        ) as event:
+            yield cast(PaystackEvent, event)
 
 
 external_event = ExternalEventService()

@@ -37,6 +37,13 @@ export const useCreateIdentityVerification = () =>
     },
   })
 
+export const useSubmitPaystackIdentityVerification = () =>
+  useMutation({
+    mutationFn: (body: schemas['PaystackIdentitySubmit']) => {
+      return api.POST('/v1/users/me/identity-verification/paystack', { body })
+    },
+  })
+
 export const useUpdateUser = () =>
   useMutation({
     mutationFn: (body: schemas['UserUpdate']) => {
