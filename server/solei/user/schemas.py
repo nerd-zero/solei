@@ -60,8 +60,24 @@ class UserUpdate(Schema):
 
 
 class UserIdentityVerification(Schema):
-    id: str
-    client_secret: str
+    provider: Literal["stripe", "paystack"] = "stripe"
+    # Stripe-specific
+    id: str | None = None
+    client_secret: str | None = None
+    # Paystack-specific
+    customer_code: str | None = None
+    required_id_type: str | None = None
+
+
+class PaystackIdentitySubmit(Schema):
+    id_type: Literal["bank_account", "sa_id", "tin"]
+    id_number: str
+    first_name: str
+    last_name: str
+    # bank_account type (Nigeria)
+    bvn: str | None = None
+    bank_code: str | None = None
+    account_number: str | None = None
 
 
 class UserSetAccount(Schema):

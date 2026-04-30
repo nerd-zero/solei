@@ -52,6 +52,9 @@ class Account(RecordModel):
     stripe_id: Mapped[str | None] = mapped_column(
         String(100), nullable=True, default=None
     )
+    paystack_recipient_code: Mapped[str | None] = mapped_column(
+        String(100), nullable=True, default=None, index=True
+    )
     open_collective_slug: Mapped[str | None] = mapped_column(
         String(255), nullable=True, default=None, deferred=True
     )

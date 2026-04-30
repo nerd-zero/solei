@@ -47,11 +47,13 @@ class TaxBehaviorOption(StrEnum):
 class AccountType(StrEnum):
     stripe = "stripe"
     manual = "manual"
+    paystack = "paystack"
 
     def get_display_name(self) -> str:
         return {
             AccountType.stripe: "Stripe Connect Express",
             AccountType.manual: "Manual",
+            AccountType.paystack: "Paystack",
         }[self]
 
 
