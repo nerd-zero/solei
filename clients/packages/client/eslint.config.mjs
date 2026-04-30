@@ -6,4 +6,10 @@ export default [
     ignores: ['node_modules/**', 'dist/**'],
   },
   ...config,
+  {
+    files: ['src/v1.ts'],
+    rules: {
+      'max-lines': 'off',
+    },
+  },
 ]
