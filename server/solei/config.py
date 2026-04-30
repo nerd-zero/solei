@@ -241,6 +241,10 @@ class Settings(BaseSettings):
     SMILEPAY_API_SECRET: str = ""
     SMILEPAY_SANDBOX: bool = True
 
+    # Paystack
+    PAYSTACK_SECRET_KEY: str = ""
+    PAYSTACK_WEBHOOK_SECRET: str = ""
+
     # Numeral
     NUMERAL_API_KEY: str | None = None
 

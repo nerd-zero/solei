@@ -2,25 +2,23 @@
 
 import AccountCreateModal from '@/components/Accounts/AccountCreateModal'
 import AccountStep from '@/components/Finance/Steps/AccountStep'
+import IdentityCountryModal from '@/components/Finance/Steps/IdentityCountryModal'
 import IdentityStep from '@/components/Finance/Steps/IdentityStep'
+import PaystackIdentityModal from '@/components/Finance/Steps/PaystackIdentityModal'
 import { DashboardBody } from '@/components/Layout/DashboardLayout'
 import { Modal } from '@/components/Modal'
 import { useModal } from '@/components/Modal/useModal'
 import AIValidationResult from '@/components/Organization/AIValidationResult'
 import OrganizationProfileSettings from '@/components/Settings/OrganizationProfileSettings'
 import { Section, SectionDescription } from '@/components/Settings/Section'
-import { toast } from '@/components/Toast/use-toast'
 import { useAuth } from '@/hooks'
-import {
-  useCreateIdentityVerification,
-  useOrganizationAccount,
-} from '@/hooks/queries'
+import { useOrganizationAccount } from '@/hooks/queries'
 import { useOrganizationReviewStatus } from '@/hooks/queries/org'
+import { useIdentityVerification } from '@/hooks/useIdentityVerification'
 import { api } from '@/utils/client'
 import { ClientResponseError, schemas, unwrap } from '@polar-sh/client'
-import { loadStripe } from '@stripe/stripe-js'
 import { CheckIcon } from 'lucide-react'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 export default function ClientPage({
   organization,
@@ -38,8 +36,6 @@ export default function ClientPage({
     !organization.details_submitted_at,
   )
   const identityVerificationStatus = currentUser?.identity_verification_status
-  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const pollingInitialStatusRef = useRef<string | undefined | null>(null)
 
   const { data: organizationAccount, error: accountError } =
     useOrganizationAccount(organization.id)
@@ -53,93 +49,31 @@ export default function ClientPage({
     reviewStatus?.verdict === 'PASS' ||
     reviewStatus?.appeal_decision === 'approved'
 
-  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY || '')
-  const createIdentityVerification = useCreateIdentityVerification()
-  const startIdentityVerification = useCallback(async () => {
-    const { data, error } = await createIdentityVerification.mutateAsync()
-    if (error) {
-      const errorBody = error as Record<string, unknown>
-      const errorDetail = errorBody.detail as
-        | string
-        | { error?: string; detail?: string }
-        | undefined
-      if (
-        (typeof errorDetail === 'object' &&
-          errorDetail?.error === 'IdentityVerificationProcessing') ||
-        errorDetail === 'Your identity verification is still processing.'
-      ) {
-        toast({
-          title: 'Identity verification in progress',
-          description:
-            'Your identity verification is already being processed. Please wait for it to complete.',
-        })
-      } else {
-        toast({
-          title: 'Error starting identity verification',
-          description:
-            typeof errorDetail === 'string'
-              ? errorDetail
-              : (typeof errorDetail === 'object' && errorDetail?.detail) ||
-                'Unable to start identity verification. Please try again.',
-        })
-      }
-      return
-    }
-    const stripe = await stripePromise
-    if (!stripe) {
-      toast({
-        title: 'Error loading Stripe',
-        description: 'Unable to load identity verification. Please try again.',
-      })
-      return
-    }
-    const { error: stripeError } = await stripe.verifyIdentity(
-      data.client_secret,
-    )
-    if (stripeError) {
-      toast({
-        title: 'Identity verification error',
-        description:
-          stripeError.message ||
-          'Something went wrong during verification. Please try again.',
-      })
-      return
-    }
-    pollingInitialStatusRef.current = identityVerificationStatus
-    await reloadUser()
-    pollingRef.current = setInterval(async () => {
-      await reloadUser()
-    }, 3000)
-    setTimeout(() => {
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current)
-        pollingRef.current = null
-      }
-    }, 30_000)
-  }, [
-    createIdentityVerification,
-    stripePromise,
-    reloadUser,
-    identityVerificationStatus,
-  ])
+  const {
+    showCountryPicker,
+    openCountryPicker,
+    closeCountryPicker,
+    isUpdatingCountry,
+    paystackData,
+    clearPaystackData,
+    startVerificationWithCountry,
+    startPolling,
+    clearPollingOnStatusChange,
+    stopPolling,
+  } = useIdentityVerification(identityVerificationStatus, reloadUser)
 
   useEffect(() => {
-    if (
-      pollingRef.current &&
-      identityVerificationStatus !== pollingInitialStatusRef.current
-    ) {
-      clearInterval(pollingRef.current)
-      pollingRef.current = null
-    }
-  }, [identityVerificationStatus])
+    clearPollingOnStatusChange()
+  }, [clearPollingOnStatusChange])
 
   useEffect(() => {
-    return () => {
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current)
-      }
-    }
-  }, [])
+    return () => stopPolling()
+  }, [stopPolling])
+
+  const handlePaystackSuccess = useCallback(() => {
+    clearPaystackData()
+    startPolling()
+  }, [clearPaystackData, startPolling])
 
   const handleDetailsSubmitted = useCallback(() => {
     setRequireDetails(false)
@@ -152,9 +86,7 @@ export default function ClientPage({
       const link = await unwrap(
         api.POST('/v1/accounts/{id}/onboarding_link', {
           params: {
-            path: {
-              id: organizationAccount.id,
-            },
+            path: { id: organizationAccount.id },
             query: {
               return_path: `/dashboard/${organization.slug}/finance/account`,
             },
@@ -225,7 +157,7 @@ export default function ClientPage({
           {isApproved ? (
             <IdentityStep
               identityVerificationStatus={identityVerificationStatus}
-              onStartIdentityVerification={startIdentityVerification}
+              onStartIdentityVerification={openCountryPicker}
             />
           ) : (
             <InfoCard>Please go through account review first</InfoCard>
@@ -242,6 +174,39 @@ export default function ClientPage({
               forOrganizationId={organization.id}
               returnPath={`/dashboard/${organization.slug}/finance/account`}
             />
+          }
+        />
+
+        <Modal
+          title="Select Your Country"
+          isShown={showCountryPicker}
+          className="min-w-[400px]"
+          hide={closeCountryPicker}
+          modalContent={
+            <IdentityCountryModal
+              defaultCountry={currentUser?.country}
+              onSubmit={startVerificationWithCountry}
+              isLoading={isUpdatingCountry}
+            />
+          }
+        />
+
+        <Modal
+          title="Verify Your Identity"
+          isShown={!!paystackData}
+          className="min-w-[400px]"
+          hide={clearPaystackData}
+          modalContent={
+            paystackData && (
+              <PaystackIdentityModal
+                customerCode={paystackData.customerCode}
+                requiredIdType={paystackData.requiredIdType}
+                firstName={currentUser?.first_name ?? ''}
+                lastName={currentUser?.last_name ?? ''}
+                onSuccess={handlePaystackSuccess}
+                onCancel={clearPaystackData}
+              />
+            )
           }
         />
       </div>

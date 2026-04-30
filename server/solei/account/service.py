@@ -12,6 +12,8 @@ from solei.campaign.service import campaign as campaign_service
 from solei.enums import AccountType
 from solei.exceptions import SoleiError
 from solei.integrations.loops.service import loops as loops_service
+from solei.integrations.paystack.service import PaystackError
+from solei.integrations.paystack.service import paystack as paystack_service
 from solei.integrations.stripe.service import stripe
 from solei.models import Account, Organization, User
 from solei.models.user import IdentityVerificationStatus
@@ -20,8 +22,11 @@ from solei.user.repository import UserRepository
 
 from .schemas import (
     AccountCreateForOrganization,
+    AccountCreateForOrganizationPaystack,
     AccountLink,
     AccountUpdate,
+    BankAccountVerified,
+    BankAccountVerifyRequest,
 )
 
 
@@ -163,17 +168,103 @@ class AccountService:
 
         return archive_account
 
+    async def verify_bank_account(
+        self, bank_verify: BankAccountVerifyRequest
+    ) -> BankAccountVerified:
+        country = bank_verify.country
+        ba = bank_verify.bank_account
+        try:
+            if country in ("NG", "GH"):
+                result = await paystack_service.resolve_bank_account(
+                    ba.account_number, ba.bank_code
+                )
+                return BankAccountVerified(
+                    account_name=result["account_name"],
+                    account_number=result["account_number"],
+                )
+            else:  # ZA
+                await paystack_service.validate_bank_account(
+                    account_number=ba.account_number,
+                    bank_code=ba.bank_code,
+                    account_name=ba.account_name or "",
+                    account_type=ba.account_type or "personal",
+                    country_code=country,
+                    document_type=ba.document_type or "identityNumber",
+                    document_number=ba.document_number or "",
+                )
+                return BankAccountVerified(
+                    account_name=ba.account_name or "",
+                    account_number=ba.account_number,
+                )
+        except PaystackError as e:
+            raise AccountServiceError(str(e)) from e
+
     async def create_account(
         self,
         session: AsyncSession,
         *,
         admin: User,
-        account_create: AccountCreateForOrganization,
+        account_create: AccountCreateForOrganization
+        | AccountCreateForOrganizationPaystack,
     ) -> Account:
-        assert account_create.account_type == AccountType.stripe
-        account = await self._create_stripe_account(session, admin, account_create)
+        if isinstance(account_create, AccountCreateForOrganizationPaystack):
+            account = await self._create_paystack_account(
+                session, admin, account_create
+            )
+        else:
+            account = await self._create_stripe_account(session, admin, account_create)
         await loops_service.user_created_account(
             session, admin, accountType=account.account_type
+        )
+        return account
+
+    async def _create_paystack_account(
+        self,
+        session: AsyncSession,
+        admin: User,
+        account_create: AccountCreateForOrganizationPaystack,
+    ) -> Account:
+        ba = account_create.bank_account
+
+        # Verify the bank account via Paystack before creating
+        try:
+            if account_create.country in ("NG", "GH"):
+                resolved = await paystack_service.resolve_bank_account(
+                    ba.account_number, ba.bank_code
+                )
+                account_name = resolved["account_name"]
+            else:  # ZA
+                await paystack_service.validate_bank_account(
+                    account_number=ba.account_number,
+                    bank_code=ba.bank_code,
+                    account_name=ba.account_name or "",
+                    account_type=ba.account_type or "personal",
+                    country_code=account_create.country,
+                    document_type=ba.document_type or "identityNumber",
+                    document_number=ba.document_number or "",
+                )
+                account_name = ba.account_name or ""
+        except PaystackError as e:
+            raise AccountServiceError(str(e)) from e
+
+        repository = AccountRepository.from_session(session)
+        currency = {"ZA": "zar", "GH": "ghs", "NG": "ngn"}.get(
+            account_create.country, "usd"
+        )
+        account = await repository.create(
+            Account(
+                account_type=AccountType.paystack,
+                admin_id=admin.id,
+                country=account_create.country,
+                currency=currency,
+                is_details_submitted=True,
+                is_charges_enabled=False,
+                is_payouts_enabled=True,
+                email=admin.email,
+                paystack_recipient_code=None,
+                data={"bank_account": ba.model_dump(), "account_name": account_name},
+            ),
+            flush=True,
         )
         return account
 
@@ -182,7 +273,8 @@ class AccountService:
         session: AsyncSession,
         organization: Organization,
         admin: User,
-        account_create: AccountCreateForOrganization,
+        account_create: AccountCreateForOrganization
+        | AccountCreateForOrganizationPaystack,
     ) -> Account:
         """Get existing account for organization or create a new one.
 
@@ -204,7 +296,11 @@ class AccountService:
                 ),
             )
 
-            if account and not account.stripe_id:
+            if (
+                account
+                and not account.stripe_id
+                and not isinstance(account_create, AccountCreateForOrganizationPaystack)
+            ):
                 assert account_create.account_type == AccountType.stripe
                 try:
                     stripe_account = await stripe.create_account(

@@ -11,6 +11,8 @@ from solei.models.account import Account as AccountModel
 from solei.organization.schemas import Organization
 from solei.user.schemas import UserBase
 
+PAYSTACK_ACCOUNT_COUNTRIES = frozenset({"ZA", "GH", "NG"})
+
 
 class StripeAccountCountry(StrEnum):
     AL = "AL"
@@ -142,11 +144,43 @@ class AccountCreateForOrganization(Schema):
     country: Annotated[StripeAccountCountry, BeforeValidator(str.upper)]
 
 
+class PaystackBankAccountDetails(Schema):
+    account_number: str
+    bank_code: str
+    # ZA-only fields
+    account_name: str | None = None
+    account_type: str | None = None  # "personal" or "business"
+    document_type: str | None = (
+        None  # "identityNumber" | "passportNumber" | "businessRegistrationNumber"
+    )
+    document_number: str | None = None  # optional per Paystack docs
+
+
+class AccountCreateForOrganizationPaystack(Schema):
+    organization_id: UUID = Field(
+        description="Organization ID to create or get account for"
+    )
+    account_type: Literal[AccountType.paystack]
+    country: Literal["ZA", "GH", "NG"]
+    bank_account: PaystackBankAccountDetails
+
+
+class BankAccountVerified(Schema):
+    account_name: str
+    account_number: str
+
+
+class BankAccountVerifyRequest(Schema):
+    country: Literal["ZA", "GH", "NG"]
+    bank_account: PaystackBankAccountDetails
+
+
 class Account(Schema):
     id: UUID
     account_type: AccountType
     status: AccountModel.Status
     stripe_id: str | None
+    paystack_recipient_code: str | None
     is_details_submitted: bool
     is_charges_enabled: bool
     is_payouts_enabled: bool

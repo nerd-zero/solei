@@ -30,6 +30,7 @@ from solei.integrations.github_repository_benefit.endpoints import (
     router as github_repository_benefit_router,
 )
 from solei.integrations.google.endpoints import router as google_router
+from solei.integrations.paystack.endpoints import router as paystack_router
 from solei.integrations.plain.endpoints import router as plain_router
 from solei.integrations.smilepay.endpoints import router as smilepay_router
 from solei.integrations.stripe.endpoints import router as stripe_router
@@ -156,3 +157,5 @@ router.include_router(wallet_router)
 router.include_router(chargeback_stop_router)
 # /integrations/smilepay
 router.include_router(smilepay_router)
+# /integrations/paystack
+router.include_router(paystack_router)

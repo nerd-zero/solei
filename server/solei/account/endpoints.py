@@ -6,7 +6,7 @@ from solei.account_credit.repository import AccountCreditRepository
 from solei.account_credit.schemas import AccountCredit as AccountCreditSchema
 from solei.auth.dependencies import WebUserRead, WebUserWrite
 from solei.enums import AccountType
-from solei.exceptions import InternalServerError, ResourceNotFound
+from solei.exceptions import BadRequest, InternalServerError, ResourceNotFound
 from solei.models import Account
 from solei.openapi import APITag
 from solei.organization.service import organization as organization_service
@@ -19,7 +19,14 @@ from solei.postgres import (
 from solei.routing import APIRouter
 
 from .schemas import Account as AccountSchema
-from .schemas import AccountCreateForOrganization, AccountLink, AccountUpdate
+from .schemas import (
+    AccountCreateForOrganization,
+    AccountCreateForOrganizationPaystack,
+    AccountLink,
+    AccountUpdate,
+    BankAccountVerified,
+    BankAccountVerifyRequest,
+)
 from .service import account as account_service
 
 router = APIRouter(tags=["accounts", APITag.private])
@@ -38,9 +45,22 @@ async def get(
     return account
 
 
+@router.post("/accounts/verify-bank", response_model=BankAccountVerified)
+async def verify_bank_account(
+    verify_request: BankAccountVerifyRequest,
+    auth_subject: WebUserWrite,
+) -> BankAccountVerified:
+    from .service import AccountServiceError
+
+    try:
+        return await account_service.verify_bank_account(verify_request)
+    except AccountServiceError as e:
+        raise BadRequest(str(e)) from e
+
+
 @router.post("/accounts", response_model=AccountSchema)
 async def create(
-    account_create: AccountCreateForOrganization,
+    account_create: AccountCreateForOrganization | AccountCreateForOrganizationPaystack,
     auth_subject: WebUserWrite,
     session: AsyncSession = Depends(get_db_session),
 ) -> Account:
