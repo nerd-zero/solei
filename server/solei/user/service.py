@@ -225,10 +225,14 @@ class UserService:
         self, session: AsyncSession, user: User, payload: PaystackIdentitySubmit
     ) -> None:
         if user.identity_verification_provider != "paystack":
-            raise IdentityVerificationDoesNotExist("no_paystack_session")
+            raise PaystackSubmissionError(
+                "No active Paystack verification session for this user."
+            )
 
         if user.identity_verification_id is None:
-            raise IdentityVerificationDoesNotExist("no_paystack_customer")
+            raise PaystackSubmissionError(
+                "No Paystack customer code found for this user."
+            )
 
         country = (user.country or "").upper()
 
