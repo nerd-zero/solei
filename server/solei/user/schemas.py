@@ -6,7 +6,7 @@ from enum import StrEnum
 from typing import Annotated, Literal
 
 from fastapi import Depends
-from pydantic import UUID4, EmailStr, Field, computed_field
+from pydantic import UUID4, EmailStr, Field, computed_field, model_validator
 
 from solei.auth.scope import Scope
 from solei.config import settings
@@ -60,8 +60,43 @@ class UserUpdate(Schema):
 
 
 class UserIdentityVerification(Schema):
-    id: str
-    client_secret: str
+    provider: Literal["stripe", "paystack"] = "stripe"
+    # Stripe-specific
+    id: str | None = None
+    client_secret: str | None = None
+    # Paystack-specific
+    customer_code: str | None = None
+    required_id_type: str | None = None
+
+
+class PaystackIdentitySubmit(Schema):
+    id_type: Literal["bank_account", "sa_id", "tin"]
+    id_number: str | None = None
+    first_name: str
+    last_name: str
+    # bank_account type (Nigeria)
+    bvn: str | None = None
+    bank_code: str | None = None
+    account_number: str | None = None
+
+    @model_validator(mode="after")
+    def validate_id_fields(self) -> "PaystackIdentitySubmit":
+        if self.id_type == "bank_account":
+            missing = [
+                f
+                for f, v in [
+                    ("account_number", self.account_number),
+                    ("bank_code", self.bank_code),
+                    ("bvn", self.bvn),
+                ]
+                if not v
+            ]
+            if missing:
+                raise ValueError(f"bank_account requires: {', '.join(missing)}")
+        else:
+            if not self.id_number:
+                raise ValueError("id_number is required for this id_type")
+        return self
 
 
 class UserSetAccount(Schema):

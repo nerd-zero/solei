@@ -206,9 +206,9 @@ jobs:
       postgres:
         image: postgres:15.1-bullseye
         env:
-          POSTGRES_USER: polar
-          POSTGRES_PASSWORD: polar
-          POSTGRES_DB: polar_test
+          POSTGRES_USER: solei
+          POSTGRES_PASSWORD: solei
+          POSTGRES_DB: solei_test
           POSTGRES_PORT: 5432
         options: >-
           --health-cmd pg_isready
@@ -224,8 +224,8 @@ jobs:
           - 9000:9000
           - 9001:9001
         env:
-          MINIO_ROOT_USER: polar
-          MINIO_ROOT_PASSWORD: polarpolar
+          MINIO_ROOT_USER: solei
+          MINIO_ROOT_PASSWORD: soleisolei
         options: >-
           --health-cmd "curl -I http://127.0.0.1:9000/minio/health/live"
           --health-interval 10s
@@ -250,12 +250,12 @@ jobs:
         working-directory: ./server/.minio
         env:
           MINIO_HOST: 127.0.0.1
-          MINIO_ROOT_USER: polar
-          MINIO_ROOT_PASSWORD: polarpolar
-          ACCESS_KEY: polar-development
-          SECRET_ACCESS_KEY: polar123456789
-          BUCKET_NAME: polar-s3
-          BUCKET_TESTING_NAME: testing-polar-s3
+          MINIO_ROOT_USER: solei
+          MINIO_ROOT_PASSWORD: soleisolei
+          ACCESS_KEY: solei-development
+          SECRET_ACCESS_KEY: solei123456789
+          BUCKET_NAME: solei-s3
+          BUCKET_TESTING_NAME: testing-solei-s3
           POLICY_FILE: policy.json
         run: bash github.sh
 
