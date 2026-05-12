@@ -168,7 +168,7 @@ export const DashboardSidebar = ({
             'dark:text-polar-500 dark:hover:text-polar-200 text-gray-500 hover:text-black',
             isCollapsed && '!dark:text-polar-600',
           )}
-          href="https://solei.to/docs"
+          href="https://docs.solei.to"
           target="_blank"
         >
           <ArrowOutwardOutlined className="ml-2" fontSize="inherit" />
