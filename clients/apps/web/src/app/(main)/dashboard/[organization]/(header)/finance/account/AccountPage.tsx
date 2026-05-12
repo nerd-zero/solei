@@ -191,13 +191,13 @@ export default function ClientPage({
           }
         />
 
-        <Modal
-          title="Verify Your Identity"
-          isShown={!!paystackData}
-          className="min-w-[400px]"
-          hide={clearPaystackData}
-          modalContent={
-            paystackData && (
+        {paystackData && (
+          <Modal
+            title="Verify Your Identity"
+            isShown={!!paystackData}
+            className="min-w-[400px]"
+            hide={clearPaystackData}
+            modalContent={
               <PaystackIdentityModal
                 customerCode={paystackData.customerCode}
                 requiredIdType={paystackData.requiredIdType}
@@ -206,9 +206,9 @@ export default function ClientPage({
                 onSuccess={handlePaystackSuccess}
                 onCancel={clearPaystackData}
               />
-            )
-          }
-        />
+            }
+          />
+        )}
       </div>
     </DashboardBody>
   )

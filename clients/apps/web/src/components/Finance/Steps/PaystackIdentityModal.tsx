@@ -57,13 +57,14 @@ export default function PaystackIdentityModal({
         id_type: idType,
         first_name: values.first_name,
         last_name: values.last_name,
+        id_number: values.id_number ?? '',
         ...(idType === 'bank_account'
           ? {
               bvn: values.bvn,
               bank_code: values.bank_code,
               account_number: values.account_number,
             }
-          : { id_number: values.id_number }),
+          : {}),
       })
       if (error) {
         const detail = (error as Record<string, unknown>).detail
