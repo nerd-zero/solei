@@ -23,6 +23,7 @@ class ExternalEventSource(StrEnum):
     stripe = "stripe"
     chargeback_stop = "chargeback_stop"
     smilepay = "smilepay"
+    paystack = "paystack"
 
 
 class ExternalEvent(RecordModel):
@@ -86,5 +87,16 @@ class SmilePayEvent(ExternalEvent):
 
     __mapper_args__ = {
         "polymorphic_identity": ExternalEventSource.smilepay,
+        "polymorphic_load": "inline",
+    }
+
+
+class PaystackEvent(ExternalEvent):
+    source: Mapped[Literal[ExternalEventSource.paystack]] = mapped_column(  # pyright: ignore
+        use_existing_column=True, default=ExternalEventSource.paystack
+    )
+
+    __mapper_args__ = {
+        "polymorphic_identity": ExternalEventSource.paystack,
         "polymorphic_load": "inline",
     }
