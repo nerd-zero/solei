@@ -21,6 +21,13 @@ class PaystackError(SoleiError):
         super().__init__(message, status_code if status_code is not None else 500)
 
 
+def _parse_error_message(response: httpx.Response, fallback: str) -> str:
+    try:
+        return response.json().get("message", fallback)
+    except Exception:
+        return response.text or fallback
+
+
 class PaystackService:
     @property
     def _headers(self) -> dict[str, str]:
@@ -29,6 +36,9 @@ class PaystackService:
             "Content-Type": "application/json",
         }
 
+    def _client(self) -> httpx.AsyncClient:
+        return httpx.AsyncClient(headers=self._headers, timeout=30.0)
+
     async def create_customer(self, user: "User") -> dict[str, Any]:
         payload: dict[str, Any] = {"email": user.email}
         if user.first_name:
@@ -36,10 +46,9 @@ class PaystackService:
         if user.last_name:
             payload["last_name"] = user.last_name
 
-        async with httpx.AsyncClient() as client:
+        async with self._client() as client:
             response = await client.post(
                 f"{PAYSTACK_BASE_URL}/customer",
-                headers=self._headers,
                 json=payload,
             )
 
@@ -59,10 +68,9 @@ class PaystackService:
     async def validate_identity(
         self, customer_code: str, payload: dict[str, Any]
     ) -> None:
-        async with httpx.AsyncClient() as client:
+        async with self._client() as client:
             response = await client.post(
                 f"{PAYSTACK_BASE_URL}/customer/{customer_code}/identification",
-                headers=self._headers,
                 json=payload,
             )
 
@@ -73,17 +81,15 @@ class PaystackService:
                 status=response.status_code,
                 body=response.text,
             )
-            data = response.json()
-            message = data.get("message", "Identity validation failed.")
+            message = _parse_error_message(response, "Identity validation failed.")
             raise PaystackError(message, response.status_code)
 
     async def resolve_bank_account(
         self, account_number: str, bank_code: str
     ) -> dict[str, Any]:
-        async with httpx.AsyncClient() as client:
+        async with self._client() as client:
             response = await client.get(
                 f"{PAYSTACK_BASE_URL}/bank/resolve",
-                headers=self._headers,
                 params={"account_number": account_number, "bank_code": bank_code},
             )
 
@@ -95,8 +101,7 @@ class PaystackService:
                 status=response.status_code,
                 body=response.text,
             )
-            data = response.json()
-            message = data.get("message", "Failed to resolve bank account.")
+            message = _parse_error_message(response, "Failed to resolve bank account.")
             raise PaystackError(message, response.status_code)
 
         return response.json()["data"]
@@ -122,10 +127,9 @@ class PaystackService:
         if document_number:
             payload["document_number"] = document_number
 
-        async with httpx.AsyncClient() as client:
+        async with self._client() as client:
             response = await client.post(
                 f"{PAYSTACK_BASE_URL}/bank/validate",
-                headers=self._headers,
                 json=payload,
             )
 
@@ -137,8 +141,7 @@ class PaystackService:
                 status=response.status_code,
                 body=response.text,
             )
-            data = response.json()
-            message = data.get("message", "Failed to validate bank account.")
+            message = _parse_error_message(response, "Failed to validate bank account.")
             raise PaystackError(message, response.status_code)
 
         data = response.json()

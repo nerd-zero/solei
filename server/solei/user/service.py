@@ -239,11 +239,10 @@ class UserService:
         # Paystack only validates with live keys; use official NG test credentials in dev/test
         if country == "NG" and (settings.is_development() or settings.is_testing()):
             identification_payload: dict[str, Any] = _PAYSTACK_NG_TEST_PAYLOAD
-        else:
+        elif payload.id_type == "bank_account":
             identification_payload = {
                 "country": country,
                 "type": payload.id_type,
-                "value": payload.id_number,
                 "first_name": payload.first_name,
                 "last_name": payload.last_name,
             }
@@ -253,6 +252,14 @@ class UserService:
                 identification_payload["bank_code"] = payload.bank_code
             if payload.account_number is not None:
                 identification_payload["account_number"] = payload.account_number
+        else:
+            identification_payload = {
+                "country": country,
+                "type": payload.id_type,
+                "value": payload.id_number,
+                "first_name": payload.first_name,
+                "last_name": payload.last_name,
+            }
 
         try:
             await paystack_service.validate_identity(
@@ -365,7 +372,9 @@ class UserService:
         if user.identity_verification_id is None:
             return None
         if user.identity_verification_provider == "paystack":
-            return user.country
+            if user.identity_verification_status == IdentityVerificationStatus.verified:
+                return user.country
+            return None
         try:
             vs = await stripe_service.get_verification_session(
                 user.identity_verification_id,

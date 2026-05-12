@@ -298,6 +298,7 @@ class AccountService:
 
             if (
                 account
+                and account.account_type == AccountType.stripe
                 and not account.stripe_id
                 and not isinstance(account_create, AccountCreateForOrganizationPaystack)
             ):

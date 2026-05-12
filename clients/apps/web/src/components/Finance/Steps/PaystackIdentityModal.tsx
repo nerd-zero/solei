@@ -18,7 +18,7 @@ interface PaystackIdentityModalProps {
 }
 
 type FormValues = {
-  id_number: string
+  id_number?: string
   first_name: string
   last_name: string
   bvn?: string
@@ -43,7 +43,11 @@ export default function PaystackIdentityModal({
     'bank_account') as schemas['PaystackIdentitySubmit']['id_type']
   const submitVerification = useSubmitPaystackIdentityVerification()
 
-  const { register, handleSubmit, formState } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
     defaultValues: { first_name: firstName, last_name: lastName },
   })
 
@@ -51,7 +55,6 @@ export default function PaystackIdentityModal({
     async (values: FormValues) => {
       const { error } = await submitVerification.mutateAsync({
         id_type: idType,
-        id_number: values.id_number,
         first_name: values.first_name,
         last_name: values.last_name,
         ...(idType === 'bank_account'
@@ -60,7 +63,7 @@ export default function PaystackIdentityModal({
               bank_code: values.bank_code,
               account_number: values.account_number,
             }
-          : {}),
+          : { id_number: values.id_number }),
       })
       if (error) {
         const detail = (error as Record<string, unknown>).detail
@@ -95,47 +98,63 @@ export default function PaystackIdentityModal({
       <div className="flex flex-col gap-y-1">
         <label className="text-sm font-medium">First Name</label>
         <Input {...register('first_name', { required: true })} />
+        {errors.first_name && (
+          <p className="text-xs text-red-500">First name is required</p>
+        )}
       </div>
 
       <div className="flex flex-col gap-y-1">
         <label className="text-sm font-medium">Last Name</label>
         <Input {...register('last_name', { required: true })} />
+        {errors.last_name && (
+          <p className="text-xs text-red-500">Last name is required</p>
+        )}
       </div>
 
-      <div className="flex flex-col gap-y-1">
-        <label className="text-sm font-medium">
-          {ID_TYPE_LABELS[idType] ?? 'ID Number'}
-        </label>
-        <Input {...register('id_number', { required: true })} />
-      </div>
+      {idType !== 'bank_account' && (
+        <div className="flex flex-col gap-y-1">
+          <label className="text-sm font-medium">
+            {ID_TYPE_LABELS[idType] ?? 'ID Number'}
+          </label>
+          <Input {...register('id_number', { required: true })} />
+          {errors.id_number && (
+            <p className="text-xs text-red-500">ID number is required</p>
+          )}
+        </div>
+      )}
 
       {idType === 'bank_account' && (
         <>
           <div className="flex flex-col gap-y-1">
             <label className="text-sm font-medium">BVN</label>
             <Input
-              {...register('bvn')}
+              {...register('bvn', { required: true })}
               placeholder="Bank Verification Number"
             />
+            {errors.bvn && (
+              <p className="text-xs text-red-500">BVN is required</p>
+            )}
           </div>
           <div className="flex flex-col gap-y-1">
             <label className="text-sm font-medium">Bank Code</label>
-            <Input {...register('bank_code')} />
+            <Input {...register('bank_code', { required: true })} />
+            {errors.bank_code && (
+              <p className="text-xs text-red-500">Bank code is required</p>
+            )}
           </div>
           <div className="flex flex-col gap-y-1">
             <label className="text-sm font-medium">Account Number</label>
-            <Input {...register('account_number')} />
+            <Input {...register('account_number', { required: true })} />
+            {errors.account_number && (
+              <p className="text-xs text-red-500">Account number is required</p>
+            )}
           </div>
         </>
       )}
 
       <div className="flex gap-x-3 pt-2">
-        <Button
-          type="submit"
-          disabled={formState.isSubmitting}
-          className="flex-1"
-        >
-          {formState.isSubmitting ? 'Submitting...' : 'Submit'}
+        <Button type="submit" disabled={isSubmitting} className="flex-1">
+          {isSubmitting ? 'Submitting...' : 'Submit'}
         </Button>
         <Button
           type="button"

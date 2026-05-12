@@ -19,22 +19,32 @@ export function useIdentityVerification(
   const createIdentityVerification = useCreateIdentityVerification()
   const updateUser = useUpdateUser()
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pollingInitialStatusRef = useRef<string | undefined | null>(null)
   const [showCountryPicker, setShowCountryPicker] = useState(false)
   const [paystackData, setPaystackData] =
     useState<PaystackVerificationData | null>(null)
 
   const startPolling = useCallback(() => {
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current)
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
     pollingInitialStatusRef.current = identityVerificationStatus
     reloadUser()
-    pollingRef.current = setInterval(async () => {
+    const intervalId = setInterval(async () => {
       await reloadUser()
     }, 3000)
-    setTimeout(() => {
-      if (pollingRef.current) {
-        clearInterval(pollingRef.current)
+    pollingRef.current = intervalId
+    timeoutRef.current = setTimeout(() => {
+      clearInterval(intervalId)
+      if (pollingRef.current === intervalId) {
         pollingRef.current = null
       }
+      timeoutRef.current = null
     }, 30_000)
   }, [identityVerificationStatus, reloadUser])
 
@@ -51,6 +61,11 @@ export function useIdentityVerification(
   const stopPolling = useCallback(() => {
     if (pollingRef.current) {
       clearInterval(pollingRef.current)
+      pollingRef.current = null
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
     }
   }, [])
 
