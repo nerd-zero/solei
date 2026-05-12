@@ -7,6 +7,13 @@
     "build:js": "esbuild scripts.mjs --bundle --minify --outfile=./static/scripts.js",
     "build": "npm run build:css && npm run build:js"
   },
+  "packageManager": "pnpm@10.28.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild"
+    ]
+  },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.17",
     "@tailwindcss/postcss": "^4.1.17",

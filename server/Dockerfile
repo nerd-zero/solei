@@ -6,6 +6,14 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 WORKDIR /app
 
+# Only lock + manifest are copied before install so Docker can cache the
+# install layer independently of source changes.
+#
+# pnpm 11 note: package.json is pinned to pnpm@10.28.1 because pnpm 11 dropped
+# support for pnpm.onlyBuiltDependencies in package.json (moved to
+# pnpm-workspace.yaml). To upgrade to pnpm 11, create
+# emails/pnpm-workspace.yaml with an onlyBuiltDependencies block,
+# add a COPY line for it here, bump packageManager, and regenerate the lockfile.
 COPY ./emails/pnpm-lock.yaml .
 COPY ./emails/package.json .
 RUN pnpm install --frozen-lockfile
@@ -24,6 +32,14 @@ ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 WORKDIR /app
 
+# Only lock + manifest are copied before install so Docker can cache the
+# install layer independently of source changes.
+#
+# pnpm 11 note: package.json is pinned to pnpm@10.28.1 because pnpm 11 dropped
+# support for pnpm.onlyBuiltDependencies in package.json (moved to
+# pnpm-workspace.yaml). To upgrade to pnpm 11, create
+# solei/backoffice/pnpm-workspace.yaml with an onlyBuiltDependencies block,
+# add a COPY line for it here, bump packageManager, and regenerate the lockfile.
 COPY ./solei/backoffice/pnpm-lock.yaml .
 COPY ./solei/backoffice/package.json .
 RUN pnpm install --frozen-lockfile
