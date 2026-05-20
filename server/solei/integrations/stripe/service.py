@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Literal, Unpack, cast, overload
 import stripe as stripe_lib
 import structlog
 
-from solei.config import settings
+from solei.config import settings, stripe_is_configured
 from solei.exceptions import SoleiError
 from solei.logfire import instrument_httpx
 from solei.logging import Logger
@@ -37,12 +37,18 @@ if TYPE_CHECKING:
     from solei.account.schemas import AccountCreateForOrganization
     from solei.models import User
 
-stripe_lib.api_key = settings.STRIPE_SECRET_KEY
+# api_version is safe to set unconditionally — it doesn't require auth.
 stripe_lib.api_version = "2026-01-28.clover"
 
-stripe_http_client = stripe_lib.HTTPXClient(allow_sync_methods=True)
-instrument_httpx(stripe_http_client._client_async)
-stripe_lib.default_http_client = stripe_http_client
+# Only wire up the API key and HTTP client when a real key is present.
+# Without this guard the placeholder value ("*** REPLACE ***") would be sent
+# on every request and cause an AuthenticationError the moment the worker
+# starts processing Stripe cron tasks.
+if stripe_is_configured():
+    stripe_lib.api_key = settings.STRIPE_SECRET_KEY
+    stripe_http_client = stripe_lib.HTTPXClient(allow_sync_methods=True)
+    instrument_httpx(stripe_http_client._client_async)
+    stripe_lib.default_http_client = stripe_http_client
 
 log: Logger = structlog.get_logger()
 
