@@ -16,9 +16,9 @@ log = structlog.get_logger()
 async def sync_stripe() -> None:
     # Bail out gracefully in dev environments where Stripe credentials have not
     # been set up yet. Without this guard the actor would crash with an
-    # AuthenticationError on every 5-minute cron tick.
+    # AuthenticationError on the hourly cron tick (runs at minute 5 each hour).
     if not stripe_is_configured():
-        log.warning("sync_stripe skipped: Stripe is not configured")
+        log.info("sync_stripe skipped: Stripe is not configured")
         return
     async with AsyncSessionMaker() as session:
         await processor_transaction_service.sync_stripe(session)

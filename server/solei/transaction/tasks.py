@@ -36,10 +36,10 @@ class PaymentTransactionDoesNotExist(TransactionTaskError):
     priority=TaskPriority.LOW,
 )
 async def sync_stripe_fees() -> None:
-    # Same guard as sync_stripe — skip silently when credentials are absent so
+    # Same guard as sync_stripe — no-op when credentials are absent so
     # the daily cron tick doesn't crash the worker in a dev environment.
     if not stripe_is_configured():
-        log.warning("sync_stripe_fees skipped: Stripe is not configured")
+        log.info("sync_stripe_fees skipped: Stripe is not configured")
         return
     async with AsyncSessionMaker() as session:
         await processor_fee_transaction_service.sync_stripe_fees(session)
