@@ -529,6 +529,7 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
+
 def stripe_is_configured() -> bool:
     """Return True only when a real Stripe secret key has been provided.
 
