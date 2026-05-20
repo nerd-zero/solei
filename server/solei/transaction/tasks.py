@@ -1,7 +1,9 @@
 import uuid
 
+import structlog
 from dramatiq import Retry
 
+from solei.config import stripe_is_configured
 from solei.exceptions import SoleiTaskError
 from solei.worker import AsyncSessionMaker, CronTrigger, TaskPriority, actor, can_retry
 
@@ -12,6 +14,8 @@ from .service.processor_fee import (
 from .service.processor_fee import (
     processor_fee_transaction as processor_fee_transaction_service,
 )
+
+log = structlog.get_logger()
 
 
 class TransactionTaskError(SoleiTaskError): ...
@@ -32,6 +36,11 @@ class PaymentTransactionDoesNotExist(TransactionTaskError):
     priority=TaskPriority.LOW,
 )
 async def sync_stripe_fees() -> None:
+    # Same guard as sync_stripe — no-op when credentials are absent so
+    # the daily cron tick doesn't crash the worker in a dev environment.
+    if not stripe_is_configured():
+        log.info("sync_stripe_fees skipped: Stripe is not configured")
+        return
     async with AsyncSessionMaker() as session:
         await processor_fee_transaction_service.sync_stripe_fees(session)
 

@@ -528,3 +528,19 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+def stripe_is_configured() -> bool:
+    """Return True only when a real Stripe secret key has been provided.
+
+    Validates that the key actually looks like a Stripe secret key
+    (starts with "sk_test_" or "sk_live_"), so this works correctly in both
+    dev environments (where the key is the placeholder "*** REPLACE ***") and
+    production environments (where a missing or misconfigured key would
+    otherwise cause an AuthenticationError at runtime).
+
+    Call this before any code that would make a Stripe API request or
+    initialise the Stripe SDK client.
+    """
+    key = settings.STRIPE_SECRET_KEY
+    return key.startswith("sk_test_") or key.startswith("sk_live_")
