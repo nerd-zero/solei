@@ -529,18 +529,17 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-# The dev .env ships with placeholder values for Stripe secrets. This sentinel
-# lets us detect that case so Stripe-dependent code can degrade gracefully
-# instead of blowing up with AuthenticationError.
-_STRIPE_PLACEHOLDER = "*** REPLACE ***"
-
-
 def stripe_is_configured() -> bool:
     """Return True only when a real Stripe secret key has been provided.
 
-    Returns False when the key is absent or still the placeholder value used
-    in the dev environment ("*** REPLACE ***"). Call this before any code that
-    would make a Stripe API request or initialise the Stripe SDK client.
+    Validates that the key actually looks like a Stripe secret key
+    (starts with "sk_test_" or "sk_live_"), so this works correctly in both
+    dev environments (where the key is the placeholder "*** REPLACE ***") and
+    production environments (where a missing or misconfigured key would
+    otherwise cause an AuthenticationError at runtime).
+
+    Call this before any code that would make a Stripe API request or
+    initialise the Stripe SDK client.
     """
     key = settings.STRIPE_SECRET_KEY
-    return bool(key) and key != _STRIPE_PLACEHOLDER
+    return key.startswith("sk_test_") or key.startswith("sk_live_")
