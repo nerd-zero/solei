@@ -1,5 +1,5 @@
+import asyncio
 import re
-import subprocess
 from typing import TYPE_CHECKING
 
 from solei.config import settings
@@ -17,17 +17,15 @@ def _transform_avatar_urls_for_email(props_json: str) -> str:
     )
 
 
-def render_from_json(template: str, props_json: str) -> str:
-    process = subprocess.Popen(
-        [
-            settings.EMAIL_RENDERER_BINARY_PATH,
-            template,
-            props_json,
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+async def render_from_json(template: str, props_json: str) -> str:
+    process = await asyncio.create_subprocess_exec(
+        settings.EMAIL_RENDERER_BINARY_PATH,
+        template,
+        props_json,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
     )
-    stdout, stderr = process.communicate()
+    stdout, stderr = await process.communicate()
     if process.returncode != 0:
         raise Exception(f"Error in react-email process: {stderr.decode('utf-8')}")
     return stdout.decode("utf-8")
@@ -38,8 +36,8 @@ def serialize_email_props(email: "Email") -> str:
     return _transform_avatar_urls_for_email(props_json)
 
 
-def render_email_template(email: "Email") -> str:
-    return render_from_json(email.template, serialize_email_props(email))
+async def render_email_template(email: "Email") -> str:
+    return await render_from_json(email.template, serialize_email_props(email))
 
 
 __all__ = ["render_email_template", "render_from_json", "serialize_email_props"]
