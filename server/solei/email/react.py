@@ -21,11 +21,17 @@ async def render_from_json(template: str, props_json: str) -> str:
     process = await asyncio.create_subprocess_exec(
         settings.EMAIL_RENDERER_BINARY_PATH,
         template,
-        props_json,
+        stdin=asyncio.subprocess.PIPE,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )
-    stdout, stderr = await process.communicate()
+    try:
+        stdout, stderr = await process.communicate(input=props_json.encode())
+    except BaseException:
+        if process.returncode is None:
+            process.kill()
+            await process.wait()
+        raise
     if process.returncode != 0:
         raise Exception(f"Error in react-email process: {stderr.decode('utf-8')}")
     return stdout.decode("utf-8")
