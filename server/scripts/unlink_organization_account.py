@@ -256,7 +256,7 @@ async def unlink_organizations(
                     )
                 )
 
-                email_html = render_email_template(email_data)
+                email_html = await render_email_template(email_data)
 
                 await email_sender.send(
                     to_email_addr=account.admin.email,

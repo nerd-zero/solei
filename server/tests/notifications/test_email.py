@@ -16,7 +16,7 @@ from solei.notifications.notification import (
 
 async def check_diff(notification: NotificationPayloadBase) -> None:
     subject = notification.subject()
-    body = render_email_template(notification.to_email())
+    body = await render_email_template(notification.to_email())
     expected = f"{subject}\n<hr>\n{body}"
 
     # Run with `SOLEI_TEST_RECORD=1 pytest` to produce new golden files :-)
@@ -127,7 +127,7 @@ async def test_MaintainerAccountCreditsGrantedNotification() -> None:
 )
 async def test_injection_payloads(payload: NotificationPayloadBase) -> None:
     subject = payload.subject()
-    body = render_email_template(payload.to_email())
+    body = await render_email_template(payload.to_email())
     assert str(123456 * 9) not in subject
     assert str(123456 * 9) not in body
 
@@ -155,6 +155,6 @@ async def test_MaintainerNewProductSaleNotification_backwards_compatibility() ->
     assert n.billing_reason is None
 
     subject = n.subject()
-    body = render_email_template(n.to_email())
+    body = await render_email_template(n.to_email())
     assert "Old Product" in body
     assert "$10.00" in subject
