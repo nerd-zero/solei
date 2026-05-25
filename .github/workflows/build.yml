@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Compute outputs
         id: out
@@ -57,7 +57,11 @@ jobs:
             [[ "$INPUT" == "api" || "$INPUT" == "both" ]] && api_changed=true
             [[ "$INPUT" == "web" || "$INPUT" == "both" ]] && web_changed=true
           else
-            VDIFF=$(git diff HEAD~1 HEAD -- VERSION)
+            BASE="${{ github.event.before }}"
+            if [[ -z "$BASE" || "$BASE" == "0000000000000000000000000000000000000000" ]]; then
+              BASE=$(git rev-list --max-parents=0 HEAD)
+            fi
+            VDIFF=$(git diff "$BASE" "${{ github.sha }}" -- VERSION)
             echo "$VDIFF" | grep -q '^+api=' && api_changed=true
             echo "$VDIFF" | grep -q '^+web=' && web_changed=true
           fi
