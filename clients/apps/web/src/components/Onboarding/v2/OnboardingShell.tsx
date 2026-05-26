@@ -73,7 +73,7 @@ export function OnboardingShell({
                     <ArrowLeft size={20} />
                   </button>
                 )}
-                <LogoIcon size={36} />
+                <LogoIcon size={36} className="text-black dark:text-white" />
               </Box>
               <Box display="flex" width="100%" alignItems="center" gap="s">
                 {STEPS.map((s, i) => (

@@ -43,7 +43,7 @@ export default function Page() {
         alignItems="center"
         rowGap="2xl"
       >
-        <LogoIcon size={48} />
+        <LogoIcon size={48} className="text-black dark:text-white" />
 
         <Box
           display="flex"
