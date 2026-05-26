@@ -2,170 +2,193 @@ name: Build & Publish Images
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
+      - prod
     paths:
       - "VERSION"
       - ".github/workflows/build.yml"
   workflow_dispatch:
+    inputs:
+      component:
+        description: "Component to build (api, web, or both)"
+        required: true
+        default: "both"
+        type: choice
+        options:
+          - api
+          - web
+          - both
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
-  prepare:
-    name: "Prepare 🔧"
+  detect:
     runs-on: ubuntu-24.04
-    permissions:
-      contents: read
     outputs:
-      api_version: ${{ steps.version.outputs.api_version }}
-      web_version: ${{ steps.version.outputs.web_version }}
-      server-changed: ${{ steps.changes.outputs.server_changed }}
-      web-changed: ${{ steps.changes.outputs.web_changed }}
+      api_changed: ${{ steps.out.outputs.api_changed }}
+      web_changed: ${{ steps.out.outputs.web_changed }}
+      api_tag: ${{ steps.out.outputs.api_tag }}
+      web_tag: ${{ steps.out.outputs.web_tag }}
+      environment: ${{ steps.out.outputs.environment }}
+      deploy_url: ${{ steps.out.outputs.deploy_url }}
+      next_public_api_url: ${{ steps.out.outputs.next_public_api_url }}
+      next_public_frontend_base_url: ${{ steps.out.outputs.next_public_frontend_base_url }}
+      next_public_backoffice_url: ${{ steps.out.outputs.next_public_backoffice_url }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: dorny/paths-filter@v4
-        id: filter
-        with:
-          filters: |
-            server:
-              - 'server/**'
-              - '.github/workflows/build.yml'
-            web:
-              - 'clients/**'
-              - '!clients/apps/app/**'
-              - '.github/workflows/build.yml'
-
-      - name: Derive changed components
-        id: changes
+      - name: Compute outputs
+        id: out
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "server_changed=true" >> "$GITHUB_OUTPUT"
-            echo "web_changed=true" >> "$GITHUB_OUTPUT"
-            exit 0
+          BRANCH="${{ github.ref_name }}"
+          EVENT="${{ github.event_name }}"
+          api_changed=false
+          web_changed=false
+
+          if [[ "$EVENT" == "workflow_dispatch" ]]; then
+            INPUT="${{ inputs.component }}"
+            [[ "$INPUT" == "api" || "$INPUT" == "both" ]] && api_changed=true
+            [[ "$INPUT" == "web" || "$INPUT" == "both" ]] && web_changed=true
+          else
+            BASE="${{ github.event.before }}"
+            if [[ -z "$BASE" || "$BASE" == "0000000000000000000000000000000000000000" ]]; then
+              BASE=$(git rev-list --max-parents=0 HEAD)
+            fi
+            VDIFF=$(git diff "$BASE" "${{ github.sha }}" -- VERSION)
+            echo "$VDIFF" | grep -q '^+api=' && api_changed=true
+            echo "$VDIFF" | grep -q '^+web=' && web_changed=true
           fi
 
-          BASE="${{ github.event.before }}"
-          HEAD="${{ github.sha }}"
-
-          if [[ -z "$BASE" || "$BASE" == "0000000000000000000000000000000000000000" ]]; then
-            BASE="$(git rev-list --max-parents=0 "$HEAD")"
-          fi
-
-          VERSION_DIFF=$(git diff --unified=0 "$BASE" "$HEAD" -- VERSION || true)
-
-          server_changed="${{ steps.filter.outputs.server }}"
-          web_changed="${{ steps.filter.outputs.web }}"
-
-          if echo "$VERSION_DIFF" | grep -q '^[-+].*api='; then
-            server_changed=true
-          fi
-          if echo "$VERSION_DIFF" | grep -q '^[-+].*web='; then
-            web_changed=true
-          fi
-
-          echo "server_changed=$server_changed" >> "$GITHUB_OUTPUT"
-          echo "web_changed=$web_changed" >> "$GITHUB_OUTPUT"
-
-      - name: Compute version tag
-        id: version
-        run: |
-          # Main: read versions from VERSION file + alpha suffix
           API_VERSION=$(grep '^api=' VERSION | cut -d= -f2 | tr -d '[:space:]')
           WEB_VERSION=$(grep '^web=' VERSION | cut -d= -f2 | tr -d '[:space:]')
-          echo "api_version=${API_VERSION}-alpha" >> "$GITHUB_OUTPUT"
-          echo "web_version=${WEB_VERSION}-alpha" >> "$GITHUB_OUTPUT"
 
-  build-server:
-    name: "Server: Build Image 🐳"
-    needs: prepare
-    if: needs.prepare.outputs.server-changed == 'true' || github.event_name == 'workflow_dispatch'
+          if [[ "$BRANCH" == "prod" ]]; then
+            echo "api_tag=${API_VERSION}" >> "$GITHUB_OUTPUT"
+            echo "web_tag=${WEB_VERSION}" >> "$GITHUB_OUTPUT"
+            echo "environment=Production" >> "$GITHUB_OUTPUT"
+            echo "deploy_url=https://solei.to" >> "$GITHUB_OUTPUT"
+            echo "next_public_api_url=https://api.solei.to" >> "$GITHUB_OUTPUT"
+            echo "next_public_frontend_base_url=https://solei.to" >> "$GITHUB_OUTPUT"
+            echo "next_public_backoffice_url=https://api.solei.to/backoffice" >> "$GITHUB_OUTPUT"
+          else
+            echo "api_tag=${API_VERSION}-alpha" >> "$GITHUB_OUTPUT"
+            echo "web_tag=${WEB_VERSION}-alpha" >> "$GITHUB_OUTPUT"
+            echo "environment=Development" >> "$GITHUB_OUTPUT"
+            echo "deploy_url=https://dev.solei.to" >> "$GITHUB_OUTPUT"
+            echo "next_public_api_url=https://dev-api.solei.to" >> "$GITHUB_OUTPUT"
+            echo "next_public_frontend_base_url=https://dev.solei.to" >> "$GITHUB_OUTPUT"
+            echo "next_public_backoffice_url=https://dev-api.solei.to/backoffice" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "api_changed=${api_changed}" >> "$GITHUB_OUTPUT"
+          echo "web_changed=${web_changed}" >> "$GITHUB_OUTPUT"
+
+  validate:
+    needs: detect
+    if: needs.detect.outputs.api_changed == 'true' || needs.detect.outputs.web_changed == 'true'
     runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      packages: write
     steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Log in to GHCR
-        uses: docker/login-action@v4
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Check API tag does not already exist
+        if: needs.detect.outputs.api_changed == 'true'
+        run: |
+          TAG="ghcr.io/nerd-zero/solei:${{ needs.detect.outputs.api_tag }}"
+          if docker manifest inspect "$TAG" > /dev/null 2>&1; then
+            echo "ERROR: Image tag $TAG already exists. Refusing to overwrite a published image."
+            exit 1
+          fi
+
+      - name: Check web tag does not already exist
+        if: needs.detect.outputs.web_changed == 'true'
+        run: |
+          TAG="ghcr.io/nerd-zero/solei-web:${{ needs.detect.outputs.web_tag }}"
+          if docker manifest inspect "$TAG" > /dev/null 2>&1; then
+            echo "ERROR: Image tag $TAG already exists. Refusing to overwrite a published image."
+            exit 1
+          fi
+
+  build-server:
+    needs: [detect, validate]
+    if: needs.detect.outputs.api_changed == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push server image
         uses: docker/build-push-action@v6
         with:
           push: true
           context: ./server
           target: production
           platforms: linux/amd64
-          tags: |
-            ghcr.io/nerd-zero/solei:${{ needs.prepare.outputs.api_version }}
-            ghcr.io/nerd-zero/solei:latest
+          tags: ghcr.io/nerd-zero/solei:${{ needs.detect.outputs.api_tag }}
           build-args: |
-            RELEASE_VERSION=${{ needs.prepare.outputs.api_version }}
+            RELEASE_VERSION=${{ needs.detect.outputs.api_tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           secrets: |
             IPINFO_ACCESS_TOKEN=${{ secrets.IPINFO_ACCESS_TOKEN }}
 
   build-web:
-    name: "Web: Build Image 🐳"
-    needs: prepare
-    if: needs.prepare.outputs.web-changed == 'true' || github.event_name == 'workflow_dispatch'
+    needs: [detect, validate]
+    if: needs.detect.outputs.web_changed == 'true'
     runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      packages: write
+    environment:
+      name: ${{ needs.detect.outputs.environment }}
+      url: ${{ needs.detect.outputs.deploy_url }}
     steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - uses: actions/checkout@v4
 
       - name: Log in to GHCR
-        uses: docker/login-action@v4
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push web image
         uses: docker/build-push-action@v6
         with:
           push: true
           context: ./clients
           file: ./clients/apps/web/Dockerfile
           platforms: linux/amd64
-          tags: |
-            ghcr.io/nerd-zero/solei-web:${{ needs.prepare.outputs.web_version }}
-            ghcr.io/nerd-zero/solei-web:latest
+          tags: ghcr.io/nerd-zero/solei-web:${{ needs.detect.outputs.web_tag }}
           build-args: |
-            RELEASE_VERSION=${{ needs.prepare.outputs.web_version }}
-            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL || 'https://dev-api.solei.to' }}
-            NEXT_PUBLIC_FRONTEND_BASE_URL=${{ vars.NEXT_PUBLIC_FRONTEND_BASE_URL || 'https://dev.solei.to' }}
-            NEXT_PUBLIC_BACKOFFICE_URL=${{ vars.NEXT_PUBLIC_BACKOFFICE_URL || 'https://dev-api.solei.to/backoffice' }}
+            RELEASE_VERSION=${{ needs.detect.outputs.web_tag }}
+            NEXT_PUBLIC_API_URL=${{ needs.detect.outputs.next_public_api_url }}
+            NEXT_PUBLIC_FRONTEND_BASE_URL=${{ needs.detect.outputs.next_public_frontend_base_url }}
+            NEXT_PUBLIC_BACKOFFICE_URL=${{ needs.detect.outputs.next_public_backoffice_url }}
             NEXT_PUBLIC_STRIPE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_KEY || '' }}
             NEXT_PUBLIC_GITHUB_APP_NAMESPACE=${{ vars.NEXT_PUBLIC_GITHUB_APP_NAMESPACE || '' }}
             NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION=${{ vars.NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION || '' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           secrets: |
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-
-  deploy:
-    name: "Deploy 🚀"
-    needs: [prepare, build-server, build-web]
-    if: |
-      always() &&
-      !failure() &&
-      !cancelled() &&
-      github.ref == 'refs/heads/main'
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Deploy to self-hosted servers
-        run: |
-          echo "TODO: wire up deployment to self-hosted servers"
-          echo "Server image: ghcr.io/nerd-zero/solei:${{ needs.prepare.outputs.api_version }}"
-          echo "Web image:    ghcr.io/nerd-zero/solei-web:${{ needs.prepare.outputs.web_version }}"
