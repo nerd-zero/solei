@@ -3,9 +3,11 @@ import { twMerge } from 'tailwind-merge'
 const LogoIcon = ({
   className,
   size = 29,
+  label = 'Solei',
 }: {
   className?: string
   size?: number
+  label?: string
 }) => {
   return (
     <svg
@@ -13,9 +15,12 @@ const LogoIcon = ({
       height={size}
       viewBox="0 0 1200 1200"
       fill="none"
+      role="img"
+      aria-label={label}
       xmlns="http://www.w3.org/2000/svg"
       className={twMerge(className ? className : '')}
     >
+      <title>{label}</title>
       <g
         transform="translate(0,1200) scale(0.1,-0.1)"
         fill="currentColor"
