@@ -57,7 +57,7 @@ class SmilePayService:
                 f"Supported currencies: {', '.join(CURRENCY_CODES.keys())}"
             )
 
-        amount = f"{amount_cents / 100:.2f}"
+        amount = round(amount_cents / 100, 2)
 
         payload = {
             "orderReference": order_reference,
