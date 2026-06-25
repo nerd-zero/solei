@@ -34,11 +34,15 @@ jobs:
       web_changed: ${{ steps.out.outputs.web_changed }}
       api_tag: ${{ steps.out.outputs.api_tag }}
       web_tag: ${{ steps.out.outputs.web_tag }}
+      sandbox_web_tag: ${{ steps.out.outputs.sandbox_web_tag }}
       environment: ${{ steps.out.outputs.environment }}
       deploy_url: ${{ steps.out.outputs.deploy_url }}
       next_public_api_url: ${{ steps.out.outputs.next_public_api_url }}
       next_public_frontend_base_url: ${{ steps.out.outputs.next_public_frontend_base_url }}
       next_public_backoffice_url: ${{ steps.out.outputs.next_public_backoffice_url }}
+      next_public_api_url_sandbox: ${{ steps.out.outputs.next_public_api_url_sandbox }}
+      next_public_frontend_base_url_sandbox: ${{ steps.out.outputs.next_public_frontend_base_url_sandbox }}
+      next_public_backoffice_url_sandbox: ${{ steps.out.outputs.next_public_backoffice_url_sandbox }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -72,11 +76,15 @@ jobs:
           if [[ "$BRANCH" == "prod" ]]; then
             echo "api_tag=${API_VERSION}" >> "$GITHUB_OUTPUT"
             echo "web_tag=${WEB_VERSION}" >> "$GITHUB_OUTPUT"
+            echo "sandbox_web_tag=${WEB_VERSION}-sandbox" >> "$GITHUB_OUTPUT"
             echo "environment=Production" >> "$GITHUB_OUTPUT"
             echo "deploy_url=https://solei.to" >> "$GITHUB_OUTPUT"
             echo "next_public_api_url=https://api.solei.to" >> "$GITHUB_OUTPUT"
             echo "next_public_frontend_base_url=https://solei.to" >> "$GITHUB_OUTPUT"
             echo "next_public_backoffice_url=https://api.solei.to/backoffice" >> "$GITHUB_OUTPUT"
+            echo "next_public_api_url_sandbox=https://sandbox-api.solei.to" >> "$GITHUB_OUTPUT"
+            echo "next_public_frontend_base_url_sandbox=https://sandbox.solei.to" >> "$GITHUB_OUTPUT"
+            echo "next_public_backoffice_url_sandbox=https://sandbox-api.solei.to/backoffice" >> "$GITHUB_OUTPUT"
           else
             echo "api_tag=${API_VERSION}-alpha" >> "$GITHUB_OUTPUT"
             echo "web_tag=${WEB_VERSION}-alpha" >> "$GITHUB_OUTPUT"
@@ -115,6 +123,15 @@ jobs:
         if: needs.detect.outputs.web_changed == 'true'
         run: |
           TAG="ghcr.io/nerd-zero/solei-web:${{ needs.detect.outputs.web_tag }}"
+          if docker manifest inspect "$TAG" > /dev/null 2>&1; then
+            echo "ERROR: Image tag $TAG already exists. Refusing to overwrite a published image."
+            exit 1
+          fi
+
+      - name: Check sandbox web tag does not already exist
+        if: needs.detect.outputs.web_changed == 'true' && github.ref_name == 'prod'
+        run: |
+          TAG="ghcr.io/nerd-zero/solei-web:${{ needs.detect.outputs.sandbox_web_tag }}"
           if docker manifest inspect "$TAG" > /dev/null 2>&1; then
             echo "ERROR: Image tag $TAG already exists. Refusing to overwrite a published image."
             exit 1
@@ -185,6 +202,47 @@ jobs:
             NEXT_PUBLIC_API_URL=${{ needs.detect.outputs.next_public_api_url }}
             NEXT_PUBLIC_FRONTEND_BASE_URL=${{ needs.detect.outputs.next_public_frontend_base_url }}
             NEXT_PUBLIC_BACKOFFICE_URL=${{ needs.detect.outputs.next_public_backoffice_url }}
+            NEXT_PUBLIC_STRIPE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_KEY || '' }}
+            NEXT_PUBLIC_GITHUB_APP_NAMESPACE=${{ vars.NEXT_PUBLIC_GITHUB_APP_NAMESPACE || '' }}
+            NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION=${{ vars.NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION || '' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          secrets: |
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+
+  build-web-sandbox:
+    needs: [detect, validate]
+    if: needs.detect.outputs.web_changed == 'true' && github.ref_name == 'prod'
+    runs-on: ubuntu-24.04
+    environment:
+      name: Sandbox
+      url: https://sandbox.solei.to
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push sandbox web image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: ./clients
+          file: ./clients/apps/web/Dockerfile
+          platforms: linux/amd64
+          tags: ghcr.io/nerd-zero/solei-web:${{ needs.detect.outputs.sandbox_web_tag }}
+          build-args: |
+            RELEASE_VERSION=${{ needs.detect.outputs.sandbox_web_tag }}
+            NEXT_PUBLIC_API_URL=${{ needs.detect.outputs.next_public_api_url_sandbox }}
+            NEXT_PUBLIC_FRONTEND_BASE_URL=${{ needs.detect.outputs.next_public_frontend_base_url_sandbox }}
+            NEXT_PUBLIC_BACKOFFICE_URL=${{ needs.detect.outputs.next_public_backoffice_url_sandbox }}
             NEXT_PUBLIC_STRIPE_KEY=${{ vars.NEXT_PUBLIC_STRIPE_KEY || '' }}
             NEXT_PUBLIC_GITHUB_APP_NAMESPACE=${{ vars.NEXT_PUBLIC_GITHUB_APP_NAMESPACE || '' }}
             NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION=${{ vars.NEXT_PUBLIC_APPLE_DOMAIN_ASSOCIATION || '' }}
