@@ -20,7 +20,7 @@ import type { BankFormValues } from './PaystackBankAccountForm'
 
 export default function ZABankFields() {
   const { control } = useFormContext<BankFormValues>()
-  //return component
+
   return (
     <>
       <FormField
