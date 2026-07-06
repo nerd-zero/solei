@@ -949,10 +949,11 @@ class CheckoutService:
             )
 
         # Check if organization can accept payments
-        # SmilePay and Paystack checkouts bypass Stripe-specific account readiness checks
+        # SmilePay, Paystack, and Ozow checkouts bypass Stripe-specific account readiness checks
         if checkout.payment_processor not in {
             PaymentProcessor.smilepay,
             PaymentProcessor.paystack,
+            PaymentProcessor.ozow,
         } and not await organization_service.is_organization_ready_for_payment(
             session, checkout.organization
         ):
@@ -1215,6 +1216,44 @@ class CheckoutService:
             raise NotImplementedError(
                 "Paystack checkout processing is not yet implemented"
             )
+        elif checkout.payment_processor == PaymentProcessor.ozow:
+            assert has_product_checkout(checkout)
+            product = checkout.product
+            assert product is not None
+            if checkout.is_payment_setup_required:
+                raise NotImplementedError("Ozow does not support subscription setup")
+
+            async with self._create_or_update_customer(
+                session, auth_subject, checkout
+            ) as (customer, generate_customer_session):
+                from solei.integrations.ozow.service import ozow_service
+
+                checkout.customer = customer
+                transaction_reference = str(checkout.id)[:50]
+                bank_reference = checkout.id.hex[:20]
+                return_url = settings.generate_frontend_url(
+                    f"/checkout/{checkout.client_secret}/confirmation"
+                )
+                notify_url = settings.generate_external_url(
+                    "/v1/integrations/ozow/notify"
+                )
+
+                response = await ozow_service.create_payment_request(
+                    amount_cents=checkout.total_amount,
+                    transaction_reference=transaction_reference,
+                    bank_reference=bank_reference,
+                    cancel_url=return_url,
+                    error_url=return_url,
+                    success_url=return_url,
+                    notify_url=notify_url,
+                    customer_name=checkout.customer_name,
+                )
+
+                checkout.payment_processor_metadata = {
+                    **(checkout.payment_processor_metadata or {}),
+                    "payment_url": response["url"],
+                    "payment_request_id": response["paymentRequestId"],
+                }
         else:
             raise NotImplementedError()
 
@@ -2302,11 +2341,14 @@ class CheckoutService:
         """Return the appropriate payment processor for a product owner's country.
 
         Zimbabwe (ZW) product owners route through SmilePay.
+        South Africa (ZA) product owners route through Ozow.
         Other African product owners route through Paystack.
         All other countries use Stripe.
         """
         if country == "ZW":
             return PaymentProcessor.smilepay
+        if country == "ZA":
+            return PaymentProcessor.ozow
         if country in self._AFRICAN_COUNTRIES:
             return PaymentProcessor.paystack
         return PaymentProcessor.stripe
@@ -2642,8 +2684,12 @@ class CheckoutService:
                 # Could be a malicious user trying to take over an existing customer's account by using their email
                 generate_customer_session = False
 
-        # SmilePay checkouts do not require a Stripe customer record
-        if checkout.payment_processor != PaymentProcessor.smilepay:
+        # Non-Stripe checkouts do not require a Stripe customer record
+        if checkout.payment_processor not in {
+            PaymentProcessor.smilepay,
+            PaymentProcessor.paystack,
+            PaymentProcessor.ozow,
+        }:
             stripe_customer_id = customer.stripe_customer_id
             if stripe_customer_id is None:
                 create_params: CustomerCreateParams = {"email": customer.email}
