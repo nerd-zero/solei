@@ -514,11 +514,8 @@ class CheckoutService:
         ):
             require_billing_address = True
 
-        initial_country = (
-            customer_billing_address.country if customer_billing_address else None
-        )
         checkout = Checkout(
-            payment_processor=self._processor_for_country(initial_country),
+            payment_processor=self._processor_for_country(product.organization.country),
             client_secret=generate_token(prefix=CHECKOUT_CLIENT_SECRET_PREFIX),
             amount=amount,
             currency=currency,
@@ -952,12 +949,12 @@ class CheckoutService:
             )
 
         # Check if organization can accept payments
-        # SmilePay checkouts bypass Stripe-specific account readiness checks
-        if (
-            checkout.payment_processor != PaymentProcessor.smilepay
-            and not await organization_service.is_organization_ready_for_payment(
-                session, checkout.organization
-            )
+        # SmilePay and Paystack checkouts bypass Stripe-specific account readiness checks
+        if checkout.payment_processor not in {
+            PaymentProcessor.smilepay,
+            PaymentProcessor.paystack,
+        } and not await organization_service.is_organization_ready_for_payment(
+            session, checkout.organization
         ):
             if checkout.is_payment_required:
                 raise PaymentNotReady()
@@ -1214,6 +1211,10 @@ class CheckoutService:
                     "transaction_reference": response["transactionReference"],
                     "webhook_token": webhook_token,
                 }
+        elif checkout.payment_processor == PaymentProcessor.paystack:
+            raise NotImplementedError(
+                "Paystack checkout processing is not yet implemented"
+            )
         else:
             raise NotImplementedError()
 
@@ -2054,18 +2055,6 @@ class CheckoutService:
 
         if checkout_update.customer_billing_address:
             checkout.customer_billing_address = checkout_update.customer_billing_address
-            new_processor = self._processor_for_country(
-                checkout_update.customer_billing_address.country
-            )
-            if new_processor != checkout.payment_processor:
-                checkout.payment_processor = new_processor
-                # Seed the initial metadata for the new processor
-                if new_processor == PaymentProcessor.stripe:
-                    checkout.payment_processor_metadata = {
-                        "publishable_key": settings.STRIPE_PUBLISHABLE_KEY,
-                    }
-                else:
-                    checkout.payment_processor_metadata = {}
 
         if (
             checkout_update.customer_tax_id is None
@@ -2250,14 +2239,76 @@ class CheckoutService:
 
         return ip_geolocation.get_ip_country(ip_geolocation_client, str(ip_address))
 
-    def _processor_for_country(self, country: str | None) -> PaymentProcessor:
-        """Return the appropriate payment processor for a billing country.
+    # African country codes (ISO 3166-1 alpha-2) supported via Paystack
+    _AFRICAN_COUNTRIES: frozenset[str] = frozenset(
+        {
+            "DZ",
+            "AO",
+            "BJ",
+            "BW",
+            "BF",
+            "BI",
+            "CV",
+            "CM",
+            "CF",
+            "TD",
+            "KM",
+            "CG",
+            "CD",
+            "CI",
+            "DJ",
+            "EG",
+            "GQ",
+            "ER",
+            "SZ",
+            "ET",
+            "GA",
+            "GM",
+            "GH",
+            "GN",
+            "GW",
+            "KE",
+            "LS",
+            "LR",
+            "LY",
+            "MG",
+            "MW",
+            "ML",
+            "MR",
+            "MU",
+            "MA",
+            "MZ",
+            "NA",
+            "NE",
+            "NG",
+            "RW",
+            "ST",
+            "SN",
+            "SC",
+            "SL",
+            "SO",
+            "ZA",
+            "SS",
+            "SD",
+            "TZ",
+            "TG",
+            "TN",
+            "UG",
+            "ZM",
+        }
+    )
 
-        Zimbabwe (ZW) customers are routed exclusively through SmilePay.
+    def _processor_for_country(self, country: str | None) -> PaymentProcessor:
+        """Return the appropriate payment processor for a product owner's country.
+
+        Zimbabwe (ZW) product owners route through SmilePay.
+        Other African product owners route through Paystack.
         All other countries use Stripe.
         """
         if country == "ZW":
             return PaymentProcessor.smilepay
+        if country in self._AFRICAN_COUNTRIES:
+            return PaymentProcessor.paystack
         return PaymentProcessor.stripe
 
     def _get_currencies(
