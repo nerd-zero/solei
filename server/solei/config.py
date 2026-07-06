@@ -240,10 +240,24 @@ class Settings(BaseSettings):
     SMILEPAY_API_KEY: str = ""
     SMILEPAY_API_SECRET: str = ""
     SMILEPAY_SANDBOX: bool = True
+    SMILEPAY_SANDBOX_URL: str = (
+        "https://zbnet.zb.co.zw/wallet_sandbox_api/payments-gateway"
+    )
+    SMILEPAY_PRODUCTION_URL: str = (
+        "https://zbnet.zb.co.zw/wallet_gateway/payments-gateway"
+    )
 
     # Paystack
     PAYSTACK_SECRET_KEY: str = ""
     PAYSTACK_WEBHOOK_SECRET: str = ""
+
+    # Ozow
+    OZOW_SITE_CODE: str = ""
+    OZOW_PRIVATE_KEY: str = ""
+    OZOW_API_KEY: str = ""
+    OZOW_IS_TEST: bool = True
+    OZOW_STAGING_API_URL: str = "https://stagingapi.ozow.com"
+    OZOW_PRODUCTION_API_URL: str = "https://api.ozow.com"
 
     # Numeral
     NUMERAL_API_KEY: str | None = None

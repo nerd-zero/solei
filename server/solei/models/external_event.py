@@ -24,6 +24,7 @@ class ExternalEventSource(StrEnum):
     chargeback_stop = "chargeback_stop"
     smilepay = "smilepay"
     paystack = "paystack"
+    ozow = "ozow"
 
 
 class ExternalEvent(RecordModel):
@@ -98,5 +99,16 @@ class PaystackEvent(ExternalEvent):
 
     __mapper_args__ = {
         "polymorphic_identity": ExternalEventSource.paystack,
+        "polymorphic_load": "inline",
+    }
+
+
+class OzowEvent(ExternalEvent):
+    source: Mapped[Literal[ExternalEventSource.ozow]] = mapped_column(  # pyright: ignore
+        use_existing_column=True, default=ExternalEventSource.ozow
+    )
+
+    __mapper_args__ = {
+        "polymorphic_identity": ExternalEventSource.ozow,
         "polymorphic_load": "inline",
     }
