@@ -28,6 +28,8 @@ _SUPPORTED_COUNTRIES: set[str] = _ALL_COUNTRIES - {
 }
 ALL_COUNTRIES = sorted(_ALL_COUNTRIES)
 SUPPORTED_COUNTRIES = sorted(_SUPPORTED_COUNTRIES)
+# Countries available for organization selection — expand as new payment integrations are added
+ORG_COUNTRIES = ["ZA", "ZW"]
 
 if TYPE_CHECKING:
 
@@ -36,6 +38,10 @@ if TYPE_CHECKING:
 
     class CountryAlpha2Input(StrEnum):
         pass
+
+    class OrgCountryInput(StrEnum):
+        pass
+
 else:
     CountryAlpha2 = Annotated[
         StrEnum("CountryAlpha2", [(country, country) for country in ALL_COUNTRIES]),
@@ -59,6 +65,20 @@ else:
                 "title": "CountryAlpha2Input",
                 "enum": SUPPORTED_COUNTRIES,
                 "x-speakeasy-enums": SUPPORTED_COUNTRIES,
+            }
+        ),
+    ]
+    OrgCountryInput = Annotated[
+        StrEnum(
+            "OrgCountryInput",
+            [(country, country) for country in ORG_COUNTRIES],
+        ),
+        WithJsonSchema(
+            {
+                "type": "string",
+                "title": "OrgCountryInput",
+                "enum": ORG_COUNTRIES,
+                "x-speakeasy-enums": ORG_COUNTRIES,
             }
         ),
     ]
