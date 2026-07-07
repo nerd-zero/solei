@@ -160,3 +160,4 @@ server/polar/organization_review/eval/fixtures/
 optimization_results/
 server/cases.json
 server/cases_schema.json
+.chief/

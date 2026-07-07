@@ -290,6 +290,65 @@ async def client_opened(
     )
 
 
+@inner_router.post(
+    "/client/{client_secret}/smilepay-result",
+    response_model=CheckoutPublic,
+    summary="Poll SmilePay Payment Status",
+    responses={
+        200: {"description": "Checkout updated from SmilePay status."},
+        404: CheckoutNotFound,
+        410: CheckoutExpired,
+    },
+    tags=[APITag.private],
+    include_in_schema=False,
+)
+async def client_smilepay_result(
+    client_secret: CheckoutClientSecret,
+    session: AsyncSession = Depends(get_db_session),
+) -> Checkout:
+    """
+    Called by the frontend confirmation page after SmilePay redirects back.
+    Polls SmilePay's status API and handles success/failure.
+    """
+    from solei.integrations.smilepay import payment as smilepay_payment
+    from solei.integrations.smilepay.service import SmilePayError, smilepay_service
+
+    checkout = await checkout_service.get_by_client_secret(session, client_secret)
+
+    if (
+        checkout.payment_processor != "smilepay"
+        or checkout.status != CheckoutStatus.confirmed
+    ):
+        return checkout
+
+    metadata = checkout.payment_processor_metadata or {}
+    transaction_reference = metadata.get("transaction_reference")
+    if not transaction_reference:
+        return checkout
+
+    try:
+        status = await smilepay_service.verify_payment_status(str(checkout.id))
+    except SmilePayError:
+        return checkout
+
+    if status == "PAID":
+        await smilepay_payment.handle_success(
+            session,
+            str(checkout.id),
+            transaction_reference,
+        )
+        checkout = await checkout_service.get_by_client_secret(session, client_secret)
+    elif status in ("FAILED", "CANCELED"):
+        await smilepay_payment.handle_failure(
+            session,
+            str(checkout.id),
+            transaction_reference,
+        )
+        checkout = await checkout_service.get_by_client_secret(session, client_secret)
+
+    return checkout
+
+
 @inner_router.get("/client/{client_secret}/stream", include_in_schema=False)
 async def client_stream(
     request: Request,
