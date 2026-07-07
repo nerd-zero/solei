@@ -7,9 +7,6 @@ from solei.logging import Logger
 
 log: Logger = structlog.get_logger()
 
-SANDBOX_URL = "https://zbnet.zb.co.zw/wallet_sandbox_api/payments-gateway"
-PRODUCTION_URL = "https://zbnet.zb.co.zw/wallet_gateway/payments-gateway"
-
 CURRENCY_CODES: dict[str, str] = {
     "usd": "840",
     "zwg": "924",
@@ -25,9 +22,11 @@ class SmilePayError(SoleiError):
 class SmilePayService:
     @property
     def _base_url(self) -> str:
-        if settings.SMILEPAY_SANDBOX:
-            return SANDBOX_URL
-        return PRODUCTION_URL
+        return (
+            settings.SMILEPAY_SANDBOX_URL
+            if settings.SMILEPAY_SANDBOX
+            else settings.SMILEPAY_PRODUCTION_URL
+        )
 
     @property
     def _headers(self) -> dict[str, str]:

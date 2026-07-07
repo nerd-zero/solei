@@ -1,8 +1,9 @@
 import { PolarEmbedCheckout } from '@polar-sh/checkout/embed'
 import type { schemas } from '@polar-sh/client'
 import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
+import { getServerURL } from '@/utils/api'
 import { CONFIG } from '@/utils/config'
 
 export const useCheckoutConfirmedRedirect = (
@@ -93,4 +94,32 @@ export const useCheckoutConfirmedRedirect = (
     },
     [router, embed, theme, listenFulfillment],
   )
+}
+
+export const useSmilePayPollOnMount = (
+  checkout: schemas['CheckoutPublic'],
+  onResult: (updated: schemas['CheckoutPublic']) => void,
+  disabled?: boolean,
+) => {
+  const called = useRef(false)
+  useEffect(() => {
+    if (
+      called.current ||
+      checkout.payment_processor !== 'smilepay' ||
+      checkout.status !== 'confirmed' ||
+      disabled
+    ) {
+      return
+    }
+    called.current = true
+    fetch(
+      `${getServerURL()}/v1/checkouts/client/${checkout.client_secret}/smilepay-result`,
+      { method: 'POST' },
+    )
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) onResult(data)
+      })
+      .catch(() => {})
+  }, [checkout, disabled, onResult])
 }

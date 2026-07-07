@@ -514,11 +514,8 @@ class CheckoutService:
         ):
             require_billing_address = True
 
-        initial_country = (
-            customer_billing_address.country if customer_billing_address else None
-        )
         checkout = Checkout(
-            payment_processor=self._processor_for_country(initial_country),
+            payment_processor=self._processor_for_country(product.organization.country),
             client_secret=generate_token(prefix=CHECKOUT_CLIENT_SECRET_PREFIX),
             amount=amount,
             currency=currency,
@@ -952,12 +949,13 @@ class CheckoutService:
             )
 
         # Check if organization can accept payments
-        # SmilePay checkouts bypass Stripe-specific account readiness checks
-        if (
-            checkout.payment_processor != PaymentProcessor.smilepay
-            and not await organization_service.is_organization_ready_for_payment(
-                session, checkout.organization
-            )
+        # SmilePay, Paystack, and Ozow checkouts bypass Stripe-specific account readiness checks
+        if checkout.payment_processor not in {
+            PaymentProcessor.smilepay,
+            PaymentProcessor.paystack,
+            PaymentProcessor.ozow,
+        } and not await organization_service.is_organization_ready_for_payment(
+            session, checkout.organization
         ):
             if checkout.is_payment_required:
                 raise PaymentNotReady()
@@ -1213,6 +1211,48 @@ class CheckoutService:
                     "payment_url": response["paymentUrl"],
                     "transaction_reference": response["transactionReference"],
                     "webhook_token": webhook_token,
+                }
+        elif checkout.payment_processor == PaymentProcessor.paystack:
+            raise NotImplementedError(
+                "Paystack checkout processing is not yet implemented"
+            )
+        elif checkout.payment_processor == PaymentProcessor.ozow:
+            assert has_product_checkout(checkout)
+            product = checkout.product
+            assert product is not None
+            if checkout.is_payment_setup_required:
+                raise NotImplementedError("Ozow does not support subscription setup")
+
+            async with self._create_or_update_customer(
+                session, auth_subject, checkout
+            ) as (customer, generate_customer_session):
+                from solei.integrations.ozow.service import ozow_service
+
+                checkout.customer = customer
+                transaction_reference = str(checkout.id)[:50]
+                bank_reference = checkout.id.hex[:20]
+                return_url = settings.generate_frontend_url(
+                    f"/checkout/{checkout.client_secret}/confirmation"
+                )
+                notify_url = settings.generate_external_url(
+                    "/v1/integrations/ozow/notify"
+                )
+
+                response = await ozow_service.create_payment_request(
+                    amount_cents=checkout.total_amount,
+                    transaction_reference=transaction_reference,
+                    bank_reference=bank_reference,
+                    cancel_url=return_url,
+                    error_url=return_url,
+                    success_url=return_url,
+                    notify_url=notify_url,
+                    customer_name=checkout.customer_name,
+                )
+
+                checkout.payment_processor_metadata = {
+                    **(checkout.payment_processor_metadata or {}),
+                    "payment_url": response["url"],
+                    "payment_request_id": response["paymentRequestId"],
                 }
         else:
             raise NotImplementedError()
@@ -2054,18 +2094,6 @@ class CheckoutService:
 
         if checkout_update.customer_billing_address:
             checkout.customer_billing_address = checkout_update.customer_billing_address
-            new_processor = self._processor_for_country(
-                checkout_update.customer_billing_address.country
-            )
-            if new_processor != checkout.payment_processor:
-                checkout.payment_processor = new_processor
-                # Seed the initial metadata for the new processor
-                if new_processor == PaymentProcessor.stripe:
-                    checkout.payment_processor_metadata = {
-                        "publishable_key": settings.STRIPE_PUBLISHABLE_KEY,
-                    }
-                else:
-                    checkout.payment_processor_metadata = {}
 
         if (
             checkout_update.customer_tax_id is None
@@ -2250,14 +2278,79 @@ class CheckoutService:
 
         return ip_geolocation.get_ip_country(ip_geolocation_client, str(ip_address))
 
-    def _processor_for_country(self, country: str | None) -> PaymentProcessor:
-        """Return the appropriate payment processor for a billing country.
+    # African country codes (ISO 3166-1 alpha-2) supported via Paystack
+    _AFRICAN_COUNTRIES: frozenset[str] = frozenset(
+        {
+            "DZ",
+            "AO",
+            "BJ",
+            "BW",
+            "BF",
+            "BI",
+            "CV",
+            "CM",
+            "CF",
+            "TD",
+            "KM",
+            "CG",
+            "CD",
+            "CI",
+            "DJ",
+            "EG",
+            "GQ",
+            "ER",
+            "SZ",
+            "ET",
+            "GA",
+            "GM",
+            "GH",
+            "GN",
+            "GW",
+            "KE",
+            "LS",
+            "LR",
+            "LY",
+            "MG",
+            "MW",
+            "ML",
+            "MR",
+            "MU",
+            "MA",
+            "MZ",
+            "NA",
+            "NE",
+            "NG",
+            "RW",
+            "ST",
+            "SN",
+            "SC",
+            "SL",
+            "SO",
+            "ZA",
+            "SS",
+            "SD",
+            "TZ",
+            "TG",
+            "TN",
+            "UG",
+            "ZM",
+        }
+    )
 
-        Zimbabwe (ZW) customers are routed exclusively through SmilePay.
+    def _processor_for_country(self, country: str | None) -> PaymentProcessor:
+        """Return the appropriate payment processor for a product owner's country.
+
+        Zimbabwe (ZW) product owners route through SmilePay.
+        South Africa (ZA) product owners route through Ozow.
+        Other African product owners route through Paystack.
         All other countries use Stripe.
         """
         if country == "ZW":
             return PaymentProcessor.smilepay
+        if country == "ZA":
+            return PaymentProcessor.ozow
+        if country in self._AFRICAN_COUNTRIES:
+            return PaymentProcessor.paystack
         return PaymentProcessor.stripe
 
     def _get_currencies(
@@ -2591,8 +2684,12 @@ class CheckoutService:
                 # Could be a malicious user trying to take over an existing customer's account by using their email
                 generate_customer_session = False
 
-        # SmilePay checkouts do not require a Stripe customer record
-        if checkout.payment_processor != PaymentProcessor.smilepay:
+        # Non-Stripe checkouts do not require a Stripe customer record
+        if checkout.payment_processor not in {
+            PaymentProcessor.smilepay,
+            PaymentProcessor.paystack,
+            PaymentProcessor.ozow,
+        }:
             stripe_customer_id = customer.stripe_customer_id
             if stripe_customer_id is None:
                 create_params: CustomerCreateParams = {"email": customer.email}

@@ -1,6 +1,9 @@
 'use client'
 
-import { useCheckoutConfirmedRedirect } from '@/hooks/checkout'
+import {
+  useCheckoutConfirmedRedirect,
+  useSmilePayPollOnMount,
+} from '@/hooks/checkout'
 import { useCheckoutClientSSE } from '@/hooks/sse'
 import { getServerURL } from '@/utils/api'
 import { hasProductCheckout } from '@polar-sh/checkout/guards'
@@ -135,7 +138,10 @@ export const CheckoutConfirmation = ({
       // Silently ignore - will retry on next interval/event
     }
   }, [client, checkout])
+
   const checkoutConfirmedRedirect = useCheckoutConfirmedRedirect(embed, theme)
+
+  useSmilePayPollOnMount(checkout, setCheckout, disabled)
 
   const checkoutEvents = useCheckoutClientSSE(checkout.client_secret)
   useEffect(() => {

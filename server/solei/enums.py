@@ -12,6 +12,8 @@ class Platforms(StrEnum):
 class PaymentProcessor(StrEnum):
     stripe = "stripe"
     smilepay = "smilepay"
+    paystack = "paystack"
+    ozow = "ozow"
 
 
 class TaxProcessor(StrEnum):
