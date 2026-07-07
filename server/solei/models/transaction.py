@@ -31,6 +31,7 @@ class Processor(StrEnum):
 
     stripe = "stripe"
     manual = "manual"
+    smilepay = "smilepay"
 
 
 class TransactionType(StrEnum):

@@ -110,5 +110,44 @@ class PaymentTransactionService(BaseTransactionService):
 
         return transaction
 
+    async def create_payment_for_processor(
+        self,
+        session: AsyncSession,
+        *,
+        processor: Processor,
+        charge_id: str,
+        amount: int,
+        currency: str,
+        tax_amount: int = 0,
+    ) -> Transaction:
+        existing = await self.get_by_charge_id(session, charge_id)
+        if existing is not None:
+            return existing
+
+        transaction = Transaction(
+            type=TransactionType.payment,
+            processor=processor,
+            currency=currency,
+            amount=amount - tax_amount,
+            account_currency=currency,
+            account_amount=amount - tax_amount,
+            tax_amount=tax_amount,
+            presentment_currency=currency,
+            presentment_amount=amount - tax_amount,
+            presentment_tax_amount=tax_amount,
+            exchange_rate=1.0,
+            charge_id=charge_id,
+            order=None,
+            payment_customer=None,
+            pledge=None,
+            payment_organization=None,
+            payment_user=None,
+        )
+
+        session.add(transaction)
+        await session.flush()
+
+        return transaction
+
 
 payment_transaction = PaymentTransactionService(Transaction)
