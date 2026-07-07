@@ -5,6 +5,7 @@ import {
   useSmilePayPollOnMount,
 } from '@/hooks/checkout'
 import { useCheckoutClientSSE } from '@/hooks/sse'
+import { getServerURL } from '@/utils/api'
 import { hasProductCheckout } from '@polar-sh/checkout/guards'
 import { createClient, unwrap, type schemas } from '@polar-sh/client'
 import {
