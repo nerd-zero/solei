@@ -143,12 +143,6 @@ export const BaseCheckoutForm = ({
             resetField('customer_billing_address.state', { defaultValue: '' })
           }
           clearErrors('customer_billing_address')
-          payload = {
-            ...payload,
-            customer_billing_address: {
-              country: newCountry,
-            },
-          }
         }
         // Update other address fields
       } else if (name.startsWith('customer_billing_address')) {
