@@ -104,7 +104,7 @@ export const CheckoutLinkForm = ({
     defaultValues,
   })
 
-  const { control, handleSubmit, setError, reset, watch } = form
+  const { control, handleSubmit, setError, reset, watch, formState } = form
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'metadata',
@@ -147,6 +147,11 @@ export const CheckoutLinkForm = ({
             discriminators.includes(error.loc[1] as string),
           )
       setValidationErrors(filteredErrors, setError, 1, discriminators)
+
+      normalizedErrors
+        .filter((error) => error.loc.length === 1 && error.loc[0] === 'body')
+        .forEach((error) => setError('root', { message: error.msg }))
+
       filteredErrors.forEach((error) => {
         let loc = error.loc.slice(1)
         if (loc.length > 0 && discriminators.includes(loc[0] as string)) {
@@ -506,6 +511,12 @@ export const CheckoutLinkForm = ({
               ))}
             </div>
           </FormItem>
+
+          {formState.errors.root && (
+            <p className="text-sm text-red-500">
+              {formState.errors.root.message}
+            </p>
+          )}
 
           <div className="flex flex-row gap-x-4">
             <Button
