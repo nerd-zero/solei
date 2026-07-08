@@ -6,6 +6,7 @@ from sqlalchemy import UnaryExpression, asc, desc
 from sqlalchemy.orm import contains_eager
 
 from solei.auth.models import AuthSubject
+from solei.checkout.service import checkout as checkout_service
 from solei.checkout_link.repository import CheckoutLinkRepository
 from solei.discount.service import discount as discount_service
 from solei.exceptions import SoleiRequestValidationError, ValidationError
@@ -130,16 +131,36 @@ class CheckoutLinkService(ResourceServiceReader[CheckoutLink]):
             products = [product]
         organization = products[0].organization
 
+        if organization.country is None:
+            raise SoleiRequestValidationError(
+                [
+                    {
+                        "type": "value_error",
+                        "loc": ("body",),
+                        "msg": (
+                            "Your organization must have a country set before "
+                            "creating checkout links. Update it in organization settings."
+                        ),
+                        "input": None,
+                    }
+                ]
+            )
+
         discount: Discount | None = None
         if checkout_link_create.discount_id is not None:
             discount = await self._get_validated_discount(
                 session, checkout_link_create.discount_id, organization, products
             )
 
+        payment_processor = checkout_service._processor_for_country(
+            organization.country
+        )
+
         checkout_link = CheckoutLink(
             client_secret=generate_token(prefix=CHECKOUT_LINK_CLIENT_SECRET_PREFIX),
             organization=organization,
             discount=discount,
+            payment_processor=payment_processor,
             checkout_link_products=[
                 CheckoutLinkProduct(product=product, order=i)
                 for i, product in enumerate(products)
@@ -150,6 +171,7 @@ class CheckoutLinkService(ResourceServiceReader[CheckoutLink]):
                     "product_id",
                     "product_price_id",
                     "discount_id",
+                    "payment_processor",
                 },
                 by_alias=True,
             ),

@@ -141,6 +141,9 @@ async def create_organization(
     # unless created_at is explicitly provided
     if "created_at" not in kwargs:
         kwargs["created_at"] = datetime(2025, 7, 1, tzinfo=UTC)
+    # Default to US so checkout link creation (which requires a country) works in tests
+    if "country" not in kwargs:
+        kwargs["country"] = "US"
 
     organization = Organization(
         name=name,

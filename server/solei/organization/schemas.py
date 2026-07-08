@@ -17,7 +17,7 @@ from pydantic.networks import HttpUrl
 
 from solei.config import settings
 from solei.enums import SubscriptionProrationBehavior
-from solei.kit.address import CountryAlpha2, CountryAlpha2Input
+from solei.kit.address import CountryAlpha2, OrgCountryInput
 from solei.kit.currency import PresentmentCurrency
 from solei.kit.email import EmailStrDNS
 from solei.kit.schemas import (
@@ -392,7 +392,7 @@ class OrganizationCreate(Schema):
         None,
         description="Additional, private, business details Solei needs about active organizations for compliance (KYC).",
     )
-    country: CountryAlpha2Input | None = Field(
+    country: OrgCountryInput | None = Field(
         None, description="Two-letter country code (ISO 3166-1 alpha-2)."
     )
     feature_settings: OrganizationFeatureSettings | None = None
@@ -421,7 +421,7 @@ class OrganizationUpdate(Schema):
         None,
         description="Additional, private, business details Solei needs about active organizations for compliance (KYC).",
     )
-    country: CountryAlpha2Input | None = Field(
+    country: OrgCountryInput | None = Field(
         None, description="Two-letter country code (ISO 3166-1 alpha-2)."
     )
 

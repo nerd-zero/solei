@@ -10,8 +10,12 @@ from solei.kit.utils import generate_uuid
 from solei.logging import Logger
 from solei.models import Checkout, Payment
 from solei.models.payment import PaymentStatus
+from solei.models.transaction import Processor
 from solei.payment.repository import PaymentRepository
 from solei.postgres import AsyncSession
+from solei.transaction.service.payment import (
+    payment_transaction as payment_transaction_service,
+)
 
 log: Logger = structlog.get_logger()
 
@@ -86,6 +90,17 @@ async def handle_success(
         amount=amount,
         currency=currency,
     )
+
+    resolved_amount = amount if amount is not None else checkout.total_amount or 0
+    resolved_currency = (currency or checkout.currency or "").lower()
+    await payment_transaction_service.create_payment_for_processor(
+        session,
+        processor=Processor.smilepay,
+        charge_id=transaction_reference,
+        amount=resolved_amount,
+        currency=resolved_currency,
+    )
+
     await checkout_service.handle_success(session, checkout, payment=payment)
 
 

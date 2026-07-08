@@ -15,7 +15,7 @@ import LinkedIn from '@mui/icons-material/LinkedIn'
 import Public from '@mui/icons-material/Public'
 import X from '@mui/icons-material/X'
 import YouTube from '@mui/icons-material/YouTube'
-import { enums, isValidationError, schemas } from '@polar-sh/client'
+import { isValidationError, schemas } from '@polar-sh/client'
 import Avatar from '@polar-sh/ui/components/atoms/Avatar'
 import Button from '@polar-sh/ui/components/atoms/Button'
 import CopyToClipboardInput from '@polar-sh/ui/components/atoms/CopyToClipboardInput'
@@ -336,7 +336,7 @@ const OrganizationDetailsForm: React.FC<OrganizationDetailsFormProps> = ({
             render={({ field }) => (
               <div>
                 <CountryPicker
-                  allowedCountries={enums.addressInputCountryValues}
+                  allowedCountries={['ZA', 'ZW']}
                   value={
                     (field.value as schemas['CountryAlpha2Input']) ?? undefined
                   }
