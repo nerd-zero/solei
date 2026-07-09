@@ -349,8 +349,8 @@ class Settings(BaseSettings):
     INVOICES_NAME: str = "Nerd Zero Pty Ltd"
     INVOICES_ADDRESS: Address = Address(
         line1="19112 Ridgeview",
-        line2="PMB 61301",
-        postal_code="94104",
+        line2="",
+        postal_code="00000",
         city="Harare",
         state="Harare",
         country=CountryAlpha2("ZW"),
