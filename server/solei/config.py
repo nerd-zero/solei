@@ -329,31 +329,31 @@ class Settings(BaseSettings):
     AWS_SIGNATURE_VERSION: str = "v4"
 
     # Downloadable files
-    S3_FILES_BUCKET_NAME: str = "polar-s3"
-    S3_FILES_PUBLIC_BUCKET_NAME: str = "polar-s3-public"
+    S3_FILES_BUCKET_NAME: str = "solei-s3"
+    S3_FILES_PUBLIC_BUCKET_NAME: str = "solei-s3-public"
     S3_FILES_PRESIGN_TTL: int = 3600  # 60 minutes
     S3_FILES_DOWNLOAD_SECRET: str = "supersecret"
     S3_FILES_DOWNLOAD_SALT: str = "saltysalty"
     # Override to http://127.0.0.1:9000 in .env during development
     S3_ENDPOINT_URL: str | None = None
 
-    MINIO_USER: str = "polar"
-    MINIO_PWD: str = "polarpolar"
+    MINIO_USER: str = "solei"
+    MINIO_PWD: str = "soleisolei"
 
     # Chargeback Stop
     CHARGEBACK_STOP_WEBHOOK_SECRET: str = ""
 
     # Invoices
-    S3_CUSTOMER_INVOICES_BUCKET_NAME: str = "polar-customer-invoices"
-    S3_PAYOUT_INVOICES_BUCKET_NAME: str = "polar-payout-invoices"
-    INVOICES_NAME: str = "Nerd Zero"
+    S3_CUSTOMER_INVOICES_BUCKET_NAME: str = "solei-customer-invoices"
+    S3_PAYOUT_INVOICES_BUCKET_NAME: str = "solei-payout-invoices"
+    INVOICES_NAME: str = "Nerd Zero Pty Ltd"
     INVOICES_ADDRESS: Address = Address(
-        line1="548 Market St",
+        line1="19112 Ridgeview",
         line2="PMB 61301",
         postal_code="94104",
-        city="San Francisco",
-        state="US-CA",
-        country=CountryAlpha2("US"),
+        city="Harare",
+        state="Harare",
+        country=CountryAlpha2("ZW"),
     )
     INVOICES_ADDITIONAL_INFO: str | None = (
         "[support@solei.to](mailto:support@solei.to)\nVAT: EU0000000"
