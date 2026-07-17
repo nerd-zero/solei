@@ -251,13 +251,13 @@ class Settings(BaseSettings):
     PAYSTACK_SECRET_KEY: str = ""
     PAYSTACK_WEBHOOK_SECRET: str = ""
 
-    # Ozow
+    # Ozow One API
     OZOW_SITE_CODE: str = ""
-    OZOW_PRIVATE_KEY: str = ""
-    OZOW_API_KEY: str = ""
+    OZOW_CLIENT_ID: str = ""
+    OZOW_CLIENT_SECRET: str = ""
     OZOW_IS_TEST: bool = True
-    OZOW_STAGING_API_URL: str = "https://stagingapi.ozow.com"
-    OZOW_PRODUCTION_API_URL: str = "https://api.ozow.com"
+    OZOW_STAGING_API_URL: str = "https://stagingone.ozow.com/v1"
+    OZOW_PRODUCTION_API_URL: str = "https://one.ozow.com/v1"
 
     # Numeral
     NUMERAL_API_KEY: str | None = None

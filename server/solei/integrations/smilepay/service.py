@@ -13,10 +13,7 @@ CURRENCY_CODES: dict[str, str] = {
 }
 
 
-class SmilePayError(SoleiError):
-    def __init__(self, message: str, response_code: str | None = None) -> None:
-        self.response_code = response_code
-        super().__init__(message)
+class SmilePayError(SoleiError): ...
 
 
 class SmilePayService:
@@ -92,7 +89,6 @@ class SmilePayService:
             )
             raise SmilePayError(
                 f"SmilePay transaction initiation failed (code={response_code})",
-                response_code=response_code,
             )
 
         return {

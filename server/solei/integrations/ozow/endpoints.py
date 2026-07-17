@@ -6,8 +6,6 @@ from solei.models.external_event import ExternalEventSource
 from solei.postgres import AsyncSession, get_db_session
 from solei.routing import APIRouter
 
-from .service import ozow_service
-
 log = structlog.get_logger()
 
 router = APIRouter(
@@ -16,7 +14,7 @@ router = APIRouter(
     include_in_schema=False,
 )
 
-OZOW_PENDING_STATUS = "Pending"
+OZOW_PENDING_STATUS = "pending"
 
 
 @router.post("/notify", status_code=202, name="integrations.ozow.notify")
@@ -24,29 +22,24 @@ async def notify_webhook(
     request: Request,
     session: AsyncSession = Depends(get_db_session),
 ) -> None:
-    form = await request.form()
-    body: dict[str, str] = {k: str(v) for k, v in form.items()}
+    body: dict[str, object] = await request.json()
 
-    transaction_reference = body.get("TransactionReference")
-    transaction_id = body.get("TransactionId")
+    merchant_reference = body.get("merchantReference")
+    transaction_id = body.get("id")
 
-    if not transaction_reference or not transaction_id:
+    if not merchant_reference or not transaction_id:
         raise HTTPException(status_code=400, detail="Missing required fields")
 
-    # Pending means Ozow hasn't determined the final status yet and will retry.
-    # Don't store the event — doing so would block the later final-status notification
-    # from being enqueued (unique constraint on source+external_id).
-    status = body.get("Status", "")
+    # One API sends "pending" while the transaction is not yet finalised.
+    # Skip storing the event — the final-status notification will follow.
+    status = body.get("status", "")
     if status == OZOW_PENDING_STATUS:
         return
-
-    if not ozow_service.verify_notification_hash(body):
-        raise HTTPException(status_code=401, detail="Invalid hash")
 
     await external_event_service.enqueue(
         session,
         ExternalEventSource.ozow,
         "ozow.webhook.notify",
-        transaction_id,
+        str(transaction_id),
         body,
     )
