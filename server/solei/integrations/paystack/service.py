@@ -16,9 +16,7 @@ log = structlog.get_logger()
 PAYSTACK_BASE_URL = "https://api.paystack.co"
 
 
-class PaystackError(SoleiError):
-    def __init__(self, message: str, status_code: int | None = None) -> None:
-        super().__init__(message, status_code if status_code is not None else 500)
+class PaystackError(SoleiError): ...
 
 
 def _parse_error_message(response: httpx.Response, fallback: str) -> str:
@@ -58,9 +56,7 @@ class PaystackService:
                 status=response.status_code,
                 body=response.text,
             )
-            raise PaystackError(
-                "Failed to create Paystack customer.", response.status_code
-            )
+            raise PaystackError("Failed to create Paystack customer.")
 
         data = response.json()
         return data["data"]
@@ -82,7 +78,7 @@ class PaystackService:
                 body=response.text,
             )
             message = _parse_error_message(response, "Identity validation failed.")
-            raise PaystackError(message, response.status_code)
+            raise PaystackError(message)
 
     async def resolve_bank_account(
         self, account_number: str, bank_code: str
@@ -102,7 +98,7 @@ class PaystackService:
                 body=response.text,
             )
             message = _parse_error_message(response, "Failed to resolve bank account.")
-            raise PaystackError(message, response.status_code)
+            raise PaystackError(message)
 
         return response.json()["data"]
 
@@ -142,7 +138,7 @@ class PaystackService:
                 body=response.text,
             )
             message = _parse_error_message(response, "Failed to validate bank account.")
-            raise PaystackError(message, response.status_code)
+            raise PaystackError(message)
 
         data = response.json()
         if not data.get("data", {}).get("verified", False):

@@ -3,6 +3,7 @@ import secrets
 import typing
 import uuid
 from collections.abc import AsyncGenerator, AsyncIterator, Sequence
+from datetime import UTC
 from typing import cast
 
 import stripe as stripe_lib
@@ -1226,33 +1227,36 @@ class CheckoutService:
             async with self._create_or_update_customer(
                 session, auth_subject, checkout
             ) as (customer, generate_customer_session):
+                from datetime import datetime, timedelta
+
                 from solei.integrations.ozow.service import ozow_service
 
                 checkout.customer = customer
-                transaction_reference = str(checkout.id)[:50]
-                bank_reference = checkout.id.hex[:20]
+                merchant_reference = str(checkout.id)[:50]
                 return_url = settings.generate_frontend_url(
                     f"/checkout/{checkout.client_secret}/confirmation"
                 )
                 notify_url = settings.generate_external_url(
                     "/v1/integrations/ozow/notify"
                 )
+                expire_at = (datetime.now(UTC) + timedelta(hours=24)).strftime(
+                    "%Y-%m-%dT%H:%M:%SZ"
+                )
 
                 response = await ozow_service.create_payment_request(
                     amount_cents=checkout.total_amount,
-                    transaction_reference=transaction_reference,
-                    bank_reference=bank_reference,
-                    cancel_url=return_url,
-                    error_url=return_url,
-                    success_url=return_url,
+                    merchant_reference=merchant_reference,
+                    return_url=return_url,
                     notify_url=notify_url,
-                    customer_name=checkout.customer_name,
+                    expire_at=expire_at,
+                    payer_name=checkout.customer_name,
+                    payer_email=checkout.customer_email,
                 )
 
                 checkout.payment_processor_metadata = {
                     **(checkout.payment_processor_metadata or {}),
-                    "payment_url": response["url"],
-                    "payment_request_id": response["paymentRequestId"],
+                    "payment_url": response["redirectUrl"],
+                    "payment_id": response["id"],
                 }
         else:
             raise NotImplementedError()
