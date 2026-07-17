@@ -26,16 +26,16 @@ async def payment_notify(event_id: uuid.UUID) -> None:
             transaction_id: str = data["id"]
             status: str = data.get("status", "")
 
-            amount_data: dict[str, object] | None = data.get("amount")  # type: ignore[assignment]
+            amount_data_obj = data.get("amount")
             amount_cents: int | None = None
             currency: str | None = None
-            if amount_data:
-                raw_amount = amount_data.get("value")
-                if raw_amount is not None:
+            if isinstance(amount_data_obj, dict):
+                raw_amount = amount_data_obj.get("value")
+                if isinstance(raw_amount, (int, float, str)):
                     amount_cents = int(round(float(raw_amount) * 100))
-                currency_code = amount_data.get("currency")
-                if currency_code:
-                    currency = str(currency_code).lower()
+                currency_code = amount_data_obj.get("currency")
+                if isinstance(currency_code, str) and currency_code:
+                    currency = currency_code.lower()
 
             if status == OZOW_SUCCESS_STATUS:
                 await payment.handle_success(

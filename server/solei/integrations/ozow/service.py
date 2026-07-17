@@ -148,7 +148,7 @@ class OzowService:
                 f"Ozow get_payment failed: HTTP {response.status_code}",
             )
 
-        return response.json()  # type: ignore[no-any-return]
+        return response.json()
 
 
 ozow_service = OzowService()
