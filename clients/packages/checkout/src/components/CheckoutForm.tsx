@@ -901,6 +901,28 @@ const SmilePayCheckoutForm = (props: CheckoutFormProps) => {
   )
 }
 
+const OzowCheckoutForm = (props: CheckoutFormProps) => {
+  const { confirm, checkout } = props
+
+  const handleConfirm = async (data: schemas['CheckoutConfirmStripe']) => {
+    const confirmed = await confirm(data, null, null)
+
+    const metadata = confirmed.payment_processor_metadata as
+      | Record<string, string>
+      | undefined
+    const paymentUrl = metadata?.payment_url
+    if (paymentUrl) {
+      window.location.href = paymentUrl
+    }
+
+    return confirmed
+  }
+
+  return (
+    <BaseCheckoutForm {...props} checkout={checkout} confirm={handleConfirm} />
+  )
+}
+
 const CheckoutForm = (props: CheckoutFormProps) => {
   const {
     checkout: { payment_processor },
@@ -911,6 +933,9 @@ const CheckoutForm = (props: CheckoutFormProps) => {
   }
   if (payment_processor === 'smilepay') {
     return <SmilePayCheckoutForm {...props} />
+  }
+  if (payment_processor === 'ozow') {
+    return <OzowCheckoutForm {...props} />
   }
   return <DummyCheckoutForm {...props} />
 }

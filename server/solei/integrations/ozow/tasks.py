@@ -11,8 +11,8 @@ from . import payment
 
 log: Logger = structlog.get_logger()
 
-OZOW_SUCCESS_STATUS = "Complete"
-OZOW_FAILURE_STATUSES = {"Cancelled", "Error", "Abandoned", "PendingInvestigation"}
+OZOW_SUCCESS_STATUS = "successful"
+OZOW_FAILURE_STATUSES = {"error", "incomplete", "refunded"}
 
 
 @actor(actor_name="ozow.webhook.notify", priority=TaskPriority.HIGH)
@@ -22,22 +22,25 @@ async def payment_notify(event_id: uuid.UUID) -> None:
             session, ExternalEventSource.ozow, event_id
         ) as event:
             data = event.data
-            transaction_reference: str = data["TransactionReference"]
-            transaction_id: str = data["TransactionId"]
-            status: str = data.get("Status", "")
-            raw_amount: float | None = data.get("Amount")
-            currency_code: str | None = data.get("CurrencyCode")
+            merchant_reference: str = data["merchantReference"]
+            transaction_id: str = data["id"]
+            status: str = data.get("status", "")
 
+            amount_data: dict[str, object] | None = data.get("amount")  # type: ignore[assignment]
             amount_cents: int | None = None
-            if raw_amount is not None:
-                amount_cents = int(round(float(raw_amount) * 100))
-
-            currency = currency_code.lower() if currency_code else None
+            currency: str | None = None
+            if amount_data:
+                raw_amount = amount_data.get("value")
+                if raw_amount is not None:
+                    amount_cents = int(round(float(raw_amount) * 100))
+                currency_code = amount_data.get("currency")
+                if currency_code:
+                    currency = str(currency_code).lower()
 
             if status == OZOW_SUCCESS_STATUS:
                 await payment.handle_success(
                     session,
-                    transaction_reference,
+                    merchant_reference,
                     transaction_id,
                     amount=amount_cents,
                     currency=currency,
@@ -45,7 +48,7 @@ async def payment_notify(event_id: uuid.UUID) -> None:
             else:
                 await payment.handle_failure(
                     session,
-                    transaction_reference,
+                    merchant_reference,
                     transaction_id,
                     amount=amount_cents,
                     currency=currency,
