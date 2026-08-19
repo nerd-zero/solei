@@ -14,22 +14,22 @@ Install the required Solei packages using the following command:
 <Tabs>
   <Tab title="npm">
     ```bash Terminal
-    npm install zod @polar-sh/express
+    npm install zod @solei/express
     ```
   </Tab>
   <Tab title="yarn">
     ```bash Terminal
-    yarn add zod @polar-sh/express
+    yarn add zod @solei/express
     ```
   </Tab>
   <Tab title="pnpm">
     ```bash Terminal
-    pnpm add zod @polar-sh/express
+    pnpm add zod @solei/express
     ```
   </Tab>
   <Tab title="bun">
     ```bash Terminal
-    bun add zod @polar-sh/express
+    bun add zod @solei/express
     ```
   </Tab>
 </Tabs>
@@ -40,7 +40,7 @@ Create a Checkout handler which takes care of redirections.
 
 ```typescript
 import express from "express";
-import { Checkout } from "@polar-sh/express";
+import { Checkout } from "@solei/express";
 
 const app = express();
 
@@ -73,7 +73,7 @@ Create a customer portal where your customer can view orders and subscriptions.
 
 ```typescript
 import express from "express";
-import { CustomerPortal } from "@polar-sh/express";
+import { CustomerPortal } from "@solei/express";
 
 const app = express();
 
@@ -94,13 +94,13 @@ A simple utility which resolves incoming webhook payloads by signing the webhook
 
 ```typescript
 import express from 'express'
-import { Webhooks } from "@polar-sh/express";
+import { Webhooks } from "@solei/express";
 
 const app = express()
 
 app
 .use(express.json())
-.post('/polar/webhooks', Webhooks({
+.post('/solei/webhooks', Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET!,
   onPayload: async (payload) => /** Handle payload */,
 }))

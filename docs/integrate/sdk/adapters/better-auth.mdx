@@ -3,7 +3,7 @@ title: "BetterAuth"
 description: "Payments and Checkouts made dead simple with BetterAuth"
 ---
 
-## @polar-sh/better-auth
+## @solei/better-auth
 
 A [Better Auth](https://github.com/better-auth/better-auth) plugin for integrating [Solei](https://solei.to) payments and subscriptions into your authentication flow.
 
@@ -28,22 +28,22 @@ Install the required Better Auth and Solei packages using the following command:
 <Tabs>
   <Tab title="npm">
     ```bash Terminal
-    npm install better-auth @polar-sh/better-auth @polar-sh/sdk
+    npm install better-auth @solei/better-auth @solei/sdk
     ```
   </Tab>
   <Tab title="yarn">
     ```bash Terminal
-    yarn add better-auth @polar-sh/better-auth @polar-sh/sdk
+    yarn add better-auth @solei/better-auth @solei/sdk
     ```
   </Tab>
   <Tab title="pnpm">
     ```bash Terminal
-    pnpm add better-auth @polar-sh/better-auth @polar-sh/sdk
+    pnpm add better-auth @solei/better-auth @solei/sdk
     ```
   </Tab>
   <Tab title="bun">
     ```bash Terminal
-    bun add better-auth @polar-sh/better-auth @polar-sh/sdk
+    bun add better-auth @solei/better-auth @solei/sdk
     ```
   </Tab>
 </Tabs>
@@ -69,10 +69,10 @@ Install the required Better Auth and Solei packages using the following command:
 
     ```typescript icon="square-js" BetterAuth Server with Solei Example
     import { betterAuth } from "better-auth";
-    import { polar, checkout, portal, usage, webhooks } from "@polar-sh/better-auth"; // [!code ++]
-    import { Polar } from "@polar-sh/sdk"; // [!code ++]
+    import { solei, checkout, portal, usage, webhooks } from "@solei/better-auth"; // [!code ++]
+    import { Solei } from "@solei/sdk"; // [!code ++]
 
-    const polarClient = new Polar({ // [!code ++]
+    const soleiClient = new Solei({ // [!code ++]
         accessToken: process.env.SOLEI_ACCESS_TOKEN, // [!code ++]
         // Use 'sandbox' if you're using the Solei Sandbox environment
         // Remember that access tokens, products, etc. are completely separated between environments.
@@ -83,8 +83,8 @@ Install the required Better Auth and Solei packages using the following command:
     const auth = betterAuth({
         // ... Better Auth config
         plugins: [
-            polar({ // [!code ++]
-                client: polarClient, // [!code ++]
+            solei({ // [!code ++]
+                client: soleiClient, // [!code ++]
                 createCustomerOnSignUp: true, // [!code ++]
                 use: [ // [!code ++]
                     checkout({ // [!code ++]
@@ -120,8 +120,8 @@ Install the required Better Auth and Solei packages using the following command:
     const auth = betterAuth({
       // ... Better Auth config
       plugins: [
-        polar({
-          client: polarClient, // [!code ++]
+        solei({
+          client: soleiClient, // [!code ++]
           createCustomerOnSignUp: true, // [!code ++]
           getCustomerCreateParams: ({ user }, request) => ({ // [!code ++]
             metadata: { // [!code ++]
@@ -147,12 +147,12 @@ Install the required Better Auth and Solei packages using the following command:
 
     ```typescript icon="square-js" BetterAuth Client with Solei Example
     import { createAuthClient } from "better-auth/react";
-    import { polarClient } from "@polar-sh/better-auth/client"; // [!code ++]
+    import { soleiClient } from "@solei/better-auth/client"; // [!code ++]
     import { organizationClient } from "better-auth/client/plugins"; // [!code ++]
 
     // All Solei plugins, etc. should be attached to BetterAuth server
     export const authClient = createAuthClient({ // [!code ++]
-      plugins: [polarClient()], // [!code ++]
+      plugins: [soleiClient()], // [!code ++]
     }); // [!code ++]
     ```
 
@@ -161,7 +161,7 @@ Install the required Better Auth and Solei packages using the following command:
 
 ## Automatic Customer creation on signup
 
-Enable the `createCustomerOnSignUp` [Solei plugin configuration option](#polar-plugin-configuration-options) to automatically create a new Solei Customer when a new User is added in the BetterAuth database.
+Enable the `createCustomerOnSignUp` [Solei plugin configuration option](#solei-plugin-configuration-options) to automatically create a new Solei Customer when a new User is added in the BetterAuth database.
 
 All new customers are created with an associated `externalId`, i.e. the ID of your User in the Database. This skips any Solei to User mapping in your database.
 
@@ -178,7 +178,7 @@ const auth = betterAuth({
       enabled: true, // [!code ++]
       afterDelete: async (user, request) => {
         // [!code ++]
-        await polar.customers.deleteExternal({
+        await solei.customers.deleteExternal({
           // [!code ++]
           externalId: user.id, // [!code ++]
         }); // [!code ++]
@@ -190,7 +190,7 @@ const auth = betterAuth({
 
 ## Checkout Plugin
 
-[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/polar-betterauth/src/plugins/checkout.ts)
+[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/solei-betterauth/src/plugins/checkout.ts)
 
 To support [checkouts](/features/checkout/links) in your app, you would pass the `checkout` plugin in the `use` property.
 
@@ -208,14 +208,14 @@ The checkout plugin accepts the following configuration options:
 
     ```typescript icon="square-js" Checkout Plugin Example
     import {
-      polar,
+      solei,
       checkout // [!code ++]
-    } from "@polar-sh/better-auth";
+    } from "@solei/better-auth";
 
     const auth = betterAuth({
         // ... Better Auth config
         plugins: [
-            polar({
+            solei({
                 ...
                 use: [
                     checkout({ // [!code ++]
@@ -274,7 +274,7 @@ The checkout plugin accepts the following configuration options:
 
 ## Usage Plugin
 
-[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/polar-betterauth/src/plugins/usage.ts)
+[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/solei-betterauth/src/plugins/usage.ts)
 
 A plugin for Usage Based Billing that allows you to [ingest events](#event-ingestion) from your application and list the [authenticated user's Usage Meter](#customer-meters).
 
@@ -282,14 +282,14 @@ To enable [usage based billing](/integrate/sdk/adapters/better-auth) in your app
 
 ```typescript icon="square-js" Usage Plugin Example
 import {
-  polar, checkout, portal,
+  solei, checkout, portal,
   usage // [!code ++]
-} from "@polar-sh/better-auth";
+} from "@solei/better-auth";
 
 const auth = betterAuth({
     // ... Better Auth config
     plugins: [
-        polar({
+        solei({
             ...
             use: [
                 checkout(...),
@@ -354,7 +354,7 @@ The `meters` method returns the following fields in the response object:
 
 ## Webhooks Plugin
 
-[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/polar-betterauth/src/plugins/webhooks.ts)
+[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/solei-betterauth/src/plugins/webhooks.ts)
 
 The `webhooks` plugin can be used to capture incoming events from your Solei organization.
 
@@ -362,7 +362,7 @@ To set up the Solei `webhooks` plugin with the BetterAuth client, follow the ste
 
 <Steps>
   <Step title="Configure Webhook Endpoints in Solei">
-    Configure a Webhook endpoint in your Solei Organization Settings page by following [this guide](/integrate/webhooks/endpoints). Webhook endpoint is configured at `/api/auth/polar/webhooks`.
+    Configure a Webhook endpoint in your Solei Organization Settings page by following [this guide](/integrate/webhooks/endpoints). Webhook endpoint is configured at `/api/auth/solei/webhooks`.
   </Step>
   <Step title="Add the Webhook Secret">
     Add the obtained webhook secret to your application environment as an environment variable (to be used as `process.env.POLAR_WEBHOOK_SECRET`):
@@ -376,14 +376,14 @@ To set up the Solei `webhooks` plugin with the BetterAuth client, follow the ste
     
     ```typescript icon="square-js" Webhooks Plugin Example
     import {
-      polar,
+      solei,
       webhooks // [!code ++]
-    } from "@polar-sh/better-auth";
+    } from "@solei/better-auth";
 
     const auth = betterAuth({
         // ... Better Auth config
         plugins: [
-            polar({
+            solei({
                 ...
                 use: [
                     webhooks({ // [!code ++]
@@ -433,20 +433,20 @@ The `webhooks` plugin allows you to invoke handlers for all Solei webhook events
 
 ## Portal Plugin
 
-[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/polar-betterauth/src/plugins/portal.ts)
+[Source code](https://github.com/nerd-zero/solei-adapters/blob/main/packages/solei-betterauth/src/plugins/portal.ts)
 
 A plugin which enables customer management of their purchases, orders and subscriptions.
 
 ```typescript icon="square-js" Portal Plugin Example
 import {
-  polar, checkout,
+  solei, checkout,
   portal // [!code ++]
-} from "@polar-sh/better-auth";
+} from "@solei/better-auth";
 
 const auth = betterAuth({
     // ... Better Auth config
     plugins: [
-        polar({
+        solei({
             ...
             use: [
                 checkout(...),

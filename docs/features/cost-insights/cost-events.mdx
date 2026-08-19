@@ -12,13 +12,13 @@ Cost Insights works by allowing you to add a special `_cost` property to any eve
 To track costs, add a `_cost` property to your event's metadata when ingesting events.
 
 ```typescript icon="square-js" TypeScript (SDK)
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@solei/sdk";
 
-const polar = new Polar({
+const solei = new Solei({
   accessToken: process.env.SOLEI_ACCESS_TOKEN,
 });
 
-await polar.events.ingest({
+await solei.events.ingest({
   events: [
     {
       name: "llm.inference",
@@ -81,10 +81,10 @@ The `_cost` property has the following structure:
 Track the cost of LLM API calls per customer:
 
 ```typescript icon="square-js" TypeScript
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@solei/sdk";
 import OpenAI from "openai";
 
-const polar = new Polar({
+const solei = new Solei({
   accessToken: process.env.SOLEI_ACCESS_TOKEN,
 });
 
@@ -104,7 +104,7 @@ const outputCost = ((completion.usage.completion * tokens) / 1000) * 6; // in ce
 const totalCost = inputCost + outputCost;
 
 // Track the cost in Solei
-await polar.events.ingest({
+await solei.events.ingest({
   events: [
     {
       name: "gpt4.completion",
@@ -180,9 +180,9 @@ Track costs from external services:
 Ingest cost events as they occur to maintain accurate, up-to-date metrics:
 
 ```typescript icon="square-js" TypeScript
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@solei/sdk";
 
-const polar = new Polar({
+const solei = new Solei({
   accessToken: process.env.SOLEI_ACCESS_TOKEN,
 });
 
@@ -194,7 +194,7 @@ const completion = await openai.chat.completions.create({
 
 const cost = calculateCost(completion.usage); // Cost should be in cents
 
-await polar.events.ingest({
+await solei.events.ingest({
   events: [
     {
       name: "llm.completion",

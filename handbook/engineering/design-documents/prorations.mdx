@@ -140,10 +140,10 @@ Credits customer’s balance | Deducted from next invoice
 B) Customer credit mechanism | Credits customer’s balance | ? we need a credit mechanism
 
 **AND** we need to display this correctly on next invoice |
-| **Monthly to yearly** |  | Would be a switch of products in Polar |  | Would be a switch of products in Polar |
+| **Monthly to yearly** |  | Would be a switch of products in Solei |  | Would be a switch of products in Solei |
 | **Yearly to monthly** | Sets billing anchor to “now” (when the downgrade happened) and starts the monthly subscription from then
 
-+ adds remaining amount to customer balance | Would be a switch of products in Polar |  | Would be a switch of products in Polar |
++ adds remaining amount to customer balance | Would be a switch of products in Solei |  | Would be a switch of products in Solei |
 | **Trial to paid** | Payment immediately |  | Payment immediately |  |
 | *within a single subscription cycle
 Downgrade from 10 to 7 units
@@ -173,7 +173,7 @@ Presumably a subscription cycle goes from e.g. July 17th 00:00 to August 17th 00
 
 # Data model
 
-Use existing `BillingEntry` data model as described in [polar#6118](https://github.com/polarsource/polar/issues/6118).
+Use existing `BillingEntry` data model as described in [solei#6118](https://github.com/soleisource/solei/issues/6118).
 
 All items billable in the future are stored in our data model `BillingEntry`.
 
@@ -289,7 +289,7 @@ On the Stripe customer page ([cus_RrJMteZ6IDixT1](https://dashboard.stripe.com/a
       "id": "in_1S0dWbRkFC2HFuLWUj2VkxFR",
       "object": "invoice",
       "account_country": "US",
-      "account_name": "francois@polar.sh sandbox",
+      "account_name": "francois@solei.sh sandbox",
       "account_tax_ids": null,
       "amount_due": 18968,
       "amount_overpaid": 0,
@@ -331,7 +331,7 @@ On the Stripe customer page ([cus_RrJMteZ6IDixT1](https://dashboard.stripe.com/a
         "postal_code": null,
         "state": null
       },
-      "customer_email": "francois+cr5@polar.sh",
+      "customer_email": "francois+cr5@solei.sh",
       "customer_metadata": {},
       "customer_name": "FV",
       "customer_phone": null,
@@ -435,7 +435,7 @@ On the Stripe customer page ([cus_RrJMteZ6IDixT1](https://dashboard.stripe.com/a
         "klarna",
         "link"
       ],
-      "footer": "Polar registrations\n\nIrish OSS VAT: EU372061545",
+      "footer": "Solei registrations\n\nIrish OSS VAT: EU372061545",
       "forgiven": false,
       "from_invoice": null,
       "frozen": true,
@@ -952,7 +952,7 @@ On the Stripe customer page ([cus_RrJMteZ6IDixT1](https://dashboard.stripe.com/a
           "description": null,
           "footer": {
             "source": "subscription_settings",
-            "value": "Polar registrations\n\nIrish OSS VAT: EU372061545"
+            "value": "Solei registrations\n\nIrish OSS VAT: EU372061545"
           }
         },
         "pdf": null,

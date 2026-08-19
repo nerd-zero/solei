@@ -14,22 +14,22 @@ Install the required Solei packages using the following command:
 <Tabs>
   <Tab title="npm">
     ```bash Terminal
-    npm install zod @polar-sh/elysia
+    npm install zod @solei/elysia
     ```
   </Tab>
   <Tab title="yarn">
     ```bash Terminal
-    yarn add zod @polar-sh/elysia
+    yarn add zod @solei/elysia
     ```
   </Tab>
   <Tab title="pnpm">
     ```bash Terminal
-    pnpm add zod @polar-sh/elysia
+    pnpm add zod @solei/elysia
     ```
   </Tab>
   <Tab title="bun">
     ```bash Terminal
-    bun add zod @polar-sh/elysia
+    bun add zod @solei/elysia
     ```
   </Tab>
 </Tabs>
@@ -40,7 +40,7 @@ Create a Checkout handler which takes care of redirections.
 
 ```typescript icon="square-js" 
 import { Elysia } from "elysia";
-import { Checkout } from "@polar-sh/elysia";
+import { Checkout } from "@solei/elysia";
 
 const app = new Elysia();
 
@@ -73,7 +73,7 @@ Create a customer portal where your customer can view orders and subscriptions.
 
 ```typescript icon="square-js" 
 import { Elysia } from "elysia";
-import { CustomerPortal } from "@polar-sh/elysia";
+import { CustomerPortal } from "@solei/elysia";
 
 const app = new Elysia();
 
@@ -94,11 +94,11 @@ A simple utility which resolves incoming webhook payloads by signing the webhook
 
 ```typescript icon="square-js" 
 import { Elysia } from 'elysia'
-import { Webhooks } from "@polar-sh/elysia";
+import { Webhooks } from "@solei/elysia";
 
 const app = new Elysia()
 
-app.post('/polar/webhooks', Webhooks({
+app.post('/solei/webhooks', Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET!,
   onPayload: async (payload) => /** Handle payload */,
 }))

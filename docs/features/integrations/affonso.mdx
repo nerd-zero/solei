@@ -112,7 +112,7 @@ To ensure proper commission attribution, pass the referral data when creating ch
 const referralId = window.affonso_referral;
 
 // Create checkout session with Solei
-const checkout = await polar.checkouts.create({
+const checkout = await solei.checkouts.create({
   products: ["your_product_id"],
   success_url: "https://your-app.com/success",
   metadata: {
@@ -141,7 +141,7 @@ window.location.href = checkout.url;
 
 ## Getting Help
 
-More details about the integration: [Solei Affiliate Program](https://affonso.io/polar-affiliate-program)
+More details about the integration: [Solei Affiliate Program](https://affonso.io/solei-affiliate-program)
 
 If you need assistance with your Affonso integration, contact Affonso's support team:
 - Email: hello@affonso.io

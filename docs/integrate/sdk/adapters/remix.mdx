@@ -14,22 +14,22 @@ Install the required Solei packages using the following command:
 <Tabs>
   <Tab title="npm">
     ```bash Terminal
-    npm install zod @polar-sh/remix
+    npm install zod @solei/remix
     ```
   </Tab>
   <Tab title="yarn">
     ```bash Terminal
-    yarn add zod @polar-sh/remix
+    yarn add zod @solei/remix
     ```
   </Tab>
   <Tab title="pnpm">
     ```bash Terminal
-    pnpm add zod @polar-sh/remix
+    pnpm add zod @solei/remix
     ```
   </Tab>
   <Tab title="bun">
     ```bash Terminal
-    bun add zod @polar-sh/remix
+    bun add zod @solei/remix
     ```
   </Tab>
 </Tabs>
@@ -40,7 +40,7 @@ Install the required Solei packages using the following command:
 Create a Checkout handler which takes care of redirections.
 
 ```typescript icon="square-js" app/routes/checkout.tsx
-import { Checkout } from "@polar-sh/remix";
+import { Checkout } from "@solei/remix";
 
 export const loader = Checkout({
   accessToken: "xxx", // Or set an environment variable to SOLEI_ACCESS_TOKEN
@@ -67,7 +67,7 @@ Pass query params to this route.
 Create a customer portal where your customer can view orders and subscriptions.
 
 ```typescript icon="square-js" app/routes/customer-portal.tsx
-import { CustomerPortal } from "@polar-sh/remix";
+import { CustomerPortal } from "@solei/remix";
 
 export const loader = CustomerPortal({
   accessToken: "xxx", // Or set an environment variable to SOLEI_ACCESS_TOKEN
@@ -82,7 +82,7 @@ export const loader = CustomerPortal({
 A simple utility which resolves incoming webhook payloads by signing the webhook secret properly.
 
 ```typescript icon="square-js" app/routes/webhook.tsx
-import { Webhooks } from "@polar-sh/remix";
+import { Webhooks } from "@solei/remix";
 
 export const action = Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET!,

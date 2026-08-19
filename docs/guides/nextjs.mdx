@@ -8,7 +8,7 @@ Feel free to use our quick-start script to get started inside a new Next.js proj
 
 ```bash Terminal
 # Inside a new Next.js project
-npx polar-init
+npx solei-init
 ```
 
 Consider following this guide while using the Solei Sandbox Environment. This will allow you to test your integration without affecting your production data.
@@ -20,7 +20,7 @@ Consider following this guide while using the Solei Sandbox Environment. This wi
 To get started, you need to install the Solei JavaScript SDK and the Solei Nextjs helper package. You can do this by running the following command:
 
 ```bash Terminal
-pnpm install @polar-sh/sdk @polar-sh/nextjs
+pnpm install @solei/sdk @solei/nextjs
 ```
 
 ## Setting up environment variables
@@ -36,10 +36,10 @@ You can create an organization access token from your organization settings.
 To interact with the Solei API, you need to create a new instance of the `Solei` class. This class uses the provided access token to authenticate with the Solei API.
 
 ```typescript
-// src/polar.ts
-import { Polar } from "@polar-sh/sdk";
+// src/solei.ts
+import { Solei } from "@solei/sdk";
 
-export const api = new Polar({
+export const api = new Solei({
   accessToken: process.env.SOLEI_ACCESS_TOKEN!,
   server: "sandbox", // Use this option if you're using the sandbox environment - else use 'production' or omit the parameter
 });
@@ -55,7 +55,7 @@ Go ahead and create a new GET route in Next.js.
 
 ```typescript
 // src/app/checkout/route.ts
-import { Checkout } from "@polar-sh/nextjs";
+import { Checkout } from "@solei/nextjs";
 
 export const GET = Checkout({
   accessToken: process.env.SOLEI_ACCESS_TOKEN!,
@@ -82,22 +82,22 @@ ngrok http 3000
 
 ### Add Webhook Endpoint
 
-1. Point the Webhook to `your-app.com/api/webhook/polar`. This must be an absolute URL which Solei can reach. If you use ngrok, the URL will look something like this: `https://<your-ngrok-id>.ngrok-free.app/api/webhook/polar`.
+1. Point the Webhook to `your-app.com/api/webhook/solei`. This must be an absolute URL which Solei can reach. If you use ngrok, the URL will look something like this: `https://<your-ngrok-id>.ngrok-free.app/api/webhook/solei`.
 2. Select which events you want to be notified about. You can read more about the available events in the [Events section](/api-reference#webhooks).
 3. Generate a secret key to sign the requests. This will allow you to verify that the requests are truly coming from Solei.
 4. Add the secret key to your environment variables.
 
 ```bash Terminal
 # .env
-SOLEI_ACCESS_TOKEN="polar_pat..."
+SOLEI_ACCESS_TOKEN="solei_pat..."
 POLAR_WEBHOOK_SECRET="..."
 ```
 
 ### Setting up the Webhook handler
 
 ```typescript
-// src/app/api/webhook/polar/route.ts
-import { Webhooks } from "@polar-sh/nextjs";
+// src/app/api/webhook/solei/route.ts
+import { Webhooks } from "@solei/nextjs";
 
 export const POST = Webhooks({
 	webhookSecret: process.env.POLAR_WEBHOOK_SECRET,
@@ -112,8 +112,8 @@ The webhook event is now verified and you can proceed to handle the payload data
 Depending on which events you've subscribed to, you'll receive different payloads. This is where you can update your database, send notifications, etc.
 
 ```typescript
-// src/app/api/webhook/polar/route.ts
-import { Webhooks } from "@polar-sh/nextjs";
+// src/app/api/webhook/solei/route.ts
+import { Webhooks } from "@solei/nextjs";
 
 export const POST = Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET,

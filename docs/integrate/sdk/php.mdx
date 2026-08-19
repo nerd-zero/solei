@@ -9,7 +9,7 @@ A fully-featured PHP SDK for the Solei API.
 ### Quickstart
 
 ```bash Terminal
-composer require polar-sh/sdk
+composer require solei/sdk
 ```
 
 ```php
@@ -19,7 +19,7 @@ require 'vendor/autoload.php';
 
 use Solei;
 
-$sdk = Polar\Polar::builder()
+$sdk = Solei\Solei::builder()
     ->setSecurity('<YOUR_BEARER_TOKEN_HERE>')
     ->build();
 
@@ -42,7 +42,7 @@ foreach ($responses as $response) {
 You can configure the SDK so it hits the [sandbox environment](/integrate/sandbox) instead of the production one. You just need to set the server when building the client:
 
 ```php
-$sdk = Polar\Polar::builder()
+$sdk = Solei\Solei::builder()
     ->setServer('sandbox')
     ->setSecurity('<YOUR_BEARER_TOKEN_HERE>')
     ->build();

@@ -1,6 +1,6 @@
 ---
 title: "Platform API"
-description: "Proposal for a Platform API to enable partners to create and manage Polar Organizations on behalf of their users."
+description: "Proposal for a Platform API to enable partners to create and manage Solei Organizations on behalf of their users."
 ---
 
 <Info>
@@ -14,7 +14,7 @@ description: "Proposal for a Platform API to enable partners to create and manag
 
 # Overview
 
-The Platform API enables partners to create and manage Polar Organizations on behalf of their users, allowing seamless integration of monetization features into third-party platforms. This document outlines the technical architecture, authentication flow, and claim process for the Platform API.
+The Platform API enables partners to create and manage Solei Organizations on behalf of their users, allowing seamless integration of monetization features into third-party platforms. This document outlines the technical architecture, authentication flow, and claim process for the Platform API.
 
 # Core Entities
 
@@ -47,9 +47,9 @@ The Platform API uses an OIDC approach with JWT tokens for authentication:
 
 1. **Platform Setup**: Partner exposes JWKS at a public URL
 2. **JWT Creation**: Platform creates a JWT signed with their private key
-3. **Token Exchange**: JWT is sent to Polar's OAuth2 token endpoint
-4. **Validation**: Polar validates the JWT using the platform's public key
-5. **Access Token**: Polar returns an Organization Access Token
+3. **Token Exchange**: JWT is sent to Solei's OAuth2 token endpoint
+4. **Validation**: Solei validates the JWT using the platform's public key
+5. **Access Token**: Solei returns an Organization Access Token
 
 ## JWT Structure
 
@@ -64,7 +64,7 @@ Used when the platform wants to act on behalf of a specific organization:
   "jti": "org-token-id-12345", // Unique ID for the token (single use)
   "sub": "org-external-123", // Platform's external organization ID
   "iss": "platform-123", // Platform ID
-  "aud": "polar:platform-organization", // Audience: organization operations
+  "aud": "solei:platform-organization", // Audience: organization operations
   "organization_name": "Acme Inc", // Optional: Organization name (creation only)
   "organization_slug": "acme", // Optional: Organization slug (creation only)
   "iat": 1735689600, // Issued at timestamp
@@ -82,7 +82,7 @@ Used when the platform wants to perform platform-level operations:
   "jti": "platform-token-id-67890", // Unique ID for the token
   "sub": "platform-123", // Platform ID (subject)
   "iss": "platform-123", // Platform ID (issuer)
-  "aud": "polar:platform", // Audience: platform operations
+  "aud": "solei:platform", // Audience: platform operations
   "iat": 1735689600, // Issued at timestamp
   "nbf": 1735689600, // Not before timestamp
   "exp": 1735776000 // Expiration timestamp
@@ -102,7 +102,7 @@ The validation process differs based on the JWT type:
 ### Organization JWT Validation
 
 1. **JWT Validation**: Verify signature using platform's JWKS
-2. **Audience Check**: Ensure `aud` = `polar:platform-organization`
+2. **Audience Check**: Ensure `aud` = `solei:platform-organization`
 3. **Claim Extraction**: Extract `sub` (platform_external_id) and `iss` (platform_id)
 4. **Organization Lookup**: Query Organization by `platform_external_id` and `platform_id`
 5. **Organization Creation** (if not exists):
@@ -113,7 +113,7 @@ The validation process differs based on the JWT type:
 ### Platform JWT Validation
 
 1. **JWT Validation**: Verify signature using platform's JWKS
-2. **Audience Check**: Ensure `aud` = `polar:platform`
+2. **Audience Check**: Ensure `aud` = `solei:platform`
 3. **Claim Validation**: Ensure `sub` = `iss` = platform_id
 4. **Platform Verification**: Verify platform exists and is active
 5. **Access Token Issuance**: Return Platform Access Token with requested scopes
@@ -128,17 +128,17 @@ The claim flow allows a User to take ownership of an Organization created via th
 
 1. **Claim Token Generation**:
    - Platform calls `/api/platform/organizations/{platform_external_id}/claim_token`
-   - Polar generates a short-lived, single-use claim token
+   - Solei generates a short-lived, single-use claim token
    - Token contains: `organization_id`, `platform_id`, expiration
 
 2. **User Onboarding**:
    - Platform presents claim token to their user
-   - User visits Polar's onboarding flow with claim token
-   - User creates Polar account (or logs in)
+   - User visits Solei's onboarding flow with claim token
+   - User creates Solei account (or logs in)
 
 3. **Organization Claiming**:
    - User submits claim token during onboarding
-   - Polar validates token and links User to Organization
+   - Solei validates token and links User to Organization
 
 4. **Post-Claim Process**:
    - User completes KYC verification
@@ -160,7 +160,7 @@ Platforms can authenticate using a dedicated Platform JWT:
   "jti": "platform-token-id-67890", // Unique ID for the token
   "sub": "platform-123", // Platform ID (subject)
   "iss": "platform-123", // Platform ID (issuer)
-  "aud": "polar:platform", // Audience: platform operations
+  "aud": "solei:platform", // Audience: platform operations
   "iat": 1735689600, // Issued at timestamp
   "nbf": 1735689600, // Not before timestamp
   "exp": 1735776000 // Expiration timestamp
@@ -170,7 +170,7 @@ Platforms can authenticate using a dedicated Platform JWT:
 **Key differences from Organization JWT:**
 
 - `sub` and `iss` are both the Platform ID
-- `aud` is `polar:platform` (vs `polar:platform-organization` for org-specific operations)
+- `aud` is `solei:platform` (vs `solei:platform-organization` for org-specific operations)
 - No organization-specific claims
 
 ## Platform Access Token Capabilities
@@ -185,7 +185,7 @@ Platform Access Tokens enable:
 ## Token Exchange for Platform Access
 
 ```bash
-curl -X POST https://api.polar.sh/v1/oauth2/token \
+curl -X POST https://api.solei.sh/v1/oauth2/token \
   -H "Content-Type: application/json" \
   -d '{
     "grant_type": "platform",
@@ -198,8 +198,8 @@ curl -X POST https://api.polar.sh/v1/oauth2/token \
 ## Platform Authentication
 
 - `POST /v1/oauth2/token` - Exchange JWT for access tokens
-  - `grant_type: platform` with `aud: polar:platform` → Platform Access Token
-  - `grant_type: platform` with `aud: polar:platform-organization` → Organization Access Token
+  - `grant_type: platform` with `aud: solei:platform` → Platform Access Token
+  - `grant_type: platform` with `aud: solei:platform-organization` → Organization Access Token
 
 ## Organization Management (Platform Access)
 
@@ -209,8 +209,8 @@ curl -X POST https://api.polar.sh/v1/oauth2/token \
 
 ## Organization Management (Organization Access)
 
-- Standard Polar API endpoints (products, customers, subscriptions, etc.)
+- Standard Solei API endpoints (products, customers, subscriptions, etc.)
 
 # Appendix: Sandbox as a Platform
 
-Maybe a crazy idea, but we could consider the Polar Sandbox as a Platform on the Production environment. This would enable us to implement processes to automatically create an Organization in Production from a Sandbox!
+Maybe a crazy idea, but we could consider the Solei Sandbox as a Platform on the Production environment. This would enable us to implement processes to automatically create an Organization in Production from a Sandbox!

@@ -363,10 +363,10 @@ sequenceDiagram
 
 ```python
 # SDK Example
-polar.products.create(request={
+solei.products.create(request={
     "name": "Seat Based Subscription",
     "is_recurring": True,
-    "recurring_interval": polar_sdk.SubscriptionRecurringInterval.MONTH,
+    "recurring_interval": solei_sdk.SubscriptionRecurringInterval.MONTH,
     "organization_id": "org_123",
     "prices": [
         {
@@ -388,7 +388,7 @@ polar.products.create(request={
 
 ```python
 # SDK Example
-polar.products.create({
+solei.products.create({
     "name": "Enterprise License Pack",
     "is_recurring": False,  # One-time purchase
     "organization_id": "org_123",
@@ -421,7 +421,7 @@ POST /v1/checkouts
 ```json
 {
     "id": "checkout_abc",
-    "url": "https://polar.sh/checkout/abc",
+    "url": "https://solei.sh/checkout/abc",
     "amount": 9000,  // 10 seats × $900/seat (tier pricing applied)
     "product_price": {
         "amount_type": "seat_based",
@@ -436,7 +436,7 @@ Works for both subscription and order-based seats:
 
 ```python
 # For subscription seats
-polar.customer_seats.create({
+solei.customer_seats.create({
     "subscription_id": "sub_xyz",
     "email": "alice@company.com",
     "metadata": {
@@ -446,7 +446,7 @@ polar.customer_seats.create({
 })
 
 # For order seats
-polar.customer_seats.create({
+solei.customer_seats.create({
     "order_id": "order_abc",
     "email": "alice@company.com",
     "metadata": {

@@ -45,14 +45,14 @@ Ad-hoc prices are marked with `source: "ad_hoc"` in the API response, while cata
 
 <CodeGroup>
 ```ts TypeScript
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@solei/sdk";
 
-const polar = new Polar({
+const solei = new Solei({
   accessToken: process.env["SOLEI_ACCESS_TOKEN"] ?? "",
 });
 
 async function run() {
-  const checkout = await polar.checkouts.create({
+  const checkout = await solei.checkouts.create({
     products: ["productId"],
     prices: {
       "productId": [
@@ -72,12 +72,12 @@ run();
 ```
 
 ```py Python
-from polar_sdk import Polar
+from solei_sdk import Solei
 
-with Polar(
+with Solei(
     access_token="<YOUR_BEARER_TOKEN_HERE>",
-) as polar:
-    checkout = polar.checkouts.create(request={
+) as solei:
+    checkout = solei.checkouts.create(request={
         "products": ["<product_id>"],
         "prices": {
             "<product_id>": [
@@ -118,14 +118,14 @@ Using our SDK, creating a checkout session is quite straightforward.
 
 <CodeGroup>
     ```ts TypeScript
-    import { Polar } from "@polar-sh/sdk";
+    import { Solei } from "@solei/sdk";
 
-    const polar = new Polar({
+    const solei = new Solei({
       accessToken: process.env["SOLEI_ACCESS_TOKEN"] ?? "",
     });
 
     async function run() {
-      const checkout = await polar.checkouts.create({
+      const checkout = await solei.checkouts.create({
         products: ["productId"]
       });
 
@@ -136,13 +136,13 @@ Using our SDK, creating a checkout session is quite straightforward.
     ```
 
     ```py Python
-    from polar_sdk import Polar
+    from solei_sdk import Solei
 
-    with Polar(
+    with Solei(
         access_token="<YOUR_BEARER_TOKEN_HERE>",
-    ) as polar:
+    ) as solei:
 
-        checkout = polar.checkouts.create(request={
+        checkout = solei.checkouts.create(request={
             "allow_discount_codes": True,
             "product_id": "<value>",
         })

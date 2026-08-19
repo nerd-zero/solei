@@ -22,7 +22,7 @@ package main
 
 import (
 	"context"
-	polargo "github.com/nerd-zero/solei-go"
+	soleigo "github.com/nerd-zero/solei-go"
 	"log"
 	"os"
 )
@@ -30,11 +30,11 @@ import (
 func main() {
 	ctx := context.Background()
 
-	s := polargo.New(
-		polargo.WithSecurity(os.Getenv("SOLEI_ACCESS_TOKEN")),
+	s := soleigo.New(
+		soleigo.WithSecurity(os.Getenv("SOLEI_ACCESS_TOKEN")),
 	)
 
-	res, err := s.Organizations.List(ctx, nil, polargo.Pointer[int64](1), polargo.Pointer[int64](10), nil)
+	res, err := s.Organizations.List(ctx, nil, soleigo.Pointer[int64](1), soleigo.Pointer[int64](10), nil)
 	if err != nil {
 		log.Fatal(err)
 	}

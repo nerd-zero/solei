@@ -39,7 +39,7 @@ Our official SDK supports the sandbox environment through a dedicated parameter.
 
 <CodeGroup>
   ```ts TypeScript
-  const polar = new Polar({
+  const solei = new Solei({
     server: 'sandbox',
     accessToken: process.env['SOLEI_ACCESS_TOKEN'] ?? '',
   })
@@ -53,14 +53,14 @@ Our official SDK supports the sandbox environment through a dedicated parameter.
   ```
 
   ```go Go
- 	s := polargo.New(
-		polargo.WithServer("sandbox"),
-		polargo.WithSecurity(os.Getenv("SOLEI_ACCESS_TOKEN")),
+ 	s := soleigo.New(
+		soleigo.WithServer("sandbox"),
+		soleigo.WithSecurity(os.Getenv("SOLEI_ACCESS_TOKEN")),
 	)
   ```
 
   ```php PHP
-  $sdk = Polar\Polar::builder()
+  $sdk = Solei\Solei::builder()
       ->setServer('sandbox')
       ->setSecurity(
           '<YOUR_BEARER_TOKEN_HERE>'
