@@ -48,7 +48,7 @@ emails-build: ## Build the email renderer binary (required for worker)
 	cd server && uv run task emails
 
 backoffice-build: ## Build backoffice CSS/JS static assets (Tailwind + DaisyUI + HTMX)
-	cd server/polar/backoffice && pnpm install && pnpm build
+	cd server/solei/backoffice && pnpm install && pnpm build
 
 # ─────────────────────────────────────────────
 # Run everything (main dev command)
@@ -58,7 +58,9 @@ run: infra-up ## Start infra + API + worker + frontend (full dev stack)
 	@echo "Starting full dev stack..."
 	@$(MAKE) -j3 api worker frontend
 
-down: ## Stop all infrastructure services
+down: ## Stop infra services and any locally-running API/worker processes
+	@pkill -f "uvicorn solei\.app:app" 2>/dev/null && echo "Stopped local API process(es)" || true
+	@pkill -f "solei\.worker\.scheduler:start solei\.worker\.run" 2>/dev/null && echo "Stopped local worker process(es)" || true
 	$(COMPOSE) -f $(COMPOSE_FILE) down
 
 # ─────────────────────────────────────────────
