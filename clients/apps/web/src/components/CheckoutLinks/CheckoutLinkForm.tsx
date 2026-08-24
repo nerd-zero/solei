@@ -11,6 +11,7 @@ import {
   setValidationErrors,
 } from '@/utils/api/errors'
 import { getDiscountDisplay } from '@/utils/discount'
+import { isStaticPrice } from '@/utils/product'
 import ClearOutlined from '@mui/icons-material/ClearOutlined'
 import { isValidationError, schemas } from '@polar-sh/client'
 import Button from '@polar-sh/ui/components/atoms/Button'
@@ -32,6 +33,7 @@ import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import ProductSelect from '../Products/ProductSelect'
 import { toast } from '../Toast/use-toast'
 import { TrialConfigurationForm } from '../TrialConfiguration/TrialConfigurationForm'
+import CheckoutLinkPriceSelect from './CheckoutLinkPriceSelect'
 
 type CheckoutLinkCreateForm = Omit<
   schemas['CheckoutLinkCreateProducts'],
@@ -85,6 +87,7 @@ export const CheckoutLinkForm = ({
         success_url: checkoutLink.success_url ?? '',
         return_url: checkoutLink.return_url ?? '',
         discount_id: checkoutLink.discount_id ?? '',
+        product_price_id: checkoutLink.pinned_product_price_id ?? null,
       }
     }
 
@@ -97,6 +100,7 @@ export const CheckoutLinkForm = ({
       success_url: '',
       return_url: '',
       discount_id: '',
+      product_price_id: null,
     }
   }, [checkoutLink, productIds])
 
@@ -104,7 +108,16 @@ export const CheckoutLinkForm = ({
     defaultValues,
   })
 
-  const { control, handleSubmit, setError, reset, watch, formState } = form
+  const {
+    control,
+    handleSubmit,
+    setError,
+    reset,
+    watch,
+    formState,
+    setValue,
+    getValues,
+  } = form
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'metadata',
@@ -118,6 +131,13 @@ export const CheckoutLinkForm = ({
   const selectedProductIds = watch('products') || []
   const { data: selectedProducts } = useSelectedProducts(selectedProductIds)
 
+  // A price can only be pinned for single-product links, and only when
+  // there's actually more than one price to choose between
+  const pinnableProduct =
+    selectedProductIds.length === 1 ? selectedProducts?.[0] : undefined
+  const canPinPrice =
+    (pinnableProduct?.prices.filter(isStaticPrice).length ?? 0) >= 2
+
   // Check if any selected products are recurring (subscription products)
   const hasRecurringProducts = useMemo(() => {
     return selectedProducts?.some((product) => product.is_recurring) ?? false
@@ -127,6 +147,18 @@ export const CheckoutLinkForm = ({
     if (!checkoutLink) return
     reset(defaultValues)
   }, [checkoutLink, reset, defaultValues])
+
+  // Clear a stale price pin if it no longer applies — either because
+  // more than one product is now selected, or the pinned price doesn't
+  // belong to the currently selected product.
+  useEffect(() => {
+    if (selectedProducts === undefined) return
+    const currentPin = getValues('product_price_id')
+    if (!currentPin) return
+    if (!pinnableProduct?.prices.some(({ id }) => id === currentPin)) {
+      setValue('product_price_id', null)
+    }
+  }, [selectedProducts, pinnableProduct, getValues, setValue])
 
   const { mutateAsync: createCheckoutLink, isPending: isCreatePending } =
     useCreateCheckoutLink()
@@ -293,6 +325,29 @@ export const CheckoutLinkForm = ({
               )
             }}
           />
+          {pinnableProduct && canPinPrice && (
+            <FormField
+              control={control}
+              name="product_price_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <CheckoutLinkPriceSelect
+                      product={pinnableProduct}
+                      value={field.value ?? null}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                  <FormDescription>
+                    Pin a specific price for this link, instead of letting it be
+                    resolved automatically at checkout.
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={control}
             name="success_url"

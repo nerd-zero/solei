@@ -562,7 +562,7 @@ const OrganizationProfileSettings: React.FC<
 > = ({ organization: _organization, kyc, onSubmitted }) => {
   const organization = _organization as schemas['Organization'] & {
     default_presentment_currency: schemas['PresentmentCurrency']
-    country?: schemas['CountryAlpha2Input']
+    country?: schemas['OrgCountryInput']
   }
   const inKYCMode = kyc === true
   const router = useRouter()
@@ -638,7 +638,7 @@ const OrganizationProfileSettings: React.FC<
       ...data,
       default_presentment_currency:
         data.default_presentment_currency as schemas['PresentmentCurrency'],
-      country: data.country as schemas['CountryAlpha2Input'] | undefined,
+      country: data.country as schemas['OrgCountryInput'] | undefined,
       socials: [...(data.socials || []), ...emptySocials],
     })
 
