@@ -2498,6 +2498,119 @@ class TestCheckoutLinkCreate:
         assert checkout.success_url == "https://example.com/success"
         assert checkout.user_metadata == {"key": "value"}
 
+    async def test_ozow_ignores_pin_uses_zar(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        organization: Organization,
+    ) -> None:
+        organization.country = "ZA"
+        await save_fixture(organization)
+        product = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(1000, "usd"), (1000, "zar")],
+        )
+        usd_price = next(p for p in product.prices if p.price_currency == "usd")
+
+        checkout_link = await create_checkout_link(
+            save_fixture,
+            products=[product],
+            payment_processor=PaymentProcessor.ozow,
+            product_price=usd_price,
+        )
+
+        checkout = await checkout_service.checkout_link_create(session, checkout_link)
+
+        assert checkout.currency == "zar"
+        assert checkout.product_price is not None
+        assert checkout.product_price.price_currency == "zar"
+
+    async def test_ozow_no_zar_price_raises(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        organization: Organization,
+    ) -> None:
+        organization.country = "ZA"
+        await save_fixture(organization)
+        product = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(1000, "usd")],
+        )
+
+        checkout_link = await create_checkout_link(
+            save_fixture,
+            products=[product],
+            payment_processor=PaymentProcessor.ozow,
+        )
+
+        with pytest.raises(SoleiRequestValidationError):
+            await checkout_service.checkout_link_create(session, checkout_link)
+
+    async def test_non_ozow_honors_pin(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        organization: Organization,
+    ) -> None:
+        product = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(1000, "usd"), (2000, "usd")],
+        )
+        pinned_price = product.prices[1]
+
+        checkout_link = await create_checkout_link(
+            save_fixture,
+            products=[product],
+            product_price=pinned_price,
+        )
+
+        checkout = await checkout_service.checkout_link_create(session, checkout_link)
+
+        assert checkout.product_price == pinned_price
+        assert checkout.currency == pinned_price.price_currency
+
+    async def test_pin_ignored_for_different_selected_product(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        organization: Organization,
+    ) -> None:
+        product_a = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(1000, "usd"), (2000, "usd")],
+        )
+        product_b = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(3000, "usd")],
+        )
+        pinned_price_a = product_a.prices[1]
+
+        checkout_link = await create_checkout_link(
+            save_fixture,
+            products=[product_a, product_b],
+            product_price=pinned_price_a,
+        )
+
+        checkout = await checkout_service.checkout_link_create(
+            session,
+            checkout_link,
+            query_prefill={"product_id": product_b.id},
+        )
+
+        assert checkout.product == product_b
+        assert checkout.product_price == product_b.prices[0]
+
 
 @pytest.mark.asyncio
 class TestUpdate:

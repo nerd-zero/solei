@@ -1520,6 +1520,7 @@ async def create_checkout_link(
     trial_interval: TrialInterval | None = None,
     trial_interval_count: int | None = None,
     user_metadata: dict[str, Any] = {},
+    product_price: ProductPrice | None = None,
 ) -> CheckoutLink:
     checkout_link = CheckoutLink(
         payment_processor=payment_processor,
@@ -1536,6 +1537,7 @@ async def create_checkout_link(
         trial_interval=trial_interval,
         trial_interval_count=trial_interval_count,
         user_metadata=user_metadata,
+        product_price=product_price,
     )
     await save_fixture(checkout_link)
     return checkout_link

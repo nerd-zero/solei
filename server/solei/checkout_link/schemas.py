@@ -115,6 +115,14 @@ class CheckoutLinkCreateProducts(CheckoutLinkCreateBase):
         description="List of products that will be available to select at checkout.",
         min_length=1,
     )
+    product_price_id: UUID4 | None = Field(
+        default=None,
+        description=(
+            "ID of a specific price to pin for this checkout link. "
+            "Only allowed when a single product is provided in `products`. "
+            "If not set, the checkout will resolve a price dynamically."
+        ),
+    )
 
 
 CheckoutLinkCreate = Annotated[
@@ -142,6 +150,14 @@ class CheckoutLinkUpdate(MetadataInputMixin, TrialConfigurationInputMixin):
     )
     discount_id: UUID4 | None = Field(
         default=None, description=_discount_id_description
+    )
+    product_price_id: UUID4 | None = Field(
+        default=None,
+        description=(
+            "ID of a specific price to pin for this checkout link. "
+            "Set to `null` to remove the pin and resume dynamic price resolution. "
+            "Only allowed when the checkout link has a single product."
+        ),
     )
     success_url: SuccessURL = None
     return_url: ReturnURL = None
@@ -173,6 +189,14 @@ class CheckoutLinkBase(
         description=_require_billing_address_description
     )
     discount_id: UUID4 | None = Field(description=_discount_id_description)
+    pinned_product_price_id: UUID4 | None = Field(
+        validation_alias="product_price_id",
+        description=(
+            "ID of the price pinned for this checkout link, if any. When set, "
+            "this price is used at checkout instead of one resolved dynamically "
+            "(subject to payment-processor currency constraints)."
+        ),
+    )
     organization_id: OrganizationID
 
     @computed_field  # type: ignore[prop-decorator]

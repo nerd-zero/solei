@@ -9,6 +9,7 @@ from solei.auth.models import AuthSubject
 from solei.checkout.service import checkout as checkout_service
 from solei.checkout_link.repository import CheckoutLinkRepository
 from solei.discount.service import discount as discount_service
+from solei.enums import PaymentProcessor
 from solei.exceptions import SoleiRequestValidationError, ValidationError
 from solei.kit.crypto import generate_token
 from solei.kit.pagination import PaginationParams
@@ -25,6 +26,7 @@ from solei.models import (
     User,
 )
 from solei.postgres import AsyncSession
+from solei.product.price_set import NoPricesForCurrencies, PriceSet
 from solei.product.repository import ProductPriceRepository, ProductRepository
 from solei.product.service import product as product_service
 
@@ -116,16 +118,25 @@ class CheckoutLinkService(ResourceServiceReader[CheckoutLink]):
         checkout_link_create: CheckoutLinkCreate,
         auth_subject: AuthSubject[User | Organization],
     ) -> CheckoutLink:
+        pinned_price: ProductPrice | None = None
+
         if isinstance(checkout_link_create, CheckoutLinkCreateProducts):
             products = await self._get_validated_products(
                 session, checkout_link_create.products, auth_subject
             )
+            if checkout_link_create.product_price_id is not None:
+                pinned_price = await self._get_validated_pin(
+                    session,
+                    checkout_link_create.product_price_id,
+                    products,
+                    auth_subject,
+                )
         elif isinstance(checkout_link_create, CheckoutLinkCreateProduct):
             products = await self._get_validated_products(
                 session, [checkout_link_create.product_id], auth_subject
             )
         elif isinstance(checkout_link_create, CheckoutLinkCreateProductPrice):
-            product, _ = await self._get_validated_price(
+            product, pinned_price = await self._get_validated_price(
                 session, checkout_link_create.product_price_id, auth_subject
             )
             products = [product]
@@ -156,11 +167,14 @@ class CheckoutLinkService(ResourceServiceReader[CheckoutLink]):
             organization.country
         )
 
+        self._validate_ozow_currency(payment_processor, pinned_price, products)
+
         checkout_link = CheckoutLink(
             client_secret=generate_token(prefix=CHECKOUT_LINK_CLIENT_SECRET_PREFIX),
             organization=organization,
             discount=discount,
             payment_processor=payment_processor,
+            product_price=pinned_price,
             checkout_link_products=[
                 CheckoutLinkProduct(product=product, order=i)
                 for i, product in enumerate(products)
@@ -212,6 +226,32 @@ class CheckoutLinkService(ResourceServiceReader[CheckoutLink]):
                 for i, product in enumerate(products)
             ]
 
+            # A pinned price only makes sense for the product it was pinned
+            # against. If the product list changes and this same update
+            # doesn't explicitly set a new pin, drop a pin that no longer
+            # matches rather than leave it referencing a stale/ambiguous product.
+            if "product_price_id" not in checkout_link_update.model_fields_set and (
+                checkout_link.product_price is not None
+                and (
+                    len(products) != 1
+                    or checkout_link.product_price.product_id != products[0].id
+                )
+            ):
+                checkout_link.product_price = None
+        else:
+            products = list(checkout_link.products)
+
+        if "product_price_id" in checkout_link_update.model_fields_set:
+            if checkout_link_update.product_price_id is None:
+                checkout_link.product_price = None
+            else:
+                checkout_link.product_price = await self._get_validated_pin(
+                    session,
+                    checkout_link_update.product_price_id,
+                    products,
+                    auth_subject,
+                )
+
         if "discount_id" in checkout_link_update.model_fields_set:
             if checkout_link_update.discount_id is None:
                 checkout_link.discount = None
@@ -224,12 +264,16 @@ class CheckoutLinkService(ResourceServiceReader[CheckoutLink]):
                 )
                 checkout_link.discount = discount
 
+        self._validate_ozow_currency(
+            checkout_link.payment_processor, checkout_link.product_price, products
+        )
+
         repository = CheckoutLinkRepository.from_session(session)
         return await repository.update(
             checkout_link,
             update_dict=checkout_link_update.model_dump(
                 exclude_unset=True,
-                exclude={"products", "discount_id"},
+                exclude={"products", "discount_id", "product_price_id"},
                 by_alias=True,
             ),
         )
@@ -371,6 +415,96 @@ class CheckoutLinkService(ResourceServiceReader[CheckoutLink]):
             ),
         )
         return (product, price)
+
+    async def _get_validated_pin(
+        self,
+        session: AsyncSession,
+        product_price_id: uuid.UUID,
+        products: Sequence[Product],
+        auth_subject: AuthSubject[User | Organization],
+    ) -> ProductPrice:
+        """Validate a `product_price_id` pin against an already-resolved
+        product list: a pin is only valid for single-product checkout links,
+        and the price must belong to that one product."""
+        if len(products) != 1:
+            raise SoleiRequestValidationError(
+                [
+                    {
+                        "type": "value_error",
+                        "loc": ("body", "product_price_id"),
+                        "msg": (
+                            "A price can only be pinned for "
+                            "single-product checkout links."
+                        ),
+                        "input": product_price_id,
+                    }
+                ]
+            )
+
+        pinned_product, pinned_price = await self._get_validated_price(
+            session, product_price_id, auth_subject
+        )
+        if pinned_product.id != products[0].id:
+            raise SoleiRequestValidationError(
+                [
+                    {
+                        "type": "value_error",
+                        "loc": ("body", "product_price_id"),
+                        "msg": "Price does not belong to the selected product.",
+                        "input": product_price_id,
+                    }
+                ]
+            )
+
+        return pinned_price
+
+    def _validate_ozow_currency(
+        self,
+        payment_processor: PaymentProcessor,
+        pinned_price: ProductPrice | None,
+        products: Sequence[Product],
+    ) -> None:
+        """Ozow (routed for South African organizations) only supports ZAR.
+        Reject at checkout-link creation/update time rather than letting a
+        merchant publish a link a customer can never complete."""
+        if payment_processor != PaymentProcessor.ozow:
+            return
+
+        if pinned_price is not None:
+            if pinned_price.price_currency.lower() != "zar":
+                raise SoleiRequestValidationError(
+                    [
+                        {
+                            "type": "value_error",
+                            "loc": ("body", "product_price_id"),
+                            "msg": (
+                                "This price is not available for this "
+                                "organization's payment processor. Ozow only "
+                                "supports ZAR."
+                            ),
+                            "input": str(pinned_price.id),
+                        }
+                    ]
+                )
+            return
+
+        for index, product in enumerate(products):
+            try:
+                PriceSet.from_product(product, "zar")
+            except NoPricesForCurrencies as e:
+                raise SoleiRequestValidationError(
+                    [
+                        {
+                            "type": "value_error",
+                            "loc": ("body", "products", index),
+                            "msg": (
+                                "This product has no ZAR price, required for "
+                                "this organization's payment processor (Ozow)."
+                            ),
+                            "input": str(product.id),
+                        }
+                    ]
+                ) from e
 
     async def _get_validated_discount(
         self,

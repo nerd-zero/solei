@@ -59,6 +59,7 @@ class CheckoutLinkRepository(
             ),
             joinedload(CheckoutLink.discount),
             joinedload(CheckoutLink.organization),
+            joinedload(CheckoutLink.product_price),
         )
 
     def get_readable_statement(

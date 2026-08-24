@@ -5,7 +5,7 @@ from httpx import AsyncClient
 from solei.auth.scope import Scope
 from solei.checkout.repository import CheckoutRepository
 from solei.checkout.service import CHECKOUT_CLIENT_SECRET_PREFIX
-from solei.enums import SubscriptionRecurringInterval
+from solei.enums import PaymentProcessor, SubscriptionRecurringInterval
 from solei.kit.utils import utc_now
 from solei.models import Checkout, CheckoutLink, Product, UserOrganization
 from solei.postgres import AsyncSession
@@ -269,3 +269,65 @@ class TestRedirect:
             "reference_id": "test_reference_id",
             "utm_campaign": "test_campaign",
         }
+
+    async def test_ozow_organization_redirects_to_zar_checkout(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        client: AsyncClient,
+    ) -> None:
+        org = await create_organization(save_fixture, name_prefix="ozowredirect")
+        org.country = "ZA"
+        await save_fixture(org)
+        product = await create_product(
+            save_fixture,
+            organization=org,
+            recurring_interval=None,
+            prices=[(1000, "usd"), (1000, "zar")],
+        )
+        checkout_link = await create_checkout_link(
+            save_fixture,
+            products=[product],
+            payment_processor=PaymentProcessor.ozow,
+        )
+
+        response = await client.get(
+            f"/v1/checkout-links/{checkout_link.client_secret}/redirect"
+        )
+
+        assert response.status_code == 307
+        assert CHECKOUT_CLIENT_SECRET_PREFIX in response.headers["location"]
+
+        checkout_repository = CheckoutRepository.from_session(session)
+        checkouts = await checkout_repository.get_all(
+            checkout_repository.get_base_statement().order_by(
+                Checkout.created_at.desc()
+            )
+        )
+        assert checkouts[0].currency == "zar"
+
+    async def test_ozow_organization_no_zar_price_returns_422(
+        self,
+        save_fixture: SaveFixture,
+        client: AsyncClient,
+    ) -> None:
+        org = await create_organization(save_fixture, name_prefix="ozownozar")
+        org.country = "ZA"
+        await save_fixture(org)
+        product = await create_product(
+            save_fixture,
+            organization=org,
+            recurring_interval=None,
+            prices=[(1000, "usd")],
+        )
+        checkout_link = await create_checkout_link(
+            save_fixture,
+            products=[product],
+            payment_processor=PaymentProcessor.ozow,
+        )
+
+        response = await client.get(
+            f"/v1/checkout-links/{checkout_link.client_secret}/redirect"
+        )
+
+        assert response.status_code == 422

@@ -21,6 +21,7 @@ from tests.fixtures.auth import AuthSubjectFixture
 from tests.fixtures.database import SaveFixture
 from tests.fixtures.random_objects import (
     create_checkout_link,
+    create_product,
 )
 
 
@@ -201,6 +202,169 @@ class TestCreate:
         )
 
         assert checkout_link.discount == discount_fixed_once
+
+    @pytest.mark.auth(
+        AuthSubjectFixture(subject="user"),
+        AuthSubjectFixture(subject="organization"),
+    )
+    async def test_ozow_pinned_non_zar_price_raises(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        auth_subject: AuthSubject[User | Organization],
+        organization: Organization,
+        user_organization: UserOrganization,
+    ) -> None:
+        organization.country = "ZA"
+        await save_fixture(organization)
+        product = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(1000, "usd"), (1000, "zar")],
+        )
+        usd_price = next(p for p in product.prices if p.price_currency == "usd")
+
+        with pytest.raises(SoleiRequestValidationError):
+            await checkout_link_service.create(
+                session,
+                CheckoutLinkCreateProducts(
+                    payment_processor=PaymentProcessor.stripe,
+                    products=[product.id],
+                    product_price_id=usd_price.id,
+                ),
+                auth_subject,
+            )
+
+    @pytest.mark.auth(
+        AuthSubjectFixture(subject="user"),
+        AuthSubjectFixture(subject="organization"),
+    )
+    async def test_ozow_pinned_zar_price_accepted_and_persisted(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        auth_subject: AuthSubject[User | Organization],
+        organization: Organization,
+        user_organization: UserOrganization,
+    ) -> None:
+        organization.country = "ZA"
+        await save_fixture(organization)
+        product = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(1000, "usd"), (1000, "zar")],
+        )
+        zar_price = next(p for p in product.prices if p.price_currency == "zar")
+
+        checkout_link = await checkout_link_service.create(
+            session,
+            CheckoutLinkCreateProducts(
+                payment_processor=PaymentProcessor.stripe,
+                products=[product.id],
+                product_price_id=zar_price.id,
+            ),
+            auth_subject,
+        )
+
+        assert checkout_link.payment_processor == PaymentProcessor.ozow
+        assert checkout_link.product_price == zar_price
+
+    @pytest.mark.auth(
+        AuthSubjectFixture(subject="user"),
+        AuthSubjectFixture(subject="organization"),
+    )
+    async def test_ozow_product_without_zar_price_raises(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        auth_subject: AuthSubject[User | Organization],
+        organization: Organization,
+        user_organization: UserOrganization,
+    ) -> None:
+        organization.country = "ZA"
+        await save_fixture(organization)
+        product = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(1000, "usd")],
+        )
+
+        with pytest.raises(SoleiRequestValidationError):
+            await checkout_link_service.create(
+                session,
+                CheckoutLinkCreateProducts(
+                    payment_processor=PaymentProcessor.stripe,
+                    products=[product.id],
+                ),
+                auth_subject,
+            )
+
+    @pytest.mark.auth(
+        AuthSubjectFixture(subject="user"),
+        AuthSubjectFixture(subject="organization"),
+    )
+    async def test_pin_requires_single_product(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        auth_subject: AuthSubject[User | Organization],
+        organization: Organization,
+        user_organization: UserOrganization,
+        product_one_time: Product,
+    ) -> None:
+        other_product = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(1000, "usd")],
+        )
+        price = product_one_time.prices[0]
+
+        with pytest.raises(SoleiRequestValidationError):
+            await checkout_link_service.create(
+                session,
+                CheckoutLinkCreateProducts(
+                    payment_processor=PaymentProcessor.stripe,
+                    products=[product_one_time.id, other_product.id],
+                    product_price_id=price.id,
+                ),
+                auth_subject,
+            )
+
+    @pytest.mark.auth(
+        AuthSubjectFixture(subject="user"),
+        AuthSubjectFixture(subject="organization"),
+    )
+    async def test_pin_must_belong_to_selected_product(
+        self,
+        save_fixture: SaveFixture,
+        session: AsyncSession,
+        auth_subject: AuthSubject[User | Organization],
+        organization: Organization,
+        user_organization: UserOrganization,
+        product_one_time: Product,
+    ) -> None:
+        other_product = await create_product(
+            save_fixture,
+            organization=organization,
+            recurring_interval=None,
+            prices=[(1000, "usd")],
+        )
+        other_price = other_product.prices[0]
+
+        with pytest.raises(SoleiRequestValidationError):
+            await checkout_link_service.create(
+                session,
+                CheckoutLinkCreateProducts(
+                    payment_processor=PaymentProcessor.stripe,
+                    products=[product_one_time.id],
+                    product_price_id=other_price.id,
+                ),
+                auth_subject,
+            )
 
 
 @pytest.mark.asyncio

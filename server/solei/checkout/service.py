@@ -671,26 +671,61 @@ class CheckoutService:
                     break
 
         ip_country = self._get_ip_country(ip_geolocation_client, ip_address)
-        currencies = self._get_currencies(
-            None, product, product.organization, ip_country
-        )
 
-        try:
-            currency_prices = PriceSet.from_product(product, *currencies)
-        except NoPricesForCurrencies as e:
-            raise SoleiRequestValidationError(
-                [
-                    {
-                        "type": "value_error",
-                        "loc": ("body", "products"),
-                        "msg": "Product is not available in the specified currency.",
-                        "input": str(product.id),
-                    }
-                ]
-            ) from e
+        if checkout_link.payment_processor == PaymentProcessor.ozow:
+            # Ozow (South African organizations) only supports ZAR. Always use
+            # the product's ZAR price, ignoring any pin — fail loudly if the
+            # product has none (e.g. archived since link creation), rather
+            # than silently falling back to a currency Ozow can't process.
+            try:
+                currency_prices = PriceSet.from_product(product, "zar")
+            except NoPricesForCurrencies as e:
+                raise SoleiRequestValidationError(
+                    [
+                        {
+                            "type": "value_error",
+                            "loc": ("body", "products"),
+                            "msg": (
+                                "Product does not have a ZAR price, required "
+                                "for this organization's payment processor "
+                                "(Ozow)."
+                            ),
+                            "input": str(product.id),
+                        }
+                    ]
+                ) from e
+            price = currency_prices.get_default_price()
+            currency = currency_prices.currency
+        elif (
+            checkout_link.product_price_id is not None
+            and checkout_link.product_price is not None
+            and checkout_link.product_price.product_id == product.id
+            and not checkout_link.product_price.is_archived
+        ):
+            # Merchant-pinned price for this specific product.
+            price = checkout_link.product_price
+            currency = price.price_currency
+        else:
+            currencies = self._get_currencies(
+                None, product, product.organization, ip_country
+            )
 
-        price = currency_prices.get_default_price()
-        currency = currency_prices.currency
+            try:
+                currency_prices = PriceSet.from_product(product, *currencies)
+            except NoPricesForCurrencies as e:
+                raise SoleiRequestValidationError(
+                    [
+                        {
+                            "type": "value_error",
+                            "loc": ("body", "products"),
+                            "msg": "Product is not available in the specified currency.",
+                            "input": str(product.id),
+                        }
+                    ]
+                ) from e
+
+            price = currency_prices.get_default_price()
+            currency = currency_prices.currency
 
         amount = 0
         seats = None
