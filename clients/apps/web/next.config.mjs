@@ -84,7 +84,10 @@ const docsCSP = `
 const nextConfig = {
   output: 'standalone',
   outputFileTracingRoot: path.join(__dirname, '../../'),
-  allowedDevOrigins: ['127.0.0.1', 'web.altafrica.online'],
+  // Include the configured frontend hostname so a local tunnel (ngrok,
+  // Cloudflare, etc.) set via NEXT_PUBLIC_FRONTEND_BASE_URL works without
+  // hardcoding anyone's personal tunnel domain here.
+  allowedDevOrigins: ['127.0.0.1', defaultFrontendHostname],
   reactStrictMode: true,
   transpilePackages: ['shiki', '@polar-sh/checkout', '@polar-sh/orbit'],
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
