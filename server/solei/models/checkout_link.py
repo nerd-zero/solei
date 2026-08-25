@@ -12,6 +12,7 @@ from solei.kit.trial import TrialConfigurationMixin
 
 from .discount import Discount
 from .product import Product
+from .product_price import ProductPrice
 
 if TYPE_CHECKING:
     from .checkout_link_product import CheckoutLinkProduct
@@ -48,6 +49,16 @@ class CheckoutLink(TrialConfigurationMixin, MetadataMixin, RecordModel):
     def discount(cls) -> Mapped[Discount | None]:
         # Eager loading makes sense here because we always need the discount when present
         return relationship(Discount, lazy="joined")
+
+    product_price_id: Mapped[UUID | None] = mapped_column(
+        Uuid, ForeignKey("product_prices.id", ondelete="set null"), nullable=True
+    )
+
+    @declared_attr
+    def product_price(cls) -> Mapped["ProductPrice | None"]:
+        # Eager loading makes sense because visit-time resolution always needs
+        # the pinned price when present
+        return relationship(ProductPrice, lazy="joined")
 
     checkout_link_products: Mapped[list["CheckoutLinkProduct"]] = relationship(
         "CheckoutLinkProduct",
