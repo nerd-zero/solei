@@ -145,10 +145,31 @@ class OzowService:
                 f"Ozow payment request was not created: status={status}, reason={reason}",
             )
 
+        data = response.json()
         return {
             "id": data["id"],
             "redirectUrl": data.get("redirectUrl", ""),
         }
+
+    async def get_payment(self, payment_id: str) -> dict[str, object]:
+        token = await self._get_access_token()
+
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"{self._base_url}/payments/{payment_id}",
+                headers={
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {token}",
+                },
+                timeout=30.0,
+            )
+
+        if response.status_code != 200:
+            raise OzowError(
+                f"Ozow get_payment failed: HTTP {response.status_code}",
+            )
+
+        return response.json()
 
 
 ozow_service = OzowService()
