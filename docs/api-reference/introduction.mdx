@@ -109,9 +109,9 @@ All official SDKs accept a `server` parameter for sandbox usage:
 
 <CodeGroup>
 ```ts TypeScript
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@solei/sdk";
 
-const polar = new Polar({
+const solei = new Solei({
 accessToken: process.env.SOLEI_ACCESS_TOKEN!,
 server: "sandbox", // omit or use 'production' for live
 });
@@ -119,7 +119,7 @@ server: "sandbox", // omit or use 'production' for live
 ````
 
 ```py Python
-from polar_sdk import Polar
+from solei_sdk import Solei
 
 client = Solei(
     access_token=os.environ["SOLEI_ACCESS_TOKEN"],
@@ -128,14 +128,14 @@ client = Solei(
 ````
 
 ```go Go
-s := polargo.New(
-  polargo.WithServer("sandbox"),
-  polargo.WithSecurity(os.Getenv("SOLEI_ACCESS_TOKEN")),
+s := soleigo.New(
+  soleigo.WithServer("sandbox"),
+  soleigo.WithSecurity(os.Getenv("SOLEI_ACCESS_TOKEN")),
 )
 ```
 
 ```php PHP
-$sdk = Polar\Polar::builder()
+$sdk = Solei\Solei::builder()
     ->setServer('sandbox')
     ->setSecurity(getenv('SOLEI_ACCESS_TOKEN'))
     ->build();

@@ -164,11 +164,11 @@ Create a webhook handler that listens for `order.paid` events and grants initial
 
 #### Next.js Example
 
-```typescript icon="square-js" title="app/api/webhook/polar/route.ts"
-import { Polar } from "@polar-sh/sdk";
-import { Webhooks } from "@polar-sh/nextjs";
+```typescript icon="square-js" title="app/api/webhook/solei/route.ts"
+import { Solei } from "@solei/sdk";
+import { Webhooks } from "@solei/nextjs";
 
-const polar = new Polar({ accessToken: process.env.SOLEI_ACCESS_TOKEN });
+const solei = new Solei({ accessToken: process.env.SOLEI_ACCESS_TOKEN });
 
 export const POST = Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET,
@@ -177,7 +177,7 @@ export const POST = Webhooks({
     const targetProductId = process.env.PRODUCT_ID;
     if (order.data.product_id === targetProductId) {
       // Grant 10 credits by ingesting a negative event
-      await polar.events.ingest({
+      await solei.events.ingest({
         events: [
           {
             name: "meter-name",
@@ -213,7 +213,7 @@ Test that credits are properly granted when a customer makes a purchase.
     Use the [Customer Meters API](/api-reference/customer-meters/list) to verify the credits were applied:
     
     ```typescript
-    const meters = await polar.customerMeters.list({
+    const meters = await solei.customerMeters.list({
       customerId: "cus_...",
     });
     
@@ -256,7 +256,7 @@ To avoid granting credits multiple times, consider:
 const hasGrantedCredits = await checkIfAlreadyGranted(order.id);
 
 if (!hasGrantedCredits) {
-  await polar.events.ingest({
+  await solei.events.ingest({
     events: [{
       name: "meter-name",
       customerId: order.data.customer_id,

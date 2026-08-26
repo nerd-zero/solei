@@ -14,13 +14,13 @@ To ingest events, you can use the Solei SDKs.
 ### TypeScript Example
 
 ```typescript
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@solei/sdk";
 
-const polar = new Polar({
+const solei = new Solei({
   accessToken: process.env["SOLEI_ACCESS_TOKEN"] ?? "",
 });
 
-await polar.events.ingest({
+await solei.events.ingest({
   events: [
     {
       name: "<value>",

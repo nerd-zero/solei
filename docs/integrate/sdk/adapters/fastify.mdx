@@ -14,22 +14,22 @@ Install the required Solei packages using the following command:
 <Tabs>
   <Tab title="npm">
     ```bash Terminal
-    npm install zod @polar-sh/fastify
+    npm install zod @solei/fastify
     ```
   </Tab>
   <Tab title="yarn">
     ```bash Terminal
-    yarn add zod @polar-sh/fastify
+    yarn add zod @solei/fastify
     ```
   </Tab>
   <Tab title="pnpm">
     ```bash Terminal
-    pnpm add zod @polar-sh/fastify
+    pnpm add zod @solei/fastify
     ```
   </Tab>
   <Tab title="bun">
     ```bash Terminal
-    bun add zod @polar-sh/fastify
+    bun add zod @solei/fastify
     ```
   </Tab>
 </Tabs>
@@ -40,7 +40,7 @@ Create a Checkout handler which takes care of redirections.
 
 ```typescript
 import fastify from "fastify";
-import { Checkout } from "@polar-sh/fastify";
+import { Checkout } from "@solei/fastify";
 
 fastify().get(
   "/checkout",
@@ -71,7 +71,7 @@ Create a customer portal where your customer can view orders and subscriptions.
 
 ```typescript
 import fastify from "fastify";
-import { CustomerPortal } from "@polar-sh/fastify";
+import { CustomerPortal } from "@solei/fastify";
 
 fastify().get(
   "/portal",
@@ -90,9 +90,9 @@ A simple utility which resolves incoming webhook payloads by signing the webhook
 
 ```typescript
 import fastify from 'fastify'
-import { Webhooks } from "@polar-sh/fastify";
+import { Webhooks } from "@solei/fastify";
 
-fastify.post('/polar/webhooks', Webhooks({
+fastify.post('/solei/webhooks', Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET!,
   onPayload: async (payload) => /** Handle payload */,
 }))

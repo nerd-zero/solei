@@ -87,13 +87,13 @@ By default, Solei OAuth2 flow generates **organization-level** access tokens. Th
 When using the default flow, the user will be prompted to select one of their organizations before allowing access to their data:
 
 ```
-https://solei.to/oauth2/authorize?response_type=code&client_id=polar_ci_j3X95_MgfdSCeCd2qkFnUw&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=openid%20email
+https://solei.to/oauth2/authorize?response_type=code&client_id=solei_ci_j3X95_MgfdSCeCd2qkFnUw&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=openid%20email
 ```
 
 To request a **user-scoped** access token instead, you need to explicitly add the parameter `sub_type=user` to the authorization URL:
 
 ```
-https://solei.to/oauth2/authorize?response_type=code&client_id=polar_ci_j3X95_MgfdSCeCd2qkFnUw&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=openid%20email&sub_type=user
+https://solei.to/oauth2/authorize?response_type=code&client_id=solei_ci_j3X95_MgfdSCeCd2qkFnUw&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=openid%20email&sub_type=user
 ```
 
 The rest of the flow remains unchanged. The access token you'll get will be tied to either the selected organization (default) or the user (when explicitly requested).

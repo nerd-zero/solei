@@ -29,11 +29,11 @@ If you've already created a customer in Solei and have their Solei customer ID, 
 
 <CodeGroup>
 ```ts TypeScript
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@solei/sdk";
 
-const polar = new Polar({ accessToken: process.env["SOLEI_ACCESS_TOKEN"] });
+const solei = new Solei({ accessToken: process.env["SOLEI_ACCESS_TOKEN"] });
 
-const checkout = await polar.checkouts.create({
+const checkout = await solei.checkouts.create({
     products: ["<product_id>"],
     customerId: "992fae2a-2a17-4b7a-8d9e-e287cf90131b", // [!code ++]
 });
@@ -42,13 +42,13 @@ console.log(checkout.url);
 ```
 
 ```py Python
-from polar_sdk import Polar
+from solei_sdk import Solei
 
-with Polar(
+with Solei(
     access_token="<YOUR_BEARER_TOKEN_HERE>",
-) as polar:
+) as solei:
 
-    checkout = polar.checkouts.create(request={
+    checkout = solei.checkouts.create(request={
         "products": ["<product_id>"],
         "customer_id": "992fae2a-2a17-4b7a-8d9e-e287cf90131b",  # [!code ++]
     })
@@ -88,11 +88,11 @@ If you have your own user management system, you can use your internal customer 
     <Step title = "Create Checkout Session with external_customer_id">
 <CodeGroup>
 ```ts TypeScript
-import { Polar } from "@polar-sh/sdk";
+import { Solei } from "@solei/sdk";
 
-const polar = new Polar({ accessToken: process.env["SOLEI_ACCESS_TOKEN"] });
+const solei = new Solei({ accessToken: process.env["SOLEI_ACCESS_TOKEN"] });
 
-const checkout = await polar.checkouts.create({
+const checkout = await solei.checkouts.create({
     products: ["<product_id>"],
     externalCustomerId: "user_12345", // Your application's user ID // [!code ++]
 });
@@ -101,13 +101,13 @@ console.log(checkout.url);
 ```
 
 ```py Python
-from polar_sdk import Polar
+from solei_sdk import Solei
 
-with Polar(
+with Solei(
     access_token="<YOUR_BEARER_TOKEN_HERE>",
-) as polar:
+) as solei:
 
-    checkout = polar.checkouts.create(request={
+    checkout = solei.checkouts.create(request={
         "products": ["<product_id>"],
         "external_customer_id": "user_12345",  # Your application's user ID # [!code ++]
     })

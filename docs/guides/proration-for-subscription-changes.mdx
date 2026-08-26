@@ -109,13 +109,13 @@ curl --request PATCH \
 
 
 ```py Python
-from polar_sdk import Polar
+from solei_sdk import Solei
 
-with Polar(
+with Solei(
     access_token="<YOUR_BEARER_TOKEN_HERE>",
-) as polar:
+) as solei:
 
-    res = polar.subscriptions.update(id="<subscription_id>", subscription_update={
+    res = solei.subscriptions.update(id="<subscription_id>", subscription_update={
         "product_id": "<product_id>",
         "proration_behavior": "<type_of_proration>"
     })

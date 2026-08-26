@@ -242,7 +242,7 @@ If you stored `cust_alice` or `cust_bob` in your database to track who has acces
 
 ```typescript
 // List all seats for a subscription to get the new member IDs
-const seats = await polar.customerSeats.list({
+const seats = await solei.customerSeats.list({
   subscription_id: "sub_456"
 });
 
@@ -301,7 +301,7 @@ Existing assignment calls using `email`, `customer_id`, or `external_customer_id
 **Phase 1:** `seat.customer_id` in the response still points to the seat holder.
 
 ```typescript
-const seat = await polar.customerSeats.assign({
+const seat = await solei.customerSeats.assign({
   subscription_id: "sub_456",
   email: "charlie@company.com"
 });
@@ -314,7 +314,7 @@ seat.member.id;      // "mem_charlie"
 **Phase 2:** `seat.customer_id` in the response points to the buyer, not the seat holder.
 
 ```typescript
-const seat = await polar.customerSeats.assign({
+const seat = await solei.customerSeats.assign({
   subscription_id: "sub_456",
   email: "charlie@company.com"
 });
@@ -329,7 +329,7 @@ If your code reads `customer_id` from the assignment response, switch to `seat.m
 You can also assign by member ID directly:
 
 ```typescript
-const seat = await polar.customerSeats.assign({
+const seat = await solei.customerSeats.assign({
   subscription_id: "sub_456",
   member_id: "mem_charlie"
 });
@@ -345,12 +345,12 @@ After migration, pass a `member_id` when creating customer sessions to scope the
 
 ```typescript
 // Before: customer session with no member context
-const session = await polar.customerSessions.create({
+const session = await solei.customerSessions.create({
   customer_id: "cust_jane"
 });
 
 // After: pass member_id to scope the session
-const session = await polar.customerSessions.create({
+const session = await solei.customerSessions.create({
   customer_id: "cust_jane",
   member_id: "mem_alice"
 });
@@ -360,7 +360,7 @@ const session = await polar.customerSessions.create({
 You can also use `external_member_id` as an alternative to `member_id`:
 
 ```typescript
-const session = await polar.customerSessions.create({
+const session = await solei.customerSessions.create({
   customer_id: "cust_jane",
   external_member_id: "your_user_id_alice"
 });

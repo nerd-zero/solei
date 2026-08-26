@@ -8,12 +8,12 @@ description: "Ingest delta time of arbitrary execution"
 Ingest delta time of arbitrary execution. Bring your own now-resolver.
 
 ```
-pnpm add @polar-sh/ingestion
+pnpm add @solei/ingestion
 ```
 
 ```typescript
-import { Ingestion } from "@polar-sh/ingestion";
-import { DeltaTimeStrategy } from "@polar-sh/ingestion/strategies/DeltaTime";
+import { Ingestion } from "@solei/ingestion";
+import { DeltaTimeStrategy } from "@solei/ingestion/strategies/DeltaTime";
 
 const nowResolver = () => performance.now();
 // const nowResolver = () => Number(hrtime.bigint())

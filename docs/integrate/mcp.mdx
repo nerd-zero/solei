@@ -22,8 +22,8 @@ You need a MCP-capable agent environment to use Solei over MCP. A few of them ar
 
 Solei provides two MCP servers:
 
-- **Production**: `https://mcp.solei.to/mcp/polar-mcp` - Connect to your live Solei organization
-- **Sandbox**: `https://mcp.solei.to/mcp/polar-sandbox` - Connect to the Solei sandbox environment for testing
+- **Production**: `https://mcp.solei.to/mcp/solei-mcp` - Connect to your live Solei organization
+- **Sandbox**: `https://mcp.solei.to/mcp/solei-sandbox` - Connect to the Solei sandbox environment for testing
 
 When you can specify a MCP URL, use one of the URLs above depending on your environment.
 
@@ -34,7 +34,7 @@ If you have to specify a command, use:
   "mcpServers": {
     "Solei": {
       "command": "npx",
-      "args": ["mcp-remote", "https://mcp.solei.to/mcp/polar-mcp"]
+      "args": ["mcp-remote", "https://mcp.solei.to/mcp/solei-mcp"]
     }
   }
 }
@@ -47,7 +47,7 @@ For sandbox:
   "mcpServers": {
     "Solei Sandbox": {
       "command": "npx",
-      "args": ["mcp-remote", "https://mcp.solei.to/mcp/polar-sandbox"]
+      "args": ["mcp-remote", "https://mcp.solei.to/mcp/solei-sandbox"]
     }
   }
 }
@@ -61,7 +61,7 @@ In `.cursor/mcp.json`, add:
 {
   "mcpServers": {
     "Solei": {
-      "url": "https://mcp.solei.to/mcp/polar-mcp"
+      "url": "https://mcp.solei.to/mcp/solei-mcp"
     }
   }
 }
@@ -73,7 +73,7 @@ For sandbox:
 {
   "mcpServers": {
     "Solei Sandbox": {
-      "url": "https://mcp.solei.to/mcp/polar-sandbox"
+      "url": "https://mcp.solei.to/mcp/solei-sandbox"
     }
   }
 }
@@ -88,7 +88,7 @@ In `mcp_config.json`, add:
   "mcpServers": {
     "Solei": {
       "command": "npx",
-      "args": ["mcp-remote", "https://mcp.solei.to/mcp/polar-mcp"]
+      "args": ["mcp-remote", "https://mcp.solei.to/mcp/solei-mcp"]
     }
   }
 }
@@ -101,7 +101,7 @@ For sandbox:
   "mcpServers": {
     "Solei Sandbox": {
       "command": "npx",
-      "args": ["mcp-remote", "https://mcp.solei.to/mcp/polar-sandbox"]
+      "args": ["mcp-remote", "https://mcp.solei.to/mcp/solei-sandbox"]
     }
   }
 }
@@ -115,15 +115,15 @@ Add the following to your `~/.codex/config.toml`:
 [features]
 rmcp_client = true
 
-[mcp_servers.polar]
+[mcp_servers.solei]
 type = "http"
-url = "https://mcp.solei.to/mcp/polar-mcp"
+url = "https://mcp.solei.to/mcp/solei-mcp"
 ```
 
 Then run:
 
 ```sh
-codex mcp login polar
+codex mcp login solei
 ```
 
 For sandbox:
@@ -132,15 +132,15 @@ For sandbox:
 [features]
 rmcp_client = true
 
-[mcp_servers.polar_sandbox]
+[mcp_servers.solei_sandbox]
 type = "http"
-url = "https://mcp.solei.to/mcp/polar-sandbox"
+url = "https://mcp.solei.to/mcp/solei-sandbox"
 ```
 
 Then run:
 
 ```sh
-codex mcp login polar_sandbox
+codex mcp login solei_sandbox
 ```
 
 ### Claude Code
@@ -148,29 +148,29 @@ codex mcp login polar_sandbox
 Run the following command:
 
 ```
-claude mcp add --transport http "Solei" "https://mcp.solei.to/mcp/polar-mcp"
+claude mcp add --transport http "Solei" "https://mcp.solei.to/mcp/solei-mcp"
 ```
 
 For sandbox:
 
 ```
-claude mcp add --transport http "Solei-Sandbox" "https://mcp.solei.to/mcp/polar-sandbox"
+claude mcp add --transport http "Solei-Sandbox" "https://mcp.solei.to/mcp/solei-sandbox"
 ```
 
 ### ChatGPT
 
 MCP is only available for paid users in beta on ChatGPT web, by enabling Developer Mode.
 
-Once Developer Mode is enabled, go to _Settings_ → _Connectors_ and add the MCP server using `https://mcp.solei.to/mcp/polar-mcp`.
+Once Developer Mode is enabled, go to _Settings_ → _Connectors_ and add the MCP server using `https://mcp.solei.to/mcp/solei-mcp`.
 
-For sandbox, use `https://mcp.solei.to/mcp/polar-sandbox` instead.
+For sandbox, use `https://mcp.solei.to/mcp/solei-sandbox` instead.
 
 ### Claude Desktop
 
 Go to _Settings_ → _Connectors_ and click _Add custom connector_.
 
-Name it "Solei" and add `https://mcp.solei.to/mcp/polar-mcp` as the server URL.
+Name it "Solei" and add `https://mcp.solei.to/mcp/solei-mcp` as the server URL.
 
-For sandbox, use `https://mcp.solei.to/mcp/polar-sandbox` as the server URL instead.
+For sandbox, use `https://mcp.solei.to/mcp/solei-sandbox` as the server URL instead.
 
 Save, and click _Connect_ to connect to your Solei organization.

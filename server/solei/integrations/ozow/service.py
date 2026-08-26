@@ -28,9 +28,7 @@ class OzowService:
 
     @property
     def _token_url(self) -> str:
-        if settings.OZOW_IS_TEST:
-            return "https://stagingone.ozow.com/v1/token"
-        return "https://one.ozow.com/v1/token"
+        return f"{self._base_url}/token"
 
     async def _get_access_token(self) -> str:
         # Return cached token if still valid (with 60s safety buffer)
@@ -114,6 +112,12 @@ class OzowService:
                 timeout=30.0,
             )
 
+        log.info(
+            "Ozow create_payment_request response",
+            status_code=response.status_code,
+            response_body=response.text,
+        )
+
         if response.status_code not in (200, 201):
             log.error(
                 "Ozow create_payment_request failed",
@@ -122,6 +126,23 @@ class OzowService:
             )
             raise OzowError(
                 f"Ozow payment request failed: HTTP {response.status_code}",
+            )
+
+        data = response.json()
+        status = data.get("status")
+
+        # Ozow's OneAPI returns this capitalized ("Created") in practice, despite
+        # the docs showing lowercase "created" — compare case-insensitively.
+        if not isinstance(status, str) or status.lower() != "created":
+            reason = data.get("reason", "no reason provided")
+            log.error(
+                "Ozow create_payment_request returned non-created status",
+                status=status,
+                reason=reason,
+                payment_id=data.get("id"),
+            )
+            raise OzowError(
+                f"Ozow payment request was not created: status={status}, reason={reason}",
             )
 
         data = response.json()

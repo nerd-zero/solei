@@ -1,9 +1,9 @@
 ---
 title: "Task Debouncer"
-description: "How to use task debouncing to avoid duplicate task execution in Polar's background worker system."
+description: "How to use task debouncing to avoid duplicate task execution in Solei's background worker system."
 ---
 
-Task debouncing is a mechanism used in Polar's background worker system to prevent duplicate execution of tasks that are triggered multiple times in a short amount of time. This is particularly useful for operations that might be triggered by multiple events or user actions.
+Task debouncing is a mechanism used in Solei's background worker system to prevent duplicate execution of tasks that are triggered multiple times in a short amount of time. This is particularly useful for operations that might be triggered by multiple events or user actions.
 
 ## When to use task debouncing
 
@@ -30,8 +30,8 @@ To add debouncing to a Dramatiq task, you need to:
 ### Example implementation
 
 ```python
-from polar.worker import actor
-from polar.config import settings
+from solei.worker import actor
+from solei.config import settings
 
 def _update_customer_debounce_key(customer_id: uuid.UUID) -> str:
     return f"customer_meter.update_customer:{customer_id}"
@@ -227,7 +227,7 @@ Result: Both M1 and M2 execute — they belong to separate debounce windows.
 
 The debouncer emits two key metrics:
 
-- `polar_task_debounced_total`: Counter of tasks that were skipped due to debouncing
-- `polar_task_debounce_delay_seconds`: Histogram of delays between first enqueue and execution
+- `solei_task_debounced_total`: Counter of tasks that were skipped due to debouncing
+- `solei_task_debounce_delay_seconds`: Histogram of delays between first enqueue and execution
 
 Both metrics are labeled with `queue` and `task_name` for filtering.

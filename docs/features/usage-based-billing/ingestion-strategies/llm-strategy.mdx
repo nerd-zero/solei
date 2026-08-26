@@ -10,12 +10,12 @@ description: "Ingestion strategy for LLM Usage"
 Wrap any LLM model from the `@ai-sdk/*` library, to automatically fire prompt- & completion tokens used by every model call.
 
 ```
-pnpm add @polar-sh/ingestion ai @ai-sdk/openai
+pnpm add @solei/ingestion ai @ai-sdk/openai
 ```
 
 ```typescript
-import { Ingestion } from "@polar-sh/ingestion";
-import { LLMStrategy } from "@polar-sh/ingestion/strategies/LLM";
+import { Ingestion } from "@solei/ingestion";
+import { LLMStrategy } from "@solei/ingestion/strategies/LLM";
 import { generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
 
@@ -76,11 +76,11 @@ Our Python SDK includes an ingestion helper and strategies for common use cases.
 <CodeGroup>
 
 ```bash pip
-pip install polar-sdk
+pip install solei-sdk
 ```
 
 ```bash uv
-uv add polar-sdk
+uv add solei-sdk
 ```
 
 </CodeGroup>
@@ -91,7 +91,7 @@ The ingestion helper is a simple wrapper around the Solei events ingestion API. 
 
 ```python
 import os
-from polar_sdk.ingestion import Ingestion
+from solei_sdk.ingestion import Ingestion
 
 ingestion = Ingestion(os.getenv("SOLEI_ACCESS_TOKEN"))
 
@@ -112,8 +112,8 @@ With our PydanticAI strategy, you can easily track the usage of LLMs and send th
 
 ```python
 import os
-from polar_sdk.ingestion import Ingestion
-from polar_sdk.ingestion.strategies import PydanticAIStrategy
+from solei_sdk.ingestion import Ingestion
+from solei_sdk.ingestion.strategies import PydanticAIStrategy
 from pydantic import BaseModel
 from pydantic_ai import Agent
 

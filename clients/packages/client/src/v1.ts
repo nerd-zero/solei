@@ -10166,6 +10166,11 @@ export interface components {
        */
       discount_id: string | null
       /**
+       * Pinned Product Price Id
+       * @description ID of the price pinned for this checkout link, if any. When set, this price is used at checkout instead of one resolved dynamically (subject to payment-processor currency constraints).
+       */
+      pinned_product_price_id: string | null
+      /**
        * Organization Id
        * Format: uuid4
        * @description The organization ID.
@@ -10412,6 +10417,11 @@ export interface components {
        * @description List of products that will be available to select at checkout.
        */
       products: string[]
+      /**
+       * Product Price Id
+       * @description ID of a specific price to pin for this checkout link. Only allowed when a single product is provided in `products`. If not set, the checkout will resolve a price dynamically.
+       */
+      product_price_id?: string | null
     }
     /**
      * CheckoutLinkProduct
@@ -10563,6 +10573,11 @@ export interface components {
        * @description ID of the discount to apply to the checkout. If the discount is not applicable anymore when opening the checkout link, it'll be ignored.
        */
       discount_id?: string | null
+      /**
+       * Product Price Id
+       * @description ID of a specific price to pin for this checkout link. Set to `null` to remove the pin and resume dynamic price resolution. Only allowed when the checkout link has a single product.
+       */
+      product_price_id?: string | null
       /**
        * Success Url
        * @description URL where the customer will be redirected after a successful payment.You can add the `checkout_id={CHECKOUT_ID}` query parameter to retrieve the checkout session id.
@@ -21123,6 +21138,11 @@ export interface components {
       /** Github Username */
       github_username?: string | null
     }
+    /**
+     * OrgCountryInput
+     * @enum {string}
+     */
+    OrgCountryInput: 'ZA' | 'ZW'
     /** Organization */
     Organization: {
       /**
@@ -21682,254 +21702,7 @@ export interface components {
       /** @description Additional, private, business details Solei needs about active organizations for compliance (KYC). */
       details?: components['schemas']['OrganizationDetails'] | null
       /** @description Two-letter country code (ISO 3166-1 alpha-2). */
-      country?:
-        | (
-            | 'AD'
-            | 'AE'
-            | 'AF'
-            | 'AG'
-            | 'AI'
-            | 'AL'
-            | 'AM'
-            | 'AO'
-            | 'AQ'
-            | 'AR'
-            | 'AS'
-            | 'AT'
-            | 'AU'
-            | 'AW'
-            | 'AX'
-            | 'AZ'
-            | 'BA'
-            | 'BB'
-            | 'BD'
-            | 'BE'
-            | 'BF'
-            | 'BG'
-            | 'BH'
-            | 'BI'
-            | 'BJ'
-            | 'BL'
-            | 'BM'
-            | 'BN'
-            | 'BO'
-            | 'BQ'
-            | 'BR'
-            | 'BS'
-            | 'BT'
-            | 'BV'
-            | 'BW'
-            | 'BY'
-            | 'BZ'
-            | 'CA'
-            | 'CC'
-            | 'CD'
-            | 'CF'
-            | 'CG'
-            | 'CH'
-            | 'CI'
-            | 'CK'
-            | 'CL'
-            | 'CM'
-            | 'CN'
-            | 'CO'
-            | 'CR'
-            | 'CV'
-            | 'CW'
-            | 'CX'
-            | 'CY'
-            | 'CZ'
-            | 'DE'
-            | 'DJ'
-            | 'DK'
-            | 'DM'
-            | 'DO'
-            | 'DZ'
-            | 'EC'
-            | 'EE'
-            | 'EG'
-            | 'EH'
-            | 'ER'
-            | 'ES'
-            | 'ET'
-            | 'FI'
-            | 'FJ'
-            | 'FK'
-            | 'FM'
-            | 'FO'
-            | 'FR'
-            | 'GA'
-            | 'GB'
-            | 'GD'
-            | 'GE'
-            | 'GF'
-            | 'GG'
-            | 'GH'
-            | 'GI'
-            | 'GL'
-            | 'GM'
-            | 'GN'
-            | 'GP'
-            | 'GQ'
-            | 'GR'
-            | 'GS'
-            | 'GT'
-            | 'GU'
-            | 'GW'
-            | 'GY'
-            | 'HK'
-            | 'HM'
-            | 'HN'
-            | 'HR'
-            | 'HT'
-            | 'HU'
-            | 'ID'
-            | 'IE'
-            | 'IL'
-            | 'IM'
-            | 'IN'
-            | 'IO'
-            | 'IQ'
-            | 'IS'
-            | 'IT'
-            | 'JE'
-            | 'JM'
-            | 'JO'
-            | 'JP'
-            | 'KE'
-            | 'KG'
-            | 'KH'
-            | 'KI'
-            | 'KM'
-            | 'KN'
-            | 'KR'
-            | 'KW'
-            | 'KY'
-            | 'KZ'
-            | 'LA'
-            | 'LB'
-            | 'LC'
-            | 'LI'
-            | 'LK'
-            | 'LR'
-            | 'LS'
-            | 'LT'
-            | 'LU'
-            | 'LV'
-            | 'LY'
-            | 'MA'
-            | 'MC'
-            | 'MD'
-            | 'ME'
-            | 'MF'
-            | 'MG'
-            | 'MH'
-            | 'MK'
-            | 'ML'
-            | 'MM'
-            | 'MN'
-            | 'MO'
-            | 'MP'
-            | 'MQ'
-            | 'MR'
-            | 'MS'
-            | 'MT'
-            | 'MU'
-            | 'MV'
-            | 'MW'
-            | 'MX'
-            | 'MY'
-            | 'MZ'
-            | 'NA'
-            | 'NC'
-            | 'NE'
-            | 'NF'
-            | 'NG'
-            | 'NI'
-            | 'NL'
-            | 'NO'
-            | 'NP'
-            | 'NR'
-            | 'NU'
-            | 'NZ'
-            | 'OM'
-            | 'PA'
-            | 'PE'
-            | 'PF'
-            | 'PG'
-            | 'PH'
-            | 'PK'
-            | 'PL'
-            | 'PM'
-            | 'PN'
-            | 'PR'
-            | 'PS'
-            | 'PT'
-            | 'PW'
-            | 'PY'
-            | 'QA'
-            | 'RE'
-            | 'RO'
-            | 'RS'
-            | 'RW'
-            | 'SA'
-            | 'SB'
-            | 'SC'
-            | 'SD'
-            | 'SE'
-            | 'SG'
-            | 'SH'
-            | 'SI'
-            | 'SJ'
-            | 'SK'
-            | 'SL'
-            | 'SM'
-            | 'SN'
-            | 'SO'
-            | 'SR'
-            | 'SS'
-            | 'ST'
-            | 'SV'
-            | 'SX'
-            | 'SZ'
-            | 'TC'
-            | 'TD'
-            | 'TF'
-            | 'TG'
-            | 'TH'
-            | 'TJ'
-            | 'TK'
-            | 'TL'
-            | 'TM'
-            | 'TN'
-            | 'TO'
-            | 'TR'
-            | 'TT'
-            | 'TV'
-            | 'TW'
-            | 'TZ'
-            | 'UA'
-            | 'UG'
-            | 'UM'
-            | 'US'
-            | 'UY'
-            | 'UZ'
-            | 'VA'
-            | 'VC'
-            | 'VE'
-            | 'VG'
-            | 'VI'
-            | 'VN'
-            | 'VU'
-            | 'WF'
-            | 'WS'
-            | 'YE'
-            | 'YT'
-            | 'ZA'
-            | 'ZM'
-            | 'ZW'
-          )
-        | null
+      country?: ('ZA' | 'ZW') | null
       feature_settings?:
         | components['schemas']['OrganizationFeatureSettings']
         | null
@@ -22673,254 +22446,7 @@ export interface components {
       /** @description Additional, private, business details Solei needs about active organizations for compliance (KYC). */
       details?: components['schemas']['OrganizationDetails'] | null
       /** @description Two-letter country code (ISO 3166-1 alpha-2). */
-      country?:
-        | (
-            | 'AD'
-            | 'AE'
-            | 'AF'
-            | 'AG'
-            | 'AI'
-            | 'AL'
-            | 'AM'
-            | 'AO'
-            | 'AQ'
-            | 'AR'
-            | 'AS'
-            | 'AT'
-            | 'AU'
-            | 'AW'
-            | 'AX'
-            | 'AZ'
-            | 'BA'
-            | 'BB'
-            | 'BD'
-            | 'BE'
-            | 'BF'
-            | 'BG'
-            | 'BH'
-            | 'BI'
-            | 'BJ'
-            | 'BL'
-            | 'BM'
-            | 'BN'
-            | 'BO'
-            | 'BQ'
-            | 'BR'
-            | 'BS'
-            | 'BT'
-            | 'BV'
-            | 'BW'
-            | 'BY'
-            | 'BZ'
-            | 'CA'
-            | 'CC'
-            | 'CD'
-            | 'CF'
-            | 'CG'
-            | 'CH'
-            | 'CI'
-            | 'CK'
-            | 'CL'
-            | 'CM'
-            | 'CN'
-            | 'CO'
-            | 'CR'
-            | 'CV'
-            | 'CW'
-            | 'CX'
-            | 'CY'
-            | 'CZ'
-            | 'DE'
-            | 'DJ'
-            | 'DK'
-            | 'DM'
-            | 'DO'
-            | 'DZ'
-            | 'EC'
-            | 'EE'
-            | 'EG'
-            | 'EH'
-            | 'ER'
-            | 'ES'
-            | 'ET'
-            | 'FI'
-            | 'FJ'
-            | 'FK'
-            | 'FM'
-            | 'FO'
-            | 'FR'
-            | 'GA'
-            | 'GB'
-            | 'GD'
-            | 'GE'
-            | 'GF'
-            | 'GG'
-            | 'GH'
-            | 'GI'
-            | 'GL'
-            | 'GM'
-            | 'GN'
-            | 'GP'
-            | 'GQ'
-            | 'GR'
-            | 'GS'
-            | 'GT'
-            | 'GU'
-            | 'GW'
-            | 'GY'
-            | 'HK'
-            | 'HM'
-            | 'HN'
-            | 'HR'
-            | 'HT'
-            | 'HU'
-            | 'ID'
-            | 'IE'
-            | 'IL'
-            | 'IM'
-            | 'IN'
-            | 'IO'
-            | 'IQ'
-            | 'IS'
-            | 'IT'
-            | 'JE'
-            | 'JM'
-            | 'JO'
-            | 'JP'
-            | 'KE'
-            | 'KG'
-            | 'KH'
-            | 'KI'
-            | 'KM'
-            | 'KN'
-            | 'KR'
-            | 'KW'
-            | 'KY'
-            | 'KZ'
-            | 'LA'
-            | 'LB'
-            | 'LC'
-            | 'LI'
-            | 'LK'
-            | 'LR'
-            | 'LS'
-            | 'LT'
-            | 'LU'
-            | 'LV'
-            | 'LY'
-            | 'MA'
-            | 'MC'
-            | 'MD'
-            | 'ME'
-            | 'MF'
-            | 'MG'
-            | 'MH'
-            | 'MK'
-            | 'ML'
-            | 'MM'
-            | 'MN'
-            | 'MO'
-            | 'MP'
-            | 'MQ'
-            | 'MR'
-            | 'MS'
-            | 'MT'
-            | 'MU'
-            | 'MV'
-            | 'MW'
-            | 'MX'
-            | 'MY'
-            | 'MZ'
-            | 'NA'
-            | 'NC'
-            | 'NE'
-            | 'NF'
-            | 'NG'
-            | 'NI'
-            | 'NL'
-            | 'NO'
-            | 'NP'
-            | 'NR'
-            | 'NU'
-            | 'NZ'
-            | 'OM'
-            | 'PA'
-            | 'PE'
-            | 'PF'
-            | 'PG'
-            | 'PH'
-            | 'PK'
-            | 'PL'
-            | 'PM'
-            | 'PN'
-            | 'PR'
-            | 'PS'
-            | 'PT'
-            | 'PW'
-            | 'PY'
-            | 'QA'
-            | 'RE'
-            | 'RO'
-            | 'RS'
-            | 'RW'
-            | 'SA'
-            | 'SB'
-            | 'SC'
-            | 'SD'
-            | 'SE'
-            | 'SG'
-            | 'SH'
-            | 'SI'
-            | 'SJ'
-            | 'SK'
-            | 'SL'
-            | 'SM'
-            | 'SN'
-            | 'SO'
-            | 'SR'
-            | 'SS'
-            | 'ST'
-            | 'SV'
-            | 'SX'
-            | 'SZ'
-            | 'TC'
-            | 'TD'
-            | 'TF'
-            | 'TG'
-            | 'TH'
-            | 'TJ'
-            | 'TK'
-            | 'TL'
-            | 'TM'
-            | 'TN'
-            | 'TO'
-            | 'TR'
-            | 'TT'
-            | 'TV'
-            | 'TW'
-            | 'TZ'
-            | 'UA'
-            | 'UG'
-            | 'UM'
-            | 'US'
-            | 'UY'
-            | 'UZ'
-            | 'VA'
-            | 'VC'
-            | 'VE'
-            | 'VG'
-            | 'VI'
-            | 'VN'
-            | 'VU'
-            | 'WF'
-            | 'WS'
-            | 'YE'
-            | 'YT'
-            | 'ZA'
-            | 'ZM'
-            | 'ZW'
-          )
-        | null
+      country?: ('ZA' | 'ZW') | null
       feature_settings?:
         | components['schemas']['OrganizationFeatureSettings']
         | null
@@ -23114,7 +22640,7 @@ export interface components {
      * PaymentProcessor
      * @enum {string}
      */
-    PaymentProcessor: 'stripe' | 'smilepay'
+    PaymentProcessor: 'stripe' | 'smilepay' | 'paystack' | 'ozow'
     /**
      * PaymentSortProperty
      * @enum {string}
@@ -23304,7 +22830,7 @@ export interface components {
        */
       id_type: 'bank_account' | 'sa_id' | 'tin'
       /** Id Number */
-      id_number: string
+      id_number?: string | null
       /** First Name */
       first_name: string
       /** Last Name */
@@ -23493,7 +23019,7 @@ export interface components {
      * @description Supported payment or payout processors, i.e rails for transactions.
      * @enum {string}
      */
-    Processor: 'stripe' | 'manual'
+    Processor: 'stripe' | 'manual' | 'smilepay'
     /**
      * Product
      * @description A product.
@@ -46776,6 +46302,9 @@ export const orderSortPropertyValues: ReadonlyArray<
 export const orderStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>['schemas']['OrderStatus']
 > = ['pending', 'paid', 'refunded', 'partially_refunded', 'void']
+export const orgCountryInputValues: ReadonlyArray<
+  FlattenedDeepRequired<components>['schemas']['OrgCountryInput']
+> = ['ZA', 'ZW']
 export const organizationCountryAnyOf0Values: ReadonlyArray<
   FlattenedDeepRequired<components>['schemas']['Organization']['country']
 > = [
@@ -47052,252 +46581,7 @@ export const organizationCompanyLegalEntitySchemaTypeValues: ReadonlyArray<
 > = ['company']
 export const organizationCreateCountryAnyOf0Values: ReadonlyArray<
   FlattenedDeepRequired<components>['schemas']['OrganizationCreate']['country']
-> = [
-  'AD',
-  'AE',
-  'AF',
-  'AG',
-  'AI',
-  'AL',
-  'AM',
-  'AO',
-  'AQ',
-  'AR',
-  'AS',
-  'AT',
-  'AU',
-  'AW',
-  'AX',
-  'AZ',
-  'BA',
-  'BB',
-  'BD',
-  'BE',
-  'BF',
-  'BG',
-  'BH',
-  'BI',
-  'BJ',
-  'BL',
-  'BM',
-  'BN',
-  'BO',
-  'BQ',
-  'BR',
-  'BS',
-  'BT',
-  'BV',
-  'BW',
-  'BY',
-  'BZ',
-  'CA',
-  'CC',
-  'CD',
-  'CF',
-  'CG',
-  'CH',
-  'CI',
-  'CK',
-  'CL',
-  'CM',
-  'CN',
-  'CO',
-  'CR',
-  'CV',
-  'CW',
-  'CX',
-  'CY',
-  'CZ',
-  'DE',
-  'DJ',
-  'DK',
-  'DM',
-  'DO',
-  'DZ',
-  'EC',
-  'EE',
-  'EG',
-  'EH',
-  'ER',
-  'ES',
-  'ET',
-  'FI',
-  'FJ',
-  'FK',
-  'FM',
-  'FO',
-  'FR',
-  'GA',
-  'GB',
-  'GD',
-  'GE',
-  'GF',
-  'GG',
-  'GH',
-  'GI',
-  'GL',
-  'GM',
-  'GN',
-  'GP',
-  'GQ',
-  'GR',
-  'GS',
-  'GT',
-  'GU',
-  'GW',
-  'GY',
-  'HK',
-  'HM',
-  'HN',
-  'HR',
-  'HT',
-  'HU',
-  'ID',
-  'IE',
-  'IL',
-  'IM',
-  'IN',
-  'IO',
-  'IQ',
-  'IS',
-  'IT',
-  'JE',
-  'JM',
-  'JO',
-  'JP',
-  'KE',
-  'KG',
-  'KH',
-  'KI',
-  'KM',
-  'KN',
-  'KR',
-  'KW',
-  'KY',
-  'KZ',
-  'LA',
-  'LB',
-  'LC',
-  'LI',
-  'LK',
-  'LR',
-  'LS',
-  'LT',
-  'LU',
-  'LV',
-  'LY',
-  'MA',
-  'MC',
-  'MD',
-  'ME',
-  'MF',
-  'MG',
-  'MH',
-  'MK',
-  'ML',
-  'MM',
-  'MN',
-  'MO',
-  'MP',
-  'MQ',
-  'MR',
-  'MS',
-  'MT',
-  'MU',
-  'MV',
-  'MW',
-  'MX',
-  'MY',
-  'MZ',
-  'NA',
-  'NC',
-  'NE',
-  'NF',
-  'NG',
-  'NI',
-  'NL',
-  'NO',
-  'NP',
-  'NR',
-  'NU',
-  'NZ',
-  'OM',
-  'PA',
-  'PE',
-  'PF',
-  'PG',
-  'PH',
-  'PK',
-  'PL',
-  'PM',
-  'PN',
-  'PR',
-  'PS',
-  'PT',
-  'PW',
-  'PY',
-  'QA',
-  'RE',
-  'RO',
-  'RS',
-  'RW',
-  'SA',
-  'SB',
-  'SC',
-  'SD',
-  'SE',
-  'SG',
-  'SH',
-  'SI',
-  'SJ',
-  'SK',
-  'SL',
-  'SM',
-  'SN',
-  'SO',
-  'SR',
-  'SS',
-  'ST',
-  'SV',
-  'SX',
-  'SZ',
-  'TC',
-  'TD',
-  'TF',
-  'TG',
-  'TH',
-  'TJ',
-  'TK',
-  'TL',
-  'TM',
-  'TN',
-  'TO',
-  'TR',
-  'TT',
-  'TV',
-  'TW',
-  'TZ',
-  'UA',
-  'UG',
-  'UM',
-  'US',
-  'UY',
-  'UZ',
-  'VA',
-  'VC',
-  'VE',
-  'VG',
-  'VI',
-  'VN',
-  'VU',
-  'WF',
-  'WS',
-  'YE',
-  'YT',
-  'ZA',
-  'ZM',
-  'ZW',
-]
+> = ['ZA', 'ZW']
 export const organizationDeletionBlockedReasonValues: ReadonlyArray<
   FlattenedDeepRequired<components>['schemas']['OrganizationDeletionBlockedReason']
 > = ['has_orders', 'has_active_subscriptions', 'stripe_account_deletion_failed']
@@ -47603,255 +46887,10 @@ export const organizationStatusValues: ReadonlyArray<
 ]
 export const organizationUpdateCountryAnyOf0Values: ReadonlyArray<
   FlattenedDeepRequired<components>['schemas']['OrganizationUpdate']['country']
-> = [
-  'AD',
-  'AE',
-  'AF',
-  'AG',
-  'AI',
-  'AL',
-  'AM',
-  'AO',
-  'AQ',
-  'AR',
-  'AS',
-  'AT',
-  'AU',
-  'AW',
-  'AX',
-  'AZ',
-  'BA',
-  'BB',
-  'BD',
-  'BE',
-  'BF',
-  'BG',
-  'BH',
-  'BI',
-  'BJ',
-  'BL',
-  'BM',
-  'BN',
-  'BO',
-  'BQ',
-  'BR',
-  'BS',
-  'BT',
-  'BV',
-  'BW',
-  'BY',
-  'BZ',
-  'CA',
-  'CC',
-  'CD',
-  'CF',
-  'CG',
-  'CH',
-  'CI',
-  'CK',
-  'CL',
-  'CM',
-  'CN',
-  'CO',
-  'CR',
-  'CV',
-  'CW',
-  'CX',
-  'CY',
-  'CZ',
-  'DE',
-  'DJ',
-  'DK',
-  'DM',
-  'DO',
-  'DZ',
-  'EC',
-  'EE',
-  'EG',
-  'EH',
-  'ER',
-  'ES',
-  'ET',
-  'FI',
-  'FJ',
-  'FK',
-  'FM',
-  'FO',
-  'FR',
-  'GA',
-  'GB',
-  'GD',
-  'GE',
-  'GF',
-  'GG',
-  'GH',
-  'GI',
-  'GL',
-  'GM',
-  'GN',
-  'GP',
-  'GQ',
-  'GR',
-  'GS',
-  'GT',
-  'GU',
-  'GW',
-  'GY',
-  'HK',
-  'HM',
-  'HN',
-  'HR',
-  'HT',
-  'HU',
-  'ID',
-  'IE',
-  'IL',
-  'IM',
-  'IN',
-  'IO',
-  'IQ',
-  'IS',
-  'IT',
-  'JE',
-  'JM',
-  'JO',
-  'JP',
-  'KE',
-  'KG',
-  'KH',
-  'KI',
-  'KM',
-  'KN',
-  'KR',
-  'KW',
-  'KY',
-  'KZ',
-  'LA',
-  'LB',
-  'LC',
-  'LI',
-  'LK',
-  'LR',
-  'LS',
-  'LT',
-  'LU',
-  'LV',
-  'LY',
-  'MA',
-  'MC',
-  'MD',
-  'ME',
-  'MF',
-  'MG',
-  'MH',
-  'MK',
-  'ML',
-  'MM',
-  'MN',
-  'MO',
-  'MP',
-  'MQ',
-  'MR',
-  'MS',
-  'MT',
-  'MU',
-  'MV',
-  'MW',
-  'MX',
-  'MY',
-  'MZ',
-  'NA',
-  'NC',
-  'NE',
-  'NF',
-  'NG',
-  'NI',
-  'NL',
-  'NO',
-  'NP',
-  'NR',
-  'NU',
-  'NZ',
-  'OM',
-  'PA',
-  'PE',
-  'PF',
-  'PG',
-  'PH',
-  'PK',
-  'PL',
-  'PM',
-  'PN',
-  'PR',
-  'PS',
-  'PT',
-  'PW',
-  'PY',
-  'QA',
-  'RE',
-  'RO',
-  'RS',
-  'RW',
-  'SA',
-  'SB',
-  'SC',
-  'SD',
-  'SE',
-  'SG',
-  'SH',
-  'SI',
-  'SJ',
-  'SK',
-  'SL',
-  'SM',
-  'SN',
-  'SO',
-  'SR',
-  'SS',
-  'ST',
-  'SV',
-  'SX',
-  'SZ',
-  'TC',
-  'TD',
-  'TF',
-  'TG',
-  'TH',
-  'TJ',
-  'TK',
-  'TL',
-  'TM',
-  'TN',
-  'TO',
-  'TR',
-  'TT',
-  'TV',
-  'TW',
-  'TZ',
-  'UA',
-  'UG',
-  'UM',
-  'US',
-  'UY',
-  'UZ',
-  'VA',
-  'VC',
-  'VE',
-  'VG',
-  'VI',
-  'VN',
-  'VU',
-  'WF',
-  'WS',
-  'YE',
-  'YT',
-  'ZA',
-  'ZM',
-  'ZW',
-]
+> = ['ZA', 'ZW']
 export const paymentProcessorValues: ReadonlyArray<
   FlattenedDeepRequired<components>['schemas']['PaymentProcessor']
-> = ['stripe', 'smilepay']
+> = ['stripe', 'smilepay', 'paystack', 'ozow']
 export const paymentSortPropertyValues: ReadonlyArray<
   FlattenedDeepRequired<components>['schemas']['PaymentSortProperty']
 > = [
@@ -47957,7 +46996,7 @@ export const presentmentCurrencyValues: ReadonlyArray<
 ]
 export const processorValues: ReadonlyArray<
   FlattenedDeepRequired<components>['schemas']['Processor']
-> = ['stripe', 'manual']
+> = ['stripe', 'manual', 'smilepay']
 export const productBillingTypeValues: ReadonlyArray<
   FlattenedDeepRequired<components>['schemas']['ProductBillingType']
 > = ['one_time', 'recurring']

@@ -22,21 +22,21 @@
 
 #### Workflow A: Public Checkout (B2C - Current)
 1. Customer visits merchant site, clicks checkout link
-2. Polar Checkout: Buyer enters email + card
-3. Polar auto-creates individual customer
+2. Solei Checkout: Buyer enters email + card
+3. Solei auto-creates individual customer
 4. Post-purchase: Customer manages subscription via Customer Portal
 
 #### Workflow B: Public Checkout (B2B - Current seats flow)
 1. Customer visits merchant site, clicks checkout link
-2. Polar Checkout: Buyer enters email + card
-3. Polar auto-creates billing manager
+2. Solei Checkout: Buyer enters email + card
+3. Solei auto-creates billing manager
 4. Post-purchase: Buyer invites team members, manages via Customer Portal
 
 #### Workflow C: Checkout Sessions (API-driven)
 1. Merchant app creates customer and business in their system
-2. Merchant creates Polar customer + business inside Polar via API
+2. Merchant creates Solei customer + business inside Solei via API
 3. Billing manager clicks checkout in merchant app
-4. Polar Checkout: Pre-filled information, enters card
+4. Solei Checkout: Pre-filled information, enters card
 5. Returns to merchant app (optional: Customer Portal access)
 
 ---
@@ -57,7 +57,7 @@ These tenets guide our decision-making, weighted by importance:
 2. **Backward Compatibility** (weight: 6) - Existing B2C and B2B customers continue working unchanged.
 3. **Simplicity** (weight: 5) - Seamless checkout, straightforward queries, simple event ingestion
 4. **Minimal Changes for B2B** (weight: 4) - Merchants make minimal changes when adding B2B
-5. **Polar Developer Experience** (weight: 3) - Avoid excessive filtering or complex queries
+5. **Solei Developer Experience** (weight: 3) - Avoid excessive filtering or complex queries
 6. **WorkOS/Auth0 Integration** (weight: 2) - Support enterprise identity providers
 
 Scale: 🔴 1 (poor) | 🟡 2 (acceptable) | 🟢 3 (excellent)
@@ -110,7 +110,7 @@ Customer (Lolo Inc)
 | Backward Compatibility  | 🔴 1  | Current integration with B2B requires migration |
 | Simplicity              | 🟢 3  | Uniform 1:N model, no type discrimination, no special cases |
 | Minimal B2B Changes     | 🟢 3  | Just add members, existing customer_id queries work |
-| Polar Dev Experience    | 🟢 3  | Clean queries, no type filtering, clear separation |
+| Solei Dev Experience    | 🟢 3  | Clean queries, no type filtering, clear separation |
 | WorkOS Integration      | 🟢 3  | Members map directly to WorkOS users/members |
 | **Weighted Total**      | **69** | |
 
@@ -163,7 +163,7 @@ Member (business_customer_id, individual_customer_id, role)
 | Backward Compatibility  | 🟢 3  | Zero breaking changes, additive-only schema |
 | Simplicity              | 🟡 2  | Single entity concept, but polymorphism adds query complexity |
 | Minimal B2B Changes     | 🟡 2  | Just add `type` parameter, similar code patterns |
-| Polar Dev Experience    | 🟡 2  | Requires type filtering, mitigated by SQLAlchemy polymorphism |
+| Solei Dev Experience    | 🟡 2  | Requires type filtering, mitigated by SQLAlchemy polymorphism |
 | WorkOS Integration      | 🟢 3  | Individual customers map cleanly to WorkOS users |
 | **Weighted Total**      | **62** | |
 
@@ -190,7 +190,7 @@ Scale: 🔴 1 (poor) | 🟡 2 (acceptable) | 🟢 3 (excellent)
 | Backward compatibility  | 6      | 🔴 3 (6)               | 🟢 3 (18)              |
 | Simplicity              | 5      | 🟢 3 (15)              | 🟡 2 (10)              |
 | Minimal changes for B2B | 4      | 🟢 3 (12)              | 🟡 2 (8)               |
-| Polar dev experience    | 3      | 🟢 3 (9)               | 🟡 2 (6)               |
+| Solei dev experience    | 3      | 🟢 3 (9)               | 🟡 2 (6)               |
 | WorkOS Integration      | 2      | 🟢 3 (6)               | 🟢 3 (6)               |
 | **Total Score**         | -      | **69**                 | **62**                 |
 
@@ -380,7 +380,7 @@ During the migration period, if a bug is found or a merchant complaint, disable 
 
 #### What is Changing?
 
-We're introducing a new **Member** entity to improve how Polar handles team subscriptions and usage-based billing. This change provides:
+We're introducing a new **Member** entity to improve how Solei handles team subscriptions and usage-based billing. This change provides:
 
 1. **Better billing accuracy**: Clear separation between who pays (Customer) and who uses the product (Member)
 2. **Multi-company support**: Users can be members of multiple companies without confusion
@@ -407,7 +407,7 @@ Customer (billing manager) ─┬─ Member (billing manager)
 
 #### Why This Change?
 
-**Problem we're solving**: When a user (e.g., Alice) works for multiple companies (Acme Corp and Slack Inc), and both companies purchase your product, Polar doesn't know which company to bill when Alice generates usage events. This causes billing ambiguity. This will allow other futures in the comming weeks, like better analytics and insights.
+**Problem we're solving**: When a user (e.g., Alice) works for multiple companies (Acme Corp and Slack Inc), and both companies purchase your product, Solei doesn't know which company to bill when Alice generates usage events. This causes billing ambiguity. This will allow other futures in the comming weeks, like better analytics and insights.
 
 **Solution**: The Member model ensures every action is attributed to a specific member of a specific customer, eliminating ambiguity.
 
@@ -434,14 +434,14 @@ Given the example above, we will have the following schema on our database:
 **Before** (current):
 ```typescript
 // Seat holder's customer_id
-await polar.customers.get([{
+await solei.customers.get([{
   externalCustomerId: "cust_ben_123",
 }]);
 ```
 
 **After** (new - required):
 ```typescript
-await polar.members.get([{
+await solei.members.get([{
   externalCustomerId: "cust_alice_123",  // The customer who pays
   externalMemberId: "cust_ben_123",    // The member of the business
 }]);
@@ -454,7 +454,7 @@ await polar.members.get([{
 **Before** (current):
 ```typescript
 // Seat holder's customer_id
-await polar.events.ingest([{
+await solei.events.ingest([{
   externalCustomerId: "cust_ben_123",
   name: "api.request",
   properties: { endpoint: "/themes" }
@@ -464,7 +464,7 @@ await polar.events.ingest([{
 **After** (new - required):
 ```typescript
 // Billing customer + specific member
-await polar.events.create([{
+await solei.events.create([{
   externalCustomerId: "cust_alice_123",  // Who pays will be mandatory
   externalMemberId: "cust_ben_123",    // Who did the action
   name: "api.request",
@@ -481,7 +481,7 @@ await polar.events.create([{
 **Before** (current):
 ```typescript
 // Generate portal link for seat holder
-const session = await polar.customerSessions.create({
+const session = await solei.customerSessions.create({
   externalCustomerId: "cust_alice_123"
 });
 ```
@@ -489,7 +489,7 @@ const session = await polar.customerSessions.create({
 **After** (new - required):
 ```typescript
 // Generate portal link for member
-const session = await polar.customerSessions.create({
+const session = await solei.customerSessions.create({
   externalCustomerId: "cust_alice_123",
   externalMemberId: "cust_ben_123"
 });
@@ -503,14 +503,14 @@ const session = await polar.customerSessions.create({
 
 **Before** (current):
 ```typescript
-const session = await polar.benefits.grants({
+const session = await solei.benefits.grants({
   externalCustomerId: "cust_ben_123"
 });
 ```
 
 **After** (new - required):
 ```typescript
-const session = await polar.benefits.grants({
+const session = await solei.benefits.grants({
   externalCustomerId: "cust_alice_123",
   externalMemberId: "cust_ben_123"
 });
@@ -556,8 +556,8 @@ The response of seats will contain the `member` entity. `customer_id` will be re
 Use this checklist to ensure your integration is updated:
 
 - [ ] **Update SDK to latest version**
-  - TypeScript: `npm install @polar-sh/sdk@latest`
-  - Python: `pip install --upgrade polar-sdk`
+  - TypeScript: `npm install @solei/sdk@latest`
+  - Python: `pip install --upgrade solei-sdk`
 
 - [ ] **Update code**
   - [ ] Change `customer_id` from seat holder customer to billing customer
@@ -592,7 +592,7 @@ Use this checklist to ensure your integration is updated:
 | **Week -2** | Migration announcement email sent | Review this guide, plan updates |
 | **Week -1** | Staging environment updated | Test your integration in staging |
 | **Week 0** | Production migration begins | Deploy updated code, monitor |
-| **Week 1-2** | One-on-one migration support | Work with Polar team if issues arise |
+| **Week 1-2** | One-on-one migration support | Work with Solei team if issues arise |
 
 ---
 
@@ -601,14 +601,14 @@ Use this checklist to ensure your integration is updated:
 **Before migration**:
 - Review the [updated API documentation](#) (link to come)
 - Test in staging environment (feature flag enabled for your org)
-- Email support@polar.sh with questions
+- Email support@solei.sh with questions
 
 **During migration**:
 - Schedule 1-on-1 call if needed.
 
 **After migration**:
-- Report issues immediately: support@polar.sh
-- Check status page: status.polar.sh
+- Report issues immediately: support@solei.sh
+- Check status page: status.solei.sh
 
 
 #### Webhook Changes
@@ -882,7 +882,7 @@ Merchants can then prompt the user or maintain context in their app to track whi
 
 ### Appendix H: Complete Integration Flows (Side-by-Side Comparison)
 
-This appendix shows how merchants integrate with Polar for common workflows, comparing **Option 1 (Member Model)** vs **Option 2 (Customer Type + Member)** side-by-side.
+This appendix shows how merchants integrate with Solei for common workflows, comparing **Option 1 (Member Model)** vs **Option 2 (Customer Type + Member)** side-by-side.
 
 ---
 
@@ -891,8 +891,8 @@ This appendix shows how merchants integrate with Polar for common workflows, com
 ##### Option 1: Member Model
 
 ```http
-POST https://api.polar.sh/v1/customers
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customers
+Authorization: Bearer solei_secret_...
 Content-Type: application/json
 
 {
@@ -932,8 +932,8 @@ Content-Type: application/json
 ##### Option 2: Customer Type + Member
 
 ```http
-POST https://api.polar.sh/v1/customers
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customers
+Authorization: Bearer solei_secret_...
 Content-Type: application/json
 
 {
@@ -975,8 +975,8 @@ Content-Type: application/json
 
 ```http
 # Step 1: Create business customer
-POST https://api.polar.sh/v1/customers
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customers
+Authorization: Bearer solei_secret_...
 
 {
   "name": "Acme Corp",
@@ -1009,8 +1009,8 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 2: Add billing manager as member
-POST https://api.polar.sh/v1/customers/cust_acme_123/members
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customers/cust_acme_123/members
+Authorization: Bearer solei_secret_...
 
 {
   "email": "billing@acme.com",
@@ -1036,8 +1036,8 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 1: Create business customer
-POST https://api.polar.sh/v1/customers
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customers
+Authorization: Bearer solei_secret_...
 
 {
   "type": "business",
@@ -1061,8 +1061,8 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 2: Add billing manager to business via Member
-POST https://api.polar.sh/v1/customers/cust_acme_123/members
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customers/cust_acme_123/members
+Authorization: Bearer solei_secret_...
 
 {
   "email": "billing@acme.com",
@@ -1097,8 +1097,8 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 1: Create checkout session
-POST https://api.polar.sh/v1/checkouts
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/checkouts
+Authorization: Bearer solei_secret_...
 
 {
   "product_id": "prod_theme_123",
@@ -1114,14 +1114,14 @@ Authorization: Bearer polar_secret_...
 ```json
 {
   "id": "checkout_abc",
-  "url": "https://polar.sh/checkout/abc",
+  "url": "https://solei.sh/checkout/abc",
   "customer_id": null  // Created after payment
 }
 ```
 
 ```http
-# Step 2: Customer completes checkout (Polar hosted)
-# → Polar auto-creates Customer + Member
+# Step 2: Customer completes checkout (Solei hosted)
+# → Solei auto-creates Customer + Member
 
 # Step 3: Webhook received
 ```
@@ -1151,7 +1151,7 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 4: Grant benefit to member
-# Polar automatically creates BenefitGrant linked to ben_alice_789
+# Solei automatically creates BenefitGrant linked to ben_alice_789
 ```
 
 ---
@@ -1160,8 +1160,8 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 1: Create checkout session
-POST https://api.polar.sh/v1/checkouts
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/checkouts
+Authorization: Bearer solei_secret_...
 
 {
   "product_id": "prod_theme_123",
@@ -1177,14 +1177,14 @@ Authorization: Bearer polar_secret_...
 ```json
 {
   "id": "checkout_abc",
-  "url": "https://polar.sh/checkout/abc",
+  "url": "https://solei.sh/checkout/abc",
   "customer_id": null  // Created after payment
 }
 ```
 
 ```http
-# Step 2: Customer completes checkout (Polar hosted)
-# → Polar auto-creates Customer with type="individual"
+# Step 2: Customer completes checkout (Solei hosted)
+# → Solei auto-creates Customer with type="individual"
 
 # Step 3: Webhook received
 ```
@@ -1208,7 +1208,7 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 4: Grant benefit to customer
-# Polar automatically creates BenefitGrant linked to cust_alice_456
+# Solei automatically creates BenefitGrant linked to cust_alice_456
 ```
 
 ---
@@ -1227,8 +1227,8 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 1: Create business customer
-POST https://api.polar.sh/v1/customers
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customers
+Authorization: Bearer solei_secret_...
 
 {
   "name": "Acme Corp",
@@ -1242,8 +1242,8 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 2: Create checkout session for business
-POST https://api.polar.sh/v1/checkouts
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/checkouts
+Authorization: Bearer solei_secret_...
 
 {
   "product_id": "prod_team_plan_4seats",
@@ -1256,14 +1256,14 @@ Authorization: Bearer polar_secret_...
 ```json
 {
   "id": "checkout_def",
-  "url": "https://polar.sh/checkout/def",
+  "url": "https://solei.sh/checkout/def",
   "customer_id": "cust_acme_123"
 }
 ```
 
 ```http
 # Step 3: Billing manager completes checkout
-# → Polar auto-creates member for billing@acme.com
+# → Solei auto-creates member for billing@acme.com
 ```
 
 Step 4: Webhook received
@@ -1294,8 +1294,8 @@ Step 4: Webhook received
 
 ```http
 # Step 5: Beneficiaries claim seats
-POST https://api.polar.sh/v1/subscriptions/sub_acme_456/seats
-Authorization: Bearer polar_customer_session_... // ben_billing_789 session
+POST https://api.solei.sh/v1/subscriptions/sub_acme_456/seats
+Authorization: Bearer solei_customer_session_... // ben_billing_789 session
 
 { "member_email": "alive@acme.com" }
 ```
@@ -1316,8 +1316,8 @@ Authorization: Bearer polar_customer_session_... // ben_billing_789 session
 
 ```http
 # Step 1: Create business customer
-POST https://api.polar.sh/v1/customers
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customers
+Authorization: Bearer solei_secret_...
 
 {
   "type": "business",
@@ -1332,8 +1332,8 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Step 2: Create checkout session
-POST https://api.polar.sh/v1/checkouts
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/checkouts
+Authorization: Bearer solei_secret_...
 
 {
   "product_id": "prod_team_plan_4seats",
@@ -1378,8 +1378,8 @@ Step 4: Webhook received
 
 ```http
 # Step 5: Beneficiaries claim seats
-POST https://api.polar.sh/v1/subscriptions/sub_acme_789/seats
-Authorization: Bearer polar_customer_session_... // cust_acme_456 session
+POST https://api.solei.sh/v1/subscriptions/sub_acme_789/seats
+Authorization: Bearer solei_customer_session_... // cust_acme_456 session
 
 { "customer_email": "alice@acme.com" }
 ```
@@ -1411,10 +1411,10 @@ Authorization: Bearer polar_customer_session_... // cust_acme_456 session
 
 ```http
 # Merchant shares public checkout link
-https://buy.polar.sh/polar_cl_gon2ISU4r7oYyjVaxXlRVUv5MKh1H3c1gCxKn1zZGHA
+https://buy.solei.sh/solei_cl_gon2ISU4r7oYyjVaxXlRVUv5MKh1H3c1gCxKn1zZGHA
 
 # Customer clicks, enters email, completes purchase
-# → Polar auto-creates Customer + Member
+# → Solei auto-creates Customer + Member
 
 # Webhook received
 ```
@@ -1448,10 +1448,10 @@ https://buy.polar.sh/polar_cl_gon2ISU4r7oYyjVaxXlRVUv5MKh1H3c1gCxKn1zZGHA
 
 ```http
 # Merchant shares public checkout link
-https://polar.sh/org_abc/products/prod_team_plan
+https://solei.sh/org_abc/products/prod_team_plan
 
 # Customer clicks, enters email, completes purchase
-# → Polar detects seat-based product, auto-creates:
+# → Solei detects seat-based product, auto-creates:
 #    1. Business customer (generated name from email domain)
 #    2. Individual customer for buyer
 #    3. Member linking them
@@ -1508,8 +1508,8 @@ https://polar.sh/org_abc/products/prod_team_plan
 # Session identifies him by customer_id (B2C backward compatibility as 1 member == 1 customer in B2C)
 
 # B2C: Using customer_id (backward compatible)
-GET https://api.polar.sh/v1/customer-portal/downloadables
-Authorization: Bearer polar_customer_session_...
+GET https://api.solei.sh/v1/customer-portal/downloadables
+Authorization: Bearer solei_customer_session_...
 
 ```
 
@@ -1549,8 +1549,8 @@ Authorization: Bearer polar_customer_session_...
 # Alice authenticates via Customer Portal
 # Session identifies her as ben_alice_acme_123 (B2B: explicit member)
 
-GET https://api.polar.sh/v1/benefit-grants?member_id=ben_alice_acme_123
-Authorization: Bearer polar_member_session_...
+GET https://api.solei.sh/v1/benefit-grants?member_id=ben_alice_acme_123
+Authorization: Bearer solei_member_session_...
 ```
 
 **Response:**
@@ -1585,8 +1585,8 @@ Authorization: Bearer polar_member_session_...
 # Alice authenticates via Customer Portal
 # Session identifies her as cust_alice_123 (individual customer)
 
-GET https://api.polar.sh/v1/customer-portal/downloadables
-Authorization: Bearer polar_customer_session_...
+GET https://api.solei.sh/v1/customer-portal/downloadables
+Authorization: Bearer solei_customer_session_...
 ```
 
 **Response:**
@@ -1607,8 +1607,8 @@ Authorization: Bearer polar_customer_session_...
 
 ```http
 # Download benefit
-GET https://api.polar.sh/v1/benefits/benefit_theme_download/download
-Authorization: Bearer polar_customer_session_...
+GET https://api.solei.sh/v1/benefits/benefit_theme_download/download
+Authorization: Bearer solei_customer_session_...
 ```
 
 ---
@@ -1630,16 +1630,16 @@ Authorization: Bearer polar_customer_session_...
 
 ```http
 # Option A: Using customer_id (B2C backward compatible)
-POST https://api.polar.sh/v1/customer-sessions
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customer-sessions
+Authorization: Bearer solei_secret_...
 
 {
   "customer_id": "cust_bob_123"  // ✅ B2C backward compatible
 }
 
 # Option B: Using member_id (new explicit way)
-POST https://api.polar.sh/v1/customer-sessions
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customer-sessions
+Authorization: Bearer solei_secret_...
 
 {
   "member_id": "ben_bob_default_456"  // ✅ New way
@@ -1649,10 +1649,10 @@ Authorization: Bearer polar_secret_...
 **Response (same for both):**
 ```json
 {
-  "token": "polar_cst_abc123xyz",
+  "token": "solei_cst_abc123xyz",
   "customer_id": "cust_bob_123",
   "member_id": "ben_bob_default_456",  // Auto-resolved from customer
-  "return_url": "https://polar.sh/org_merchant/portal?token=polar_cst_abc123xyz",
+  "return_url": "https://solei.sh/org_merchant/portal?token=solei_cst_abc123xyz",
   "expires_at": "2025-12-01T10:00:00Z"
 }
 ```
@@ -1672,8 +1672,8 @@ Authorization: Bearer polar_secret_...
 ###### Option 2: Customer Type + Member
 
 ```http
-POST https://api.polar.sh/v1/customer-sessions
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customer-sessions
+Authorization: Bearer solei_secret_...
 
 {
   "customer_id": "cust_bob_456"
@@ -1683,9 +1683,9 @@ Authorization: Bearer polar_secret_...
 **Response:**
 ```json
 {
-  "token": "polar_cst_abc123xyz",
+  "token": "solei_cst_abc123xyz",
   "customer_id": "cust_bob_456",
-  "return_url": "https://polar.sh/org_merchant/portal?token=polar_cst_abc123xyz",
+  "return_url": "https://solei.sh/org_merchant/portal?token=solei_cst_abc123xyz",
   "expires_at": "2025-12-01T10:00:00Z"
 }
 ```
@@ -1710,8 +1710,8 @@ Authorization: Bearer polar_secret_...
 We can only use the member id. The customerId has multiple benefficieres and we don't know which one to pick.
 
 ```http
-POST https://api.polar.sh/v1/customer-sessions
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customer-sessions
+Authorization: Bearer solei_secret_...
 
 {
   "member_id": "ben_jane_789"  // Jane's member at Acme
@@ -1721,10 +1721,10 @@ Authorization: Bearer polar_secret_...
 **Response:**
 ```json
 {
-  "token": "polar_cst_def456",
+  "token": "solei_cst_def456",
   "member_id": "ben_jane_789",
   "customer_id": "cust_acme_123",
-  "url": "https://polar.sh/portal?token=polar_cst_def456",
+  "url": "https://solei.sh/portal?token=solei_cst_def456",
   "expires_at": "2025-12-01T10:00:00Z"
 }
 ```
@@ -1740,8 +1740,8 @@ Authorization: Bearer polar_secret_...
 ###### Option 2: Customer Type + Member
 
 ```http
-POST https://api.polar.sh/v1/customer-sessions
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/customer-sessions
+Authorization: Bearer solei_secret_...
 
 {
   "customer_id": "cust_jane_456"  // Jane's individual customer
@@ -1751,9 +1751,9 @@ Authorization: Bearer polar_secret_...
 **Response:**
 ```json
 {
-  "token": "polar_cst_def456",
+  "token": "solei_cst_def456",
   "customer_id": "cust_jane_456",
-  "url": "https://polar.sh/portal?token=polar_cst_def456",
+  "url": "https://solei.sh/portal?token=solei_cst_def456",
   "expires_at": "2025-12-01T10:00:00Z"
 }
 ```
@@ -1787,8 +1787,8 @@ Authorization: Bearer polar_secret_...
 
 ```http
 # Option A: Using customer_id (B2C backward compatible)
-POST https://api.polar.sh/v1/events
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/events
+Authorization: Bearer solei_secret_...
 
 {
   "customer_id": "cust_bob_123",  // ✅ B2C backward compatible
@@ -1800,8 +1800,8 @@ Authorization: Bearer polar_secret_...
 }
 
 # Option B: Using member_id (new explicit way)
-POST https://api.polar.sh/v1/events
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/events
+Authorization: Bearer solei_secret_...
 
 {
   "member_id": "ben_bob_default_456",  // ✅ New way
@@ -1826,8 +1826,8 @@ Authorization: Bearer polar_secret_...
 ###### Option 2: Customer Type + Member
 
 ```http
-POST https://api.polar.sh/v1/events
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/events
+Authorization: Bearer solei_secret_...
 
 {
   "customer_id": "cust_bob_456",
@@ -1853,8 +1853,8 @@ Authorization: Bearer polar_secret_...
 ###### Option 1: Member Model
 
 ```http
-POST https://api.polar.sh/v1/events
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/events
+Authorization: Bearer solei_secret_...
 
 {
   "customer_id": "cust_acme_123", // the business customer of the subscription, who to bill. ⚠️ This breaks current seats usage as merchants will need to pass a new customer ID or use the new benefficiaryId
@@ -1878,8 +1878,8 @@ Authorization: Bearer polar_secret_...
 ###### Option 2: Customer Type + Member
 
 ```http
-POST https://api.polar.sh/v1/events
-Authorization: Bearer polar_secret_...
+POST https://api.solei.sh/v1/events
+Authorization: Bearer solei_secret_...
 
 {
   "customer_id": "cust_alice_123",  // Alice's individual customer
@@ -1892,7 +1892,7 @@ Authorization: Bearer polar_secret_...
 ```
 
 **What happens:**
-- Polar checks if cust_alice_123 is a member of any businesses
+- Solei checks if cust_alice_123 is a member of any businesses
 - Finds member record: business_customer_id = cust_acme_456
 - If Alice is member of ONLY ONE business and doesn't have a subscription, we will bill that business
 
@@ -1917,7 +1917,7 @@ Authorization: Bearer polar_secret_...
 
 **Retry with explicit subscription:**
 ```http
-POST https://api.polar.sh/v1/events
+POST https://api.solei.sh/v1/events
 {
   "customer_id": "cust_alice_123",
   "subscription_id": "sub_acme_789",  // Explicit
@@ -1929,7 +1929,7 @@ POST https://api.polar.sh/v1/events
 
 #### Flow 10: Customer Portal Login
 
-The user access: https://polar.sh/petru-test/portal/request
+The user access: https://solei.sh/petru-test/portal/request
 
 ##### Flow 10.a: B2C login
 

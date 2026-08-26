@@ -203,14 +203,14 @@ ngrok http 3000
 
 ### Add Webhook Endpoint
 
-1. Point the Webhook to `your-app.com/api/webhook/polar`. This must be an absolute URL which Solei can reach. If you use ngrok, the URL will look something like this: `https://<your-ngrok-id>.ngrok-free.app/api/webhook/polar`.
+1. Point the Webhook to `your-app.com/api/webhook/solei`. This must be an absolute URL which Solei can reach. If you use ngrok, the URL will look something like this: `https://<your-ngrok-id>.ngrok-free.app/api/webhook/solei`.
 2. Select which events you want to be notified about. You can read more about the available events in the [Events section](/api-reference#webhooks).
 3. Generate a secret key to sign the requests. This will allow you to verify that the requests are truly coming from Solei.
 4. Add the secret key to your environment variables.
 
 ```bash Terminal
 # .env
-POLAR_API_KEY="polar_oat..."
+POLAR_API_KEY="solei_oat..."
 POLAR_WEBHOOK_SECRET="..."
 ```
 ### Setting up the Webhook handler
@@ -225,7 +225,7 @@ Go and add a `routes/api.php` file and add the following entry:
 
 ```php
 // routes/api.php
-Route::webhooks('/webhook/polar');
+Route::webhooks('/webhook/solei');
 ```
 
 Make sure that it is included in the Bootstrap file.

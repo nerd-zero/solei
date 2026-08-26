@@ -19,8 +19,8 @@ The snippet looks like this:
 ```typescript
 <a
   href="__CHECKOUT_LINK__"
-  data-polar-checkout
-  data-polar-checkout-theme="light"
+  data-solei-checkout
+  data-solei-checkout-theme="light"
 >
   Purchase
 </a>
@@ -28,13 +28,13 @@ The snippet looks like this:
 <script
   defer
   data-auto-init
-  src="https://cdn.jsdelivr.net/npm/@polar-sh/checkout@latest/dist/embed.global.js"
+  src="https://cdn.jsdelivr.net/npm/@solei/checkout@latest/dist/embed.global.js"
 ></script>
 ```
 
 This will display a `Purchase` link which will open an inline checkout when clicked.
 
-You can style the trigger element any way you want, as long as you keep the `data-polar-checkout` attribute.
+You can style the trigger element any way you want, as long as you keep the `data-solei-checkout` attribute.
 
 ## Import Library
 
@@ -42,22 +42,22 @@ If you have a more advanced project in JavaScript, like a React app, adding the 
 
 <CodeGroup>
   ```bash npm
-  npm install @polar-sh/checkout
+  npm install @solei/checkout
   ```
   ```bash pnpm
-  pnpm add @polar-sh/checkout
+  pnpm add @solei/checkout
   ```
   ```bash yarn
-  yarn add @polar-sh/checkout
+  yarn add @solei/checkout
   ```
 </CodeGroup>
 
-Then, you should import the `SoleiEmbedCheckout` helper class and manually call `SoleiEmbedCheckout.init()`. This will add the required handlers on elements having the `data-polar-checkout` attribute.
+Then, you should import the `SoleiEmbedCheckout` helper class and manually call `SoleiEmbedCheckout.init()`. This will add the required handlers on elements having the `data-solei-checkout` attribute.
 
 Here is an example in React:
 
 ```ts
-import { SoleiEmbedCheckout } from '@polar-sh/checkout/embed'
+import { SoleiEmbedCheckout } from '@solei/checkout/embed'
 import { useEffect } from 'react'
 
 const PurchaseLink = () => {
@@ -68,8 +68,8 @@ const PurchaseLink = () => {
   return (
     <a
       href="__CHECKOUT_LINK__"
-      data-polar-checkout
-      data-polar-checkout-theme="light"
+      data-solei-checkout
+      data-solei-checkout-theme="light"
     >
       Purchase
     </a>
@@ -92,10 +92,10 @@ For users who need more control over the embedded checkout flow, the `SoleiEmbed
 
 ### Programmatically creating an embed
 
-Instead of using declarative triggers with `data-polar-checkout` attributes, you can programmatically create and control checkout instances:
+Instead of using declarative triggers with `data-solei-checkout` attributes, you can programmatically create and control checkout instances:
 
 ```ts
-import { SoleiEmbedCheckout } from "@polar-sh/checkout/embed";
+import { SoleiEmbedCheckout } from "@solei/checkout/embed";
 
 // Open checkout programmatically when needed
 const openCheckout = async () => {
@@ -127,7 +127,7 @@ document.getElementById("buy-button").addEventListener("click", () => {
 You can listen for checkout events to respond to user interactions. For the `loaded` event, we recommend using the `onLoaded` callback in the `create` method to ensure it's always executed, even if the checkout loads very quickly.
 
 ```ts
-import { SoleiEmbedCheckout } from "@polar-sh/checkout/embed";
+import { SoleiEmbedCheckout } from "@solei/checkout/embed";
 
 const openCheckoutWithEvents = async () => {
   const checkout = await SoleiEmbedCheckout.create("__CHECKOUT_LINK__", {
@@ -175,7 +175,7 @@ const openCheckoutWithEvents = async () => {
 Here's a more complete React example that handles checkout events:
 
 ```ts
-import { SoleiEmbedCheckout } from '@polar-sh/checkout/embed'
+import { SoleiEmbedCheckout } from '@solei/checkout/embed'
 import { useState, useEffect } from 'react'
 
 const CheckoutButton = () => {
@@ -242,7 +242,7 @@ export default CheckoutButton
 In some cases, you might need to programmatically close the checkout - for instance, if you detect that a user needs to take an action elsewhere in your application first:
 
 ```ts
-import { SoleiEmbedCheckout } from "@polar-sh/checkout/embed";
+import { SoleiEmbedCheckout } from "@solei/checkout/embed";
 
 // Example: open checkout and store the instance
 let activeCheckout = null;

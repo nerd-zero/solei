@@ -1,5 +1,5 @@
 ---
-title: "Investigating Worker Memory Leak in Polar"
+title: "Investigating Worker Memory Leak in Solei"
 description: "A deep dive into debugging memory leaks in our Python worker system using Dramatiq and Redis"
 author: "Petru Rares Sincraian"
 date: "2025-08-29"
@@ -10,7 +10,7 @@ tags: ["debugging", "performance", "python", "dramatiq", "memory-leak"]
 **Author:** Petru Rares Sincraian • **Published:** August 29, 2025
 </Info>
 
-I'm trying to find the memory leak in the polar source code for Worker. The main stack is Python 3.12, Dramatiq with Redis as a Broker.
+I'm trying to find the memory leak in the solei source code for Worker. The main stack is Python 3.12, Dramatiq with Redis as a Broker.
 
 From what I see, I see in Logfire some message types are repeating themselves. As I would expect:
 
@@ -81,8 +81,8 @@ I created a MemoryProfilerMiddleware for Dramatiq that logs the increase in memo
 For events ingested without an error, we don't have this behavior, and a straight memory consumption is maintained. For the `webhook_event.send` if it throws an error we also see the same behavior. Then we can confirm that the memory leak it's happening when an exception is thrown. We tested 2 different message types, so the idea is that something is off on some configuration or a library that we are using.
 
 Checking the top tracemalloc line that created the memory, we can see that in most cases the errors are in:
-- `polar/server/.venv/lib/python3.12/site-packages/sentry_sdk/utils.py:439`
-- `polar/server/.venv/lib/python3.12/site-packages/opentelemetry/sdk/trace/**init**.py:1020`
+- `solei/server/.venv/lib/python3.12/site-packages/sentry_sdk/utils.py:439`
+- `solei/server/.venv/lib/python3.12/site-packages/opentelemetry/sdk/trace/**init**.py:1020`
 
 If we the increase in memory for every message that throws an exception we can see that most of the time the memory keeps increasing.
 
@@ -98,23 +98,23 @@ Now, I changed my middleware to log the top 15 lines that hold memory with `trac
 ```text
 40 --------------------------------------------------------------------------------
 
-41: #10: /Users/petru/workplace/polar/server/.venv/lib/python3.12/site-packages/sentry_sdk/scope.py:1145: size=6776 B (+768 B), count=37 (+6), average=183 B
+41: #10: /Users/petru/workplace/solei/server/.venv/lib/python3.12/site-packages/sentry_sdk/scope.py:1145: size=6776 B (+768 B), count=37 (+6), average=183 B
 
-42: File "/Users/petru/workplace/polar/server/.venv/lib/python3.12/site-packages/sentry_sdk/scope.py", line 1145
+42: File "/Users/petru/workplace/solei/server/.venv/lib/python3.12/site-packages/sentry_sdk/scope.py", line 1145
 
 43 span = Span(**kwargs)
 
 
-21: #5: /Users/petru/workplace/polar/server/.venv/lib/python3.12/site-packages/sentry_sdk/utils.py:250: size=16.6 KiB (-1297 B), count=351 (-26), average=48 B
+21: #5: /Users/petru/workplace/solei/server/.venv/lib/python3.12/site-packages/sentry_sdk/utils.py:250: size=16.6 KiB (-1297 B), count=351 (-26), average=48 B
 
-22: File "/Users/petru/workplace/polar/server/.venv/lib/python3.12/site-packages/sentry_sdk/utils.py", line 250
+22: File "/Users/petru/workplace/solei/server/.venv/lib/python3.12/site-packages/sentry_sdk/utils.py", line 250
 
 23 return utctime.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 
-41: #10: /Users/petru/workplace/polar/server/.venv/lib/python3.12/site-packages/sentry_sdk/tracing.py:439: size=7384 B (+800 B), count=60 (+6), average=123 B
+41: #10: /Users/petru/workplace/solei/server/.venv/lib/python3.12/site-packages/sentry_sdk/tracing.py:439: size=7384 B (+800 B), count=60 (+6), average=123 B
 
-42: File "/Users/petru/workplace/polar/server/.venv/lib/python3.12/site-packages/sentry_sdk/tracing.py", line 439
+42: File "/Users/petru/workplace/solei/server/.venv/lib/python3.12/site-packages/sentry_sdk/tracing.py", line 439
 
 43 child = Span(
 ```
